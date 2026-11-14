@@ -14,6 +14,7 @@ import { dataRange } from './lib/metrics'
 import { evaluate, nearestGoShift, rank } from './lib/tactics'
 import type { Site, SiteData } from './lib/types'
 import { buildUrlState, customIndex, parseUrlState } from './lib/url'
+import { useNeighborhood } from './lib/useNeighborhood'
 import { DEFAULT_THRESHOLDS, type Thresholds } from './lib/verdict'
 
 // <input type="datetime-local"> values are treated as UTC.
@@ -98,6 +99,7 @@ export default function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [planned?.data, planned?.verdict, landing, days, t],
   )
+  const nearby = useNeighborhood(planned?.data.site.id)
   const plannedBefore = useMemo(
     () => (planned && original ? evaluate(planned.data, fromInput(original), days, t) : null),
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -239,7 +241,7 @@ export default function App() {
       <h2 className="section-title" id="tactics">Tactics</h2>
       <TacticsBoard
         ranked={ranked} planned={planned} shiftDays={shiftDays} landing={landingDate} t={t}
-        before={plannedBefore} original={original ? fromInput(original) : null}
+        before={plannedBefore} original={original ? fromInput(original) : null} nearby={nearby}
         onTryDate={(d) => setLanding(toInput(d))}
         onSelect={setSelectedId}
       />

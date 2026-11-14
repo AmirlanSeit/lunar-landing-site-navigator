@@ -1,12 +1,15 @@
 import { stepHours } from '../lib/metrics'
 import type { Scenario } from '../lib/tactics'
+import { useNeighborhood } from '../lib/useNeighborhood'
 import { reasonsFor, type Thresholds } from '../lib/verdict'
 import { ExplainMath } from './ExplainMath'
 import { HorizonView } from './HorizonView'
 import { MissionTimeline } from './MissionTimeline'
+import { NearbyMap } from './NearbyMap'
 
 export function SiteDetail({ s, t, explain }: { s: Scenario; t: Thresholds; explain: boolean }) {
   const { site } = s.data
+  const nearby = useNeighborhood(site.id)
   const lat = `${Math.abs(site.lat).toFixed(2)}°${site.lat < 0 ? 'S' : 'N'}`
   const lon = `${Math.abs(site.lon).toFixed(2)}°${site.lon < 0 ? 'W' : 'E'}`
   return (
@@ -26,6 +29,7 @@ export function SiteDetail({ s, t, explain }: { s: Scenario; t: Thresholds; expl
       <HorizonView data={s.data} m={s.metrics} />
       <div className="chart-caption">What an astronaut would see turning a full circle at the site during the mission.</div>
       <MissionTimeline m={s.metrics} stepHours={stepHours(s.data)} />
+      {nearby && <NearbyMap nb={nearby} />}
       {explain && <ExplainMath s={s} />}
       <div className="sources">
         {site.note && <p>{site.note}</p>}

@@ -152,6 +152,25 @@ button, input, select { font: inherit; color: inherit; }
 .match th:first-child, .match td:first-child { text-align: left; color: var(--muted); }
 .match td.win { color: var(--go); font-weight: 700; }
 
+/* Best spot nearby */
+.tactic .fine { color: var(--muted); font-size: 12px; margin: 8px 0 0; }
+.tactic .bearing { display: inline-block; color: var(--sun); }
+.nearby { margin-top: 18px; border-top: 1px solid var(--line); padding-top: 14px; }
+.nearby-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+.nearby-head h3 { margin: 0; font-family: var(--font-display); font-size: 18px; }
+.nearby-toggle { display: flex; gap: 6px; }
+.nearby-toggle button {
+  background: var(--panel-2); border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px;
+  cursor: pointer; font-size: 13px;
+}
+.nearby-toggle button.on { border-color: var(--sun); color: var(--sun); }
+.nearby-summary { color: #c9cedb; margin: 8px 0; }
+.nearby-svg { width: 100%; max-width: 420px; height: auto; display: block; margin: 8px auto 0; border-radius: 10px; }
+.nearby-legend { display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; margin-top: 8px; font-size: 12px; color: var(--muted); }
+.nearby-legend i { display: inline-block; width: 140px; height: 10px; border-radius: 5px; }
+.nearby-keys { margin-left: 8px; }
+.nearby-readout { text-align: center; font-family: var(--font-display); font-size: 16px; margin: 8px 0 0; min-height: 1.4em; }
+
 .sources { margin-top: 14px; color: var(--muted); font-size: 12px; }
 .sources p { margin: 4px 0; }
 .sources a { color: var(--earth); }

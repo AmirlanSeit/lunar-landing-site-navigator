@@ -1,6 +1,7 @@
+import { compass, type Neighborhood } from '../lib/neighborhood'
 import { STAT_LABELS } from '../lib/rating'
 import { strengthsWeaknesses, type Scenario } from '../lib/tactics'
-import { reasonsFor, type Thresholds } from '../lib/verdict'
+import { formatHours, reasonsFor, type Thresholds } from '../lib/verdict'
 
 interface Props {
   ranked: Scenario[]
@@ -10,6 +11,8 @@ interface Props {
   /** The planned site evaluated on the original (pre-slip) date, if one was given. */
   before: Scenario | null
   original: Date | null
+  /** "Best spot nearby" data for the planned site (polar catalog sites only). */
+  nearby: Neighborhood | null
   t: Thresholds
   onTryDate: (d: Date) => void
   onSelect: (id: string) => void
@@ -17,7 +20,7 @@ interface Props {
 
 const fmtDate = (d: Date) => d.toISOString().slice(0, 16).replace('T', ' ') + ' UTC'
 
-export function TacticsBoard({ ranked, planned, shiftDays, landing, before, original, t, onTryDate, onSelect }: Props) {
+export function TacticsBoard({ ranked, planned, shiftDays, landing, before, original, nearby, t, onTryDate, onSelect }: Props) {
   const best = ranked[0]
   if (!best) return null
   const sw = planned ? strengthsWeaknesses(planned, ranked) : null
@@ -58,6 +61,32 @@ export function TacticsBoard({ ranked, planned, shiftDays, landing, before, orig
           ) : (
             <p>No GO date within ±30 days – switch to the best pick or relax the thresholds.</p>
           )}
+        </div>
+      )}
+
+      {planned && nearby && (
+        <div className="tactic">
+          <h3>Better spot nearby</h3>
+          {nearby.best.distance_km < 0.25 ? (
+            <p>This is already the best spot within {nearby.radius_km} km.</p>
+          ) : (
+            <>
+              <div className="big">
+                Move {nearby.best.distance_km.toFixed(1)} km {compass(nearby.best.bearing_deg)}
+                {' '}<span className="bearing" style={{ transform: `rotate(${nearby.best.bearing_deg}deg)` }} aria-hidden="true">↑</span>
+              </div>
+              <ul>
+                <li>Sunlight {nearby.center.light_pct.toFixed(0)}% → <b>{nearby.best.light_pct.toFixed(0)}%</b></li>
+                <li>Earth link {nearby.center.earth_pct.toFixed(0)}% → <b>{nearby.best.earth_pct.toFixed(0)}%</b></li>
+                <li>Longest night {formatHours(nearby.center.longest_dark_h)} → {formatHours(nearby.best.longest_dark_h)}, slope {nearby.best.slope_deg.toFixed(1)}°</li>
+              </ul>
+              <p className="fine">Two-year averages over LRO LOLA terrain – a few kilometres change everything at the pole.</p>
+            </>
+          )}
+          <button onClick={() => {
+            onSelect(planned.data.site.id)
+            setTimeout(() => document.getElementById('nearby-map')?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 50)
+          }}>Show the map</button>
         </div>
       )}
 
