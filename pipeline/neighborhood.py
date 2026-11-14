@@ -157,8 +157,66 @@ def horizon_for_candidates(
     return masks
 
 
-def metrics_for_masks(mask_deg: np.ndarray, ephem: dict) -> tuple[np.ndarray, ...]:
-    """Apply the website's sun-disk, Earth-disc, and consecutive-dark-hour formulas."""
+def enu_basis(lat_rad: np.ndarray, lon_rad: np.ndarray) -> np.ndarray:
+    """Local east, north and up unit vectors (rows) in the Moon-fixed frame, shape (..., 3, 3)."""
+    sin_lat, cos_lat = np.sin(lat_rad), np.cos(lat_rad)
+    sin_lon, cos_lon = np.sin(lon_rad), np.cos(lon_rad)
+    zero = np.zeros_like(sin_lat)
+    east = np.stack([-sin_lon, cos_lon, zero], axis=-1)
+    north = np.stack([-sin_lat * cos_lon, -sin_lat * sin_lon, cos_lat], axis=-1)
+    up = np.stack([cos_lat * cos_lon, cos_lat * sin_lon, sin_lat], axis=-1)
+    return np.stack([east, north, up], axis=-2)
+
+
+def directions_at(
+    az_deg: np.ndarray,
+    el_deg: np.ndarray,
+    center_lat_deg: float,
+    center_lon_deg: float,
+    lat_deg: np.ndarray,
+    lon_deg: np.ndarray,
+) -> tuple[np.ndarray, np.ndarray]:
+    """Re-express directions observed at the center in each candidate's own local frame.
+
+    The Sun and Earth are effectively at infinity for a 5 km baseline (Earth's parallax is
+    below 0.001 degrees), so only the local axes change. Near the pole local north turns by
+    about the longitude difference times sin(latitude), roughly 2-3 degrees across 5 km,
+    which matters against a 1-degree horizon mask. Returns (azimuth, elevation) in degrees
+    with shape (candidates, samples).
+    """
+    az = np.deg2rad(az_deg)
+    el = np.deg2rad(el_deg)
+    enu = np.stack([np.cos(el) * np.sin(az), np.cos(el) * np.cos(az), np.sin(el)], axis=-1)
+    center = enu_basis(np.deg2rad(center_lat_deg), np.deg2rad(center_lon_deg))
+    local = enu_basis(np.deg2rad(lat_deg), np.deg2rad(lon_deg))
+    # center ENU -> Moon-fixed (center^T) -> candidate ENU (local)
+    v = np.einsum("kij,lj,tl->kti", local, center, enu)
+    local_az = np.rad2deg(np.arctan2(v[..., 0], v[..., 1])) % 360.0
+    local_el = np.rad2deg(np.arcsin(np.clip(v[..., 2], -1.0, 1.0)))
+    return local_az, local_el
+
+
+def mask_at(masks: np.ndarray, az_deg: np.ndarray) -> np.ndarray:
+    """Linearly interpolate each row's 1-degree mask at that row's azimuths."""
+    i = np.floor(az_deg).astype(np.int64) % 360
+    j = (i + 1) % 360
+    f = az_deg - np.floor(az_deg)
+    return np.take_along_axis(masks, i, axis=1) * (1.0 - f) + np.take_along_axis(masks, j, axis=1) * f
+
+
+def metrics_for_masks(
+    mask_deg: np.ndarray,
+    ephem: dict,
+    center_lat_deg: float,
+    center_lon_deg: float,
+    lat_deg: np.ndarray,
+    lon_deg: np.ndarray,
+) -> tuple[np.ndarray, ...]:
+    """Apply the website's sun-disk, Earth-disc, and consecutive-dark-hour formulas.
+
+    The ephemeris was computed at the center; directions are rotated into each candidate's
+    local frame before they are compared with that candidate's mask.
+    """
     sun = ephem["sun"]
     earth = ephem["earth"]
     sun_az = np.asarray(sun["az"], dtype=np.float64) % 360.0
@@ -170,27 +228,26 @@ def metrics_for_masks(mask_deg: np.ndarray, ephem: dict) -> tuple[np.ndarray, ..
     hours_per_step = float(ephem["step_min"]) / 60.0
     steps = len(sun_el)
     indices = np.arange(steps)
-    sun_i = np.floor(sun_az).astype(np.int32)
-    sun_j = (sun_i + 1) % 360
-    sun_f = sun_az - sun_i
-    earth_i = np.floor(earth_az).astype(np.int32)
-    earth_j = (earth_i + 1) % 360
-    earth_f = earth_az - earth_i
+    lat_deg = np.asarray(lat_deg, dtype=np.float64)
+    lon_deg = np.asarray(lon_deg, dtype=np.float64)
 
     light_pct = np.empty(len(mask_deg), dtype=np.float64)
     earth_pct = np.empty(len(mask_deg), dtype=np.float64)
     longest_dark_h = np.empty(len(mask_deg), dtype=np.float64)
     for start in range(0, len(mask_deg), 32):
         end = min(start + 32, len(mask_deg))
-        masks = mask_deg[start:end]
-        sun_horizon = masks[:, sun_i] * (1.0 - sun_f) + masks[:, sun_j] * sun_f
+        masks = mask_deg[start:end].astype(np.float64)
+        lat_k, lon_k = lat_deg[start:end], lon_deg[start:end]
+        sun_az_k, sun_el_k = directions_at(sun_az, sun_el, center_lat_deg, center_lon_deg, lat_k, lon_k)
+        earth_az_k, earth_el_k = directions_at(earth_az, earth_el, center_lat_deg, center_lon_deg, lat_k, lon_k)
+        sun_horizon = mask_at(masks, sun_az_k)
         sun_fraction = np.clip(
-            (sun_el[None, :] - sun_horizon + SUN_RADIUS_DEG) / (2.0 * SUN_RADIUS_DEG),
+            (sun_el_k - sun_horizon + SUN_RADIUS_DEG) / (2.0 * SUN_RADIUS_DEG),
             0.0,
             1.0,
         )
-        earth_horizon = masks[:, earth_i] * (1.0 - earth_f) + masks[:, earth_j] * earth_f
-        earth_visible = earth_el[None, :] > earth_horizon - EARTH_RADIUS_DEG
+        earth_horizon = mask_at(masks, earth_az_k)
+        earth_visible = earth_el_k > earth_horizon - EARTH_RADIUS_DEG
         dark = sun_fraction < 0.5
         last_non_dark = np.maximum.accumulate(np.where(~dark, indices[None, :], -1), axis=1)
         run_lengths = indices[None, :] - last_non_dark
@@ -200,8 +257,11 @@ def metrics_for_masks(mask_deg: np.ndarray, ephem: dict) -> tuple[np.ndarray, ..
     return light_pct, earth_pct, longest_dark_h
 
 
-def metrics_for_one_mask(mask: list[float], ephem: dict) -> tuple[float, float, float]:
-    result = metrics_for_masks(np.asarray(mask, dtype=np.float32)[None, :], ephem)
+def metrics_for_one_mask(mask: list[float], ephem: dict, lat_deg: float, lon_deg: float) -> tuple[float, float, float]:
+    """Metrics for a mask at the ephemeris site itself (no rotation)."""
+    result = metrics_for_masks(
+        np.asarray(mask, dtype=np.float32)[None, :], ephem, lat_deg, lon_deg, np.array([lat_deg]), np.array([lon_deg])
+    )
     return tuple(float(values[0]) for values in result)
 
 
@@ -250,11 +310,12 @@ def build_site(
     if abs(center_height - heights[center_i]) > 0.01:
         raise RuntimeError(f"Center DEM sampling mismatch at {site['id']}")
 
-    light, earth, longest = metrics_for_masks(masks, ephem)
+    site_lat, site_lon = float(site["lat"]), float(site["lon"])
+    light, earth, longest = metrics_for_masks(masks, ephem, site_lat, site_lon, lat, lon)
     site_id = site["id"]
     existing_horizon_path = HORIZON_DIR / f"{site_id}.json"
     existing_mask = json.loads(existing_horizon_path.read_text(encoding="utf-8"))["mask_el_deg"]
-    baseline = metrics_for_one_mask(existing_mask, ephem)
+    baseline = metrics_for_one_mask(existing_mask, ephem, site_lat, site_lon)
     center = {
         "lat": round(float(lat[center_i]), 5),
         "lon": round(float(lon[center_i]), 5),
@@ -282,9 +343,10 @@ def build_site(
         "observer_height_m": 2,
         "dem": DEM_PRODUCT,
         "notes": (
-            "Sun and Earth directions use the center-site JPL Horizons hourly ephemeris "
-            "for every candidate; across this neighborhood the direction shift is below "
-            "0.2 degrees, an accepted approximation."
+            "Sun and Earth directions come from the center-site JPL Horizons hourly ephemeris "
+            "and are rotated into each candidate's local east/north/up frame (near the pole "
+            "local north turns by up to about 3 degrees across 5 km); Sun and Earth parallax "
+            "across the neighborhood is below 0.001 degrees and is neglected."
         ),
         "center": center,
         "best": best,
