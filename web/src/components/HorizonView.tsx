@@ -58,7 +58,9 @@ export function HorizonView({ data, m }: { data: SiteData; m: Metrics }) {
       <div className="legend">
         <span><i style={{ background: 'var(--sun)' }} />Sun path (bright = above terrain)</span>
         <span><i style={{ background: 'var(--earth)' }} />Earth path (bright = link possible)</span>
-        <span><i style={{ background: 'var(--terrain)', borderRadius: 2 }} />Terrain horizon{data.mask?.mock ? ' (placeholder)' : ''}</span>
+        <span><i style={{ background: 'var(--terrain)', borderRadius: 2 }} />
+          {data.mask ? `Terrain horizon${data.mask.mock ? ' (placeholder)' : ' (LRO LOLA)'}` : 'Flat horizon (terrain not modeled)'}
+        </span>
         <span>Big dots = at landing · dashed = flat-Moon horizon</span>
       </div>
     </div>

@@ -1,6 +1,6 @@
 # Lunar data pipeline
 
-These scripts generate the real data served from `web/public/data/` in the format fixed by `PLAN.md` §2.1. `fetch_horizons.py` supplies Sun/Earth ephemerides; this README documents the LOLA terrain-mask pipeline.
+These scripts generate the real data served from `web/public/data/` in the format fixed by `PLAN.md` §2.1. `fetch_horizons.mjs` supplies Sun/Earth ephemerides (`node pipeline/fetch_horizons.mjs` from the repo root); this README documents the LOLA terrain-mask pipeline.
 
 ## LOLA horizon masks
 

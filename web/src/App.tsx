@@ -65,7 +65,8 @@ export default function App() {
   const maxLanding = maxDate ? new Date(maxDate.getTime() - days * 86400000) : null
   const mockEphem = data.some((d) => d.ephem.mock)
   const mockTerrain = data.some((d) => d.mask?.mock)
-  const unverifiedSites = sites.some((s) => !s.source?.length)
+  // User-entered points have no sources by design; only catalog sites must be sourced.
+  const unverifiedSites = sites.some((s) => s.category !== 'custom' && !s.source?.length)
 
   const toggleMatch = (id: string) =>
     setMatchIds((ids) => (ids.includes(id) ? ids.filter((x) => x !== id) : [...ids, id].slice(-4)))
