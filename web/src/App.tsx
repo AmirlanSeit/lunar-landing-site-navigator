@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { CustomSiteForm } from './components/CustomSiteForm'
 import { LatitudeLab } from './components/LatitudeLab'
 import { MatchView } from './components/MatchView'
 import { PlayerCard } from './components/PlayerCard'
@@ -26,7 +27,9 @@ export default function App() {
   const [matchIds, setMatchIds] = useState<string[]>([])
   const [explain, setExplain] = useState(false)
 
-  useEffect(() => { loadSites().then(setSites) }, [])
+  useEffect(() => {
+    loadSites().then((catalog) => setSites((current) => [...catalog, ...current.filter((s) => s.category === 'custom')]))
+  }, [])
 
   const regionSites = useMemo(() => sites.filter((s) => regionOf(s) === region), [sites, region])
 
@@ -36,8 +39,8 @@ export default function App() {
       if (!live) return
       setData(res.flatMap((r) => (r.status === 'fulfilled' ? [r.value] : [])))
     })
-    setPlannedId(regionSites[0]?.id ?? null)
-    setSelectedId(null)
+    setPlannedId((id) => regionSites.some((s) => s.id === id) ? id : regionSites[0]?.id ?? null)
+    setSelectedId((id) => regionSites.some((s) => s.id === id) ? id : null)
     setMatchIds([])
     return () => { live = false }
   }, [regionSites])
@@ -127,6 +130,13 @@ export default function App() {
           <input id="comm" type="range" min={25} max={100} step={5} value={t.goComm} onChange={(e) => setT({ ...t, goComm: +e.target.value })} />
         </div>
       </section>
+
+      <CustomSiteForm onAdd={(site) => {
+        setSites((current) => [...current, site])
+        setRegion(regionOf(site))
+        setPlannedId(site.id)
+        setSelectedId(site.id)
+      }} />
 
       {ranked.length === 0 && data.length > 0 && (
         <p className="section-title">No data for this date range – pick a date between {minDate && toInput(minDate)} and {maxLanding && toInput(maxLanding)}.</p>
