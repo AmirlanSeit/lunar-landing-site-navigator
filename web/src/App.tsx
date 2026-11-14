@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { CustomSiteForm } from './components/CustomSiteForm'
 import { Intro } from './components/Intro'
 import { LatitudeLab } from './components/LatitudeLab'
+import { LaunchCalendar } from './components/LaunchCalendar'
 import { MatchView } from './components/MatchView'
 import { PlayerCard } from './components/PlayerCard'
 import { ShareButton } from './components/ShareButton'
@@ -242,6 +243,17 @@ export default function App() {
         onTryDate={(d) => setLanding(toInput(d))}
         onSelect={setSelectedId}
       />
+
+      {data.every(({ site }) => regionOf(site) === region) && (
+        <LaunchCalendar
+          data={data} ranked={ranked} landing={landingDate} days={days} t={t}
+          onPick={(date, siteId) => {
+            setLanding(toInput(date))
+            setPlannedId(siteId)
+            setSelectedId(siteId)
+          }}
+        />
+      )}
 
       <h2 className="section-title">Squad ranking · {REGION_LABELS[region]}</h2>
       <div className="cards">
