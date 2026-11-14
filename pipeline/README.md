@@ -33,6 +33,37 @@ python pipeline/plot_mask.py
 
 The plotter saves a north-up, clockwise-from-north polar PNG for each mask in `pipeline/plots/`. Both `pipeline/dem/` and `pipeline/plots/` are ignored by Git.
 
+## Neighborhood comparison
+
+`neighborhood.py` evaluates a local candidate grid around each site south of 75°S. It reads the same `LDEM_75S_120M` JP2 already used for the horizon masks and the site's committed JPL Horizons ephemeris; it does not change `horizon/` or `ephem/`.
+
+```powershell
+python pipeline/neighborhood.py --radius-km 5 --spacing-m 240
+python pipeline/plot_neighborhood.py --site-id artemis_nobile_rim_1
+python pipeline/plot_neighborhood.py --site-id artemis_haworth
+```
+
+The search grid is laid out in local east/north offsets and clipped by great-circle distance, then each coordinate is placed on the lunar sphere with the direct geodesic formula. Each candidate's 360 rays keep the horizon-mask convention: clockwise from local north, spherical destination points, DEM bilinear samples, LOLA terrain height plus a 2 m observer, and the 1,737.4 km lunar radius. Ray samples are 120 m apart from 0.2–5 km, 240 m apart from 5–25 km, and 480 m apart from 25–150 km. Numpy processes six candidate masks at a time and evaluates ephemeris metrics in blocks of 32; the center candidate is replaced with the full 120 m `horizon_mask.py` result. This variable far-field ray spacing reduced the six-site 5 km run to 390.8 seconds on the development laptop while retaining 120 m sampling in the near field.
+
+Sun and Earth azimuth/elevation series are reused from the center-site ephemeris for every candidate. The change in apparent direction over 5 km is below 0.2°, so this is the stated neighborhood approximation. Illumination applies the website's linearly interpolated one-degree horizon, 0.265° solar radius and 0.53° disk diameter; Earth visibility uses the website's 0.95° Earth radius and strict `earth_el > horizon - 0.95` test. Longest darkness counts consecutive hourly samples with a visible solar-disk fraction below 0.5. Slope is the local angle derived from centered 120 m DEM height differences.
+
+### Center cross-check and neighborhood results (2026-11-14)
+
+At the center, computed results use the already committed one-degree horizon mask and match the site metric values to <0.01 percentage point before rounding. The user-provided rounded reference values are reproduced within 0.5 percentage point:
+
+| Site | Reference light / Earth (%) | Center light / Earth (%) | Best light / Earth (%) | Light gain |
+|---|---:|---:|---:|---:|
+| Haworth | 11 / 42 | 10.6 / 42.5 | 59.0 / 68.2 | +48.4 pp |
+| Nobile Rim 1 | 29 / 0 | 28.7 / 0.0 | 85.0 / 61.5 | +56.3 pp |
+| Nobile Rim 2 | 42 / 64 | 41.5 / 63.8 | 53.2 / 83.3 | +11.7 pp |
+| VIPER Mons Mouton target | 48 / 100 | 47.5 / 100.0 | 80.3 / 67.8 | +32.8 pp |
+| IM-1 Odysseus | 39 / 100 | 39.4 / 100.0 | 52.4 / 100.0 | +13.0 pp |
+| IM-2 Athena | 46 / 95 | 45.5 / 94.6 | 52.0 / 75.9 | +6.5 pp |
+
+Every selected best point has slope ≤8° and Earth visibility ≥50%. The maximum measured slope on a selected point is 4.79°. Largest light gains are at Nobile Rim 1 (+56.3 pp) and Haworth (+48.4 pp); their heatmaps are [`Nobile Rim 1`](../docs/images/neighborhood-artemis_nobile_rim_1.png) and [`Haworth`](../docs/images/neighborhood-artemis_haworth.png). Each PNG is under 300 KB and includes both markers, a 0–100% scale and the requested attribution.
+
+An independent center-value comparison with NASA's LOLA average solar illumination product is in [`docs/validation.md`](../docs/validation.md). The PDS raster and map label were sampled at each center coordinate; the largest difference from this approximately 2.17-year Horizons series is 2.45 percentage points.
+
 ### Sanity checks recorded 2026-11-14
 
 - All six sites below 75°S were read from `sites.json`; DEM heights recovered for IM-2 Athena and IM-1 Odysseus are 5,321.5 m and 2,582.6 m respectively, consistent with their site records. The other four DEM heights are 1,625.1 m (Haworth), 5,830.5 m (Nobile Rim 1), 1,018.7 m (Nobile Rim 2), and 6,296.4 m (VIPER Mons Mouton target).
@@ -43,4 +74,4 @@ The plotter saves a north-up, clockwise-from-north polar PNG for each mask in `p
 
 ## SI disclosure
 
-The horizon-mask implementation and its plots were created with help from ChatGPT Codex (GPT-6). The team selected the candidate-site list and reviewed the DEM choice and the mask outputs.
+The horizon-mask and neighborhood implementations and their plots were created with help from SI. The team selected the candidate-site list and reviewed the DEM choice, formulas, and outputs.
