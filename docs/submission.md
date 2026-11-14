@@ -1,16 +1,14 @@
 # Submission copy
 
-The fields below are ready to paste after the team chooses a tagline and replaces the bracketed placeholders, including [VIDEO LINK]. Keep the team name as [TEAM NAME] and participant names as [MEMBERS] wherever they are needed. Proposed next steps are for the team to review.
+The fields below are ready to paste after the team replaces the remaining bracketed placeholders, including [VIDEO LINK]. Team: Ninjago: Masters of Claudejitzu; participant names stay as [MEMBERS] wherever they are needed. Proposed next steps are for the team to review.
 
 ## Project Name
 
 Lunar Landing Site Navigator
 
-### Tagline options: choose one
+### Tagline (chosen by the team)
 
-1. Compare lunar sites when launch dates change.
-2. Find a new date for your lunar landing.
-3. See how sunlight and Earth visibility shape landings.
+The Moon gives us a destination.
 
 ## High-Level Project Summary
 
@@ -135,4 +133,4 @@ These notes are not submission-field text.
 - Verified against main commit `c63ae3d` and the live Demo on 14 November 2026; the better-spot map and validation figures were added after review against main commit `0adc0f9`. The exact scenario is [the built-in two-week-slip example](https://lunar-landing-site-navigator-sigma.vercel.app/?region=south-pole&date=2027-11-27T12:00&orig=2027-11-13T12:00&site=viper_mons_mouton_target). Screen percentages in the description are rounded values.
 - The [official Project Submission Guide](https://www.spaceappschallenge.org/resources/project-submission-guide/#project-page-form-field-instructions), dated 13 November 2026, lists the fields used here. It does not publish numeric word or character limits for the text fields. The summary follows the team's requested cap of 150 words; check any counters shown by the live form when pasting.
 - Demo must be a public video no longer than 30 seconds or a public presentation of no more than seven slides, including titles and introductions. All written submission materials are in English; use English subtitles for any non-English speech. See [demo requirements](https://www.spaceappschallenge.org/resources/project-submission-guide/#tips-for-creating-a-project-demo).
-- Replace the bracketed placeholders, choose one tagline, review the proposed next steps and confirm the final public links. Paste only the appropriate field content, not these notes or the unused tagline options.
+- Replace the remaining bracketed placeholders, review the proposed next steps and confirm the final public links. Paste only the appropriate field content, not these notes. Check that the team name matches the team page exactly.

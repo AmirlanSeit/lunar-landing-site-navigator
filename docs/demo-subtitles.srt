@@ -1,0 +1,32 @@
+1
+00:00:00,000 --> 00:00:02,000
+Ninjago: Masters of Claudejitzu
+
+2
+00:00:02,000 --> 00:00:05,000
+Imagine a two-week delay that cuts available sunlight.
+
+3
+00:00:05,000 --> 00:00:09,000
+Lunar Landing Site Navigator.
+The Moon gives us a destination.
+
+4
+00:00:09,000 --> 00:00:13,000
+The demo changes sunlight from 70% to 35%: NO-GO.
+
+5
+00:00:13,000 --> 00:00:16,000
+Try five days later: December 2 returns GO.
+
+6
+00:00:16,000 --> 00:00:19,000
+Compare daily landing windows in the calendar.
+
+7
+00:00:19,000 --> 00:00:24,000
+Or move 2.1 km: two-year sunlight rises from 48% to 80%.
+
+8
+00:00:24,000 --> 00:00:29,000
+NASA Horizons and LOLA data. Next: terrain for any point.

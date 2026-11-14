@@ -2,13 +2,15 @@
 
 Project: Lunar Landing Site Navigator
 
-Team: [TEAM NAME]
+Team: Ninjago: Masters of Claudejitzu
 
 Members: [MEMBERS]
 
-Chosen tagline: [CHOSEN TAGLINE]
+Chosen tagline: The Moon gives us a destination.
 
 Public demo URL: [VIDEO LINK]
+
+Subtitle file ready to import: [`demo-subtitles.srt`](demo-subtitles.srt) (8 cues, 0:00–0:29).
 
 Use a team name of at most four words in the opening cue. Choose a tagline of at most eight words: the four-word project name and tagline must fit within the 12-word title subtitle. Replace the placeholders before recording. Do not include identifiable names, voices, or images of members younger than 18 in the recording or slides.
 
@@ -40,9 +42,9 @@ The final edit is exactly **29 seconds**, from **0:00 through 0:29**. Cut the re
 
 | Start | End | Picture and action | English subtitle |
 |---|---|---|---|
-| 0:00 | 0:02 | Plain team card. Show the team name without faces, member names, or logos. | [TEAM NAME] |
+| 0:00 | 0:02 | Plain team card. Show the team name without faces, member names, or logos. | Ninjago: Masters of Claudejitzu |
 | 0:02 | 0:05 | Close-up of the original and delayed dates. Keep the small label "Hypothetical date slip" visible. | Imagine a two-week delay that cuts available sunlight. |
-| 0:05 | 0:09 | Project title card. Put the chosen tagline immediately below the title. | Lunar Landing Site Navigator. [CHOSEN TAGLINE] |
+| 0:05 | 0:09 | Project title card. Put the chosen tagline immediately below the title. | Lunar Landing Site Navigator. The Moon gives us a destination. |
 | 0:09 | 0:13 | Show the Demo click, then cut to the settled Tactics panel. Frame Mons Mouton's original GO, delayed NO-GO, and 70% to 35% comparison. | The demo changes sunlight from 70% to 35%: NO-GO. |
 | 0:13 | 0:16 | Click **Try that date**. Hold on the new date, 2 December at 12:00 UTC, and Mons Mouton's GO. Add a small label: "GO = mission-average thresholds". | Try five days later: December 2 returns GO. |
 | 0:16 | 0:19 | Scroll to the calendar. Frame the Mons Mouton row and selected 2 December column; hover its cell to show the tooltip. | Compare daily landing windows in the calendar. |
@@ -69,8 +71,8 @@ Use this deck instead of the video if recording is not ready. The seven-slide co
 
 | Slide | Title | Content and visual |
 |---|---|---|
-| 1 | Lunar Landing Site Navigator | [CHOSEN TAGLINE] and the public live-site URL. Plain title treatment, without NASA logos. |
-| 2 | The team | [TEAM NAME] and [MEMBERS]. Replace member credits only with information permitted by the event's age and consent rules. Do not include identifiable minors' names or likenesses. |
+| 1 | Lunar Landing Site Navigator | The Moon gives us a destination. and the public live-site URL. Plain title treatment, without NASA logos. |
+| 2 | The team | Ninjago: Masters of Claudejitzu and [MEMBERS]. Replace member credits only with information permitted by the event's age and consent rules. Do not include identifiable minors' names or likenesses. |
 | 3 | A delayed landing changes the conditions | Explain the hypothetical Mons Mouton date slip: 13 to 27 November 2027. Show 70% to 35% sunlight and GO to NO-GO for the same 14-day window length. Identify Mons Mouton as a historical VIPER target. |
 | 4 | Compare sites and dates | Show the flow: set a date, compare sunlight and Earth visibility, try a suggested shift or select a calendar cell. State the 70% sunlight and 50% Earth-visibility thresholds. |
 | 5 | The working result | Use three readable screenshots: the delayed NO-GO, the five-day shift to 2 December with GO, and the "Within 5 km" map (best spot 2.1 km ENE, two-year sunlight 48% → 80%). Note that GO tests mission averages, not continuous coverage or landing safety, and that the map shows two-year averages. |
