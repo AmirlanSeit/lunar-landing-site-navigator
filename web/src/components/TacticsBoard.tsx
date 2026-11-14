@@ -1,6 +1,6 @@
 import { compass, type Neighborhood } from '../lib/neighborhood'
 import { STAT_LABELS } from '../lib/rating'
-import { strengthsWeaknesses, type Scenario } from '../lib/tactics'
+import { bestPick, flatHorizonPolar, strengthsWeaknesses, type Scenario } from '../lib/tactics'
 import { formatHours, reasonsFor, type Thresholds } from '../lib/verdict'
 
 interface Props {
@@ -21,7 +21,7 @@ interface Props {
 const fmtDate = (d: Date) => d.toISOString().slice(0, 16).replace('T', ' ') + ' UTC'
 
 export function TacticsBoard({ ranked, planned, shiftDays, landing, before, original, nearby, t, onTryDate, onSelect }: Props) {
-  const best = ranked[0]
+  const best = bestPick(ranked)
   if (!best) return null
   const sw = planned ? strengthsWeaknesses(planned, ranked) : null
   const shiftedDate = shiftDays === null ? null : new Date(landing.getTime() + shiftDays * 86400000)
@@ -41,6 +41,9 @@ export function TacticsBoard({ ranked, planned, shiftDays, landing, before, orig
         <div className="tactic">
           <h3>Your planned site</h3>
           <div className="big">{planned.data.site.name} <span className={`verdict ${planned.verdict}`}>{planned.verdict}</span></div>
+          {flatHorizonPolar(planned.data.site) && (
+            <p className="fine">⚠ Flat horizon: terrain is not modeled for custom points, and near the pole real terrain usually lowers these numbers.</p>
+          )}
           {before && original && (
             <p className="slip">
               Original date ({fmtDate(original)}): <span className={`verdict ${before.verdict}`}>{before.verdict}</span>

@@ -14,7 +14,7 @@ export const CATEGORY_LABELS: Record<Category, string> = {
   clps_historical_target: 'Planned target',
   clps_landed: 'Landed',
   international_landed: 'Landed',
-  custom: 'Custom point',
+  custom: 'Custom · flat horizon',
 }
 
 export interface Site {

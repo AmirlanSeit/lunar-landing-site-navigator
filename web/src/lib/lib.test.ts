@@ -3,7 +3,7 @@ import {
   flatPanelPct, hillAngle, maxSunElevation, nominalEarthElevation, SUNRISE_HOURS, verticalPanelPct,
 } from './explain'
 import { computeMetrics } from './metrics'
-import { nearestGoShift, rank, evaluate } from './tactics'
+import { bestPick, nearestGoShift, rank, evaluate } from './tactics'
 import type { SiteData } from './types'
 import { DEFAULT_THRESHOLDS, verdictFor } from './verdict'
 import { maskAt, sunFraction } from './visibility'
@@ -81,6 +81,22 @@ describe('explain math', () => {
   it('a lunar sunrise lasts about an hour', () => {
     expect(SUNRISE_HOURS).toBeGreaterThan(0.9)
     expect(SUNRISE_HOURS).toBeLessThan(1.2)
+  })
+})
+
+describe('best pick', () => {
+  it('never recommends a flat-horizon polar custom point over terrain-modeled sites', () => {
+    // terrain-modeled catalog site lit only half the time; the flat-horizon point looks perfect
+    const realData = fake((i) => (i % 48 < 24 ? 3 : -3), () => 3)
+    realData.site = { ...realData.site, id: 'artemis_x', category: 'artemis_region_reference' }
+    const real = evaluate(realData, new Date(START), 14, DEFAULT_THRESHOLDS)!
+    const customData = fake(() => 5, () => 5)
+    customData.site = { ...customData.site, id: 'custom-1', category: 'custom', lat: -88 }
+    const custom = evaluate(customData, new Date(START), 14, DEFAULT_THRESHOLDS)!
+    const ranked = rank([real, custom])
+    expect(ranked[0]).toBe(custom) // it still ranks first on its (optimistic) numbers…
+    expect(bestPick(ranked)).toBe(real) // …but is not offered as the best pick
+    expect(bestPick([custom])).toBe(custom)
   })
 })
 

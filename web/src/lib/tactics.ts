@@ -1,7 +1,12 @@
 import { computeMetrics, type Metrics } from './metrics'
 import { overall, statsFor, type Stats } from './rating'
-import type { SiteData } from './types'
+import type { Site, SiteData } from './types'
 import { verdictFor, type Thresholds, type Verdict } from './verdict'
+
+/** Custom points use a flat horizon; near the pole that overstates sunlight and Earth visibility. */
+export function flatHorizonPolar(site: Site): boolean {
+  return site.category === 'custom' && site.lat < -75
+}
 
 export interface Scenario {
   data: SiteData
@@ -23,6 +28,11 @@ export function evaluate(data: SiteData, landing: Date, days: number, t: Thresho
 /** Best first: by verdict, then overall rating. */
 export function rank(scenarios: Scenario[]): Scenario[] {
   return [...scenarios].sort((a, b) => VERDICT_RANK[a.verdict] - VERDICT_RANK[b.verdict] || b.ovr - a.ovr)
+}
+
+/** The site to recommend: a flat-horizon polar point is never compared as an equal to terrain-modeled sites. */
+export function bestPick(ranked: Scenario[]): Scenario | undefined {
+  return ranked.find((s) => !flatHorizonPolar(s.data.site)) ?? ranked[0]
 }
 
 /** Smallest landing-date shift (whole days, either direction) that turns this site GO. */

@@ -11,7 +11,7 @@ import { TacticsBoard } from './components/TacticsBoard'
 import { createCustomSite } from './lib/custom-site'
 import { loadSiteData, loadSites, REGION_LABELS, regionOf, type Region } from './lib/data'
 import { dataRange } from './lib/metrics'
-import { evaluate, nearestGoShift, rank } from './lib/tactics'
+import { bestPick, evaluate, nearestGoShift, rank } from './lib/tactics'
 import type { Site, SiteData } from './lib/types'
 import { buildUrlState, customIndex, parseUrlState } from './lib/url'
 import { useNeighborhood } from './lib/useNeighborhood'
@@ -93,6 +93,7 @@ export default function App() {
     [data, landing, days, t],
   )
   const byId = (id: string | null) => ranked.find((s) => s.data.site.id === id) ?? null
+  const pick = bestPick(ranked)
   const planned = byId(plannedId)
   const shiftDays = useMemo(
     () => (planned && planned.verdict !== 'GO' ? nearestGoShift(planned.data, landingDate, days, t) : null),
@@ -262,7 +263,7 @@ export default function App() {
         {ranked.map((s, i) => (
           <PlayerCard
             key={s.data.site.id} s={s} rank={i + 1}
-            best={i === 0 && s.verdict !== 'NO-GO'}
+            best={s === pick && s.verdict !== 'NO-GO'}
             planned={s.data.site.id === plannedId}
             selected={s === selected}
             inMatch={matchIds.includes(s.data.site.id)}
