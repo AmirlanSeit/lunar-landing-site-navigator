@@ -38,7 +38,7 @@ export function LatitudeLab({ siteLat, siteName }: { siteLat: number; siteName: 
         <button className="link" onClick={() => setLat(siteLat)}>Back to {siteName}</button>
         <code>Sun height = 90° − |lat| = {el.toFixed(1)}° (up to {maxSunElevation(lat).toFixed(1)}° with the 1.5° tilt)</code>
         <p>
-          Flat panel: <b>{Math.round(flatPanelPct(el))}%</b> power · vertical panel: <b>{Math.round(verticalPanelPct(el))}%</b>
+          Ideal geometric factor: flat panel <b>{Math.round(flatPanelPct(el))}%</b> · vertical panel <b>{Math.round(verticalPanelPct(el))}%</b>
         </p>
       </div>
       <svg className="chart lab-svg" viewBox={`0 0 ${W} ${H}`} role="img" aria-label="Sunlight angle versus latitude on the Moon">

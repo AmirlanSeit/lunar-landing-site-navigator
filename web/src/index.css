@@ -152,6 +152,16 @@ button, input, select { font: inherit; color: inherit; }
 .match th:first-child, .match td:first-child { text-align: left; color: var(--muted); }
 .match td.win { color: var(--go); font-weight: 700; }
 
+.section-note { margin: -4px 0 12px; color: var(--muted); font-size: 13px; }
+.section-note b { color: var(--text); font-family: var(--font-display); }
+.custom-site-details { margin-top: 12px; }
+.custom-site-details > summary {
+  cursor: pointer; color: var(--muted); font-family: var(--font-display); text-transform: uppercase;
+  letter-spacing: 0.06em; font-size: 14px; padding: 6px 0;
+}
+.custom-site-details[open] > summary { color: var(--text); }
+.custom-site-details .custom-site-form h2 { display: none; }
+
 /* Best spot nearby */
 .tactic .fine { color: var(--muted); font-size: 12px; margin: 8px 0 0; }
 .tactic .bearing { display: inline-block; color: var(--sun); }

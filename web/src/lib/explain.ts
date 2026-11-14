@@ -19,12 +19,12 @@ export function hillAngle(heightKm: number, distanceKm: number): number {
   return Math.atan((heightKm - drop) / distanceKm) / rad
 }
 
-/** Share of full power a flat (horizontal) panel gets: sin(elevation). */
+/** Ideal geometric factor for a flat (horizontal) panel: sin(elevation). Not electrical power. */
 export function flatPanelPct(elDeg: number): number {
   return 100 * Math.max(0, Math.sin(elDeg * rad))
 }
 
-/** Share of full power a vertical panel turned toward the Sun gets: cos(elevation). */
+/** Ideal geometric factor for a vertical panel turned toward the Sun: cos(elevation). */
 export function verticalPanelPct(elDeg: number): number {
   return 100 * Math.max(0, Math.cos(elDeg * rad))
 }
@@ -34,8 +34,19 @@ export function nominalEarthElevation(latDeg: number, lonDeg: number): number {
   return Math.asin(Math.cos(latDeg * rad) * Math.cos(lonDeg * rad)) / rad
 }
 
-/** How fast the Sun crosses the lunar sky, degrees per Earth day. */
+/** How fast the Sun's hour angle advances in the lunar sky, degrees per Earth day. */
 export const SUN_DEG_PER_DAY = 360 / SYNODIC_MONTH_DAYS
 
-/** Hours the Sun needs to move its own diameter – roughly how long a lunar sunrise lasts. */
-export const SUNRISE_HOURS = (SUN_DIAMETER_DEG / SUN_DEG_PER_DAY) * 24
+/**
+ * How fast the Sun climbs while crossing a flat horizon, degrees per Earth day. With the Moon's
+ * small solar declination the Sun rises roughly due east, so the vertical rate is the hour-angle
+ * rate times cos(latitude): full speed at the equator, almost nothing near the pole.
+ */
+export function sunriseRateDegPerDay(latDeg: number): number {
+  return SUN_DEG_PER_DAY * Math.cos(latDeg * rad)
+}
+
+/** Hours for the whole solar disk to clear a flat horizon at this latitude (terrain changes it). */
+export function sunriseHours(latDeg: number): number {
+  return (SUN_DIAMETER_DEG / sunriseRateDegPerDay(latDeg)) * 24
+}

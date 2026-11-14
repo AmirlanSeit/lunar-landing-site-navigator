@@ -89,7 +89,7 @@ export function LaunchCalendar({ data, ranked, landing, days, t, onPick }: Launc
                     const selected = date.getTime() === landingMs
                     const dateLabel = `${date.toISOString().slice(0, 16).replace('T', ' ')} UTC`
                     const description = cell
-                      ? `${site.name}, ${dateLabel}: ${cell.verdict}; sunlight ${cell.lightPct.toFixed(1)}%; Earth link ${cell.commPct.toFixed(1)}%`
+                      ? `${site.name}, ${dateLabel}: ${cell.verdict}; sunlight ${cell.lightPct.toFixed(1)}%; Earth in view ${cell.commPct.toFixed(1)}%`
                       : `${site.name}, ${dateLabel}: no data for the full ${days}-day mission`
                     const label = `${description}${selected ? '; selected landing date' : ''}`
                     return (

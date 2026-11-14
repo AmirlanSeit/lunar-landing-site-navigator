@@ -223,23 +223,31 @@ export default function App() {
           <input id="light" type="range" min={30} max={100} step={5} value={t.goLight} onChange={(e) => setT({ ...t, goLight: +e.target.value })} />
         </div>
         <div className="control">
-          <label htmlFor="comm">GO needs Earth link ≥ <span className="value">{t.goComm}%</span></label>
+          <label htmlFor="comm">GO needs Earth in view ≥ <span className="value">{t.goComm}%</span></label>
           <input id="comm" type="range" min={25} max={100} step={5} value={t.goComm} onChange={(e) => setT({ ...t, goComm: +e.target.value })} />
         </div>
       </section>
 
-      <CustomSiteForm onAdd={(site) => {
-        setSites((current) => [...current, site])
-        setRegion(regionOf(site))
-        setPlannedId(site.id)
-        setSelectedId(site.id)
-      }} />
+      {/* Collapsed by default so the results start on the first screen. */}
+      <details className="custom-site-details">
+        <summary>➕ Try any lunar coordinates (custom site)</summary>
+        <CustomSiteForm onAdd={(site) => {
+          setSites((current) => [...current, site])
+          setRegion(regionOf(site))
+          setPlannedId(site.id)
+          setSelectedId(site.id)
+        }} />
+      </details>
 
       {ranked.length === 0 && data.length > 0 && (
         <p className="section-title">No data for this date range – pick a date between {minDate && toInput(minDate)} and {maxLanding && toInput(maxLanding)}.</p>
       )}
 
       <h2 className="section-title" id="tactics">Tactics</h2>
+      <p className="section-note">
+        GO = the mission averages meet your thresholds. It does not promise continuous sunlight, a working radio link
+        or a safe landing.
+      </p>
       <TacticsBoard
         ranked={ranked} planned={planned} shiftDays={shiftDays} landing={landingDate} t={t}
         before={plannedBefore} original={original ? fromInput(original) : null} nearby={nearby}
@@ -259,6 +267,11 @@ export default function App() {
       )}
 
       <h2 className="section-title">Squad ranking · {REGION_LABELS[region]}</h2>
+      <p className="section-note">
+        Card stats are scores from 0 to 99, higher is better: <b>LGT</b> sunlight · <b>COM</b> Earth in view ·{' '}
+        <b>NGT</b> night survival · <b>SUN</b> time to sunset · <b>ERT</b> time to Earthset · <b>ELV</b> Sun above
+        terrain. <b>OVR</b> is their weighted total. Hover a stat for details.
+      </p>
       <div className="cards">
         {ranked.map((s, i) => (
           <PlayerCard

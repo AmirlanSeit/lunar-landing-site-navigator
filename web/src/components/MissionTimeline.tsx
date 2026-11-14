@@ -4,7 +4,7 @@ const W = 720
 const ROW = 22
 const LABEL = 48
 
-/** Day-by-day strip: sunlight and Earth link across the mission. */
+/** Day-by-day strip: sunlight and Earth visibility across the mission. */
 export function MissionTimeline({ m, stepHours }: { m: Metrics; stepHours: number }) {
   const n = m.sunFrac.length
   const cw = (W - LABEL) / n
@@ -12,7 +12,7 @@ export function MissionTimeline({ m, stepHours }: { m: Metrics; stepHours: numbe
   const tickEvery = days > 20 ? 5 : days > 8 ? 2 : 1
   const H = ROW * 2 + 26
   return (
-    <svg className="chart" viewBox={`0 0 ${W} ${H}`} role="img" aria-label="Mission timeline of sunlight and Earth link">
+    <svg className="chart" viewBox={`0 0 ${W} ${H}`} role="img" aria-label="Mission timeline of sunlight and Earth visibility">
       <text x={0} y={ROW - 6} fontSize="12" fill="#8a93a8">Sun</text>
       <text x={0} y={ROW * 2 - 2} fontSize="12" fill="#8a93a8">Earth</text>
       {m.sunFrac.map((f, k) => (

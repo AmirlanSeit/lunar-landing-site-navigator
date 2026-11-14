@@ -4,7 +4,10 @@ import { earthVisible, maskAt, sunFraction } from './visibility'
 export interface Metrics {
   lightPct: number // mean fraction of solar disk visible, %
   commPct: number // share of time Earth is in view, %
-  meanSunElLit: number // mean sun elevation above terrain while lit, degrees
+  /** Mean clearance of the Sun above the terrain while lit (degrees) – drives the ELV stat. */
+  meanSunClearanceLit: number
+  /** Mean geometric Sun elevation above the level horizon while lit (degrees) – what a panel sees. */
+  meanSunElevationLit: number
   longestDarkHours: number
   litAtLanding: boolean
   earthAtLanding: boolean
@@ -45,7 +48,8 @@ export function computeMetrics(d: SiteData, landing: Date, days: number): Metric
   const earthVis: boolean[] = []
   let lightSum = 0
   let commCount = 0
-  let elLitSum = 0
+  let clearanceLitSum = 0
+  let elevationLitSum = 0
   let litSteps = 0
   let dark = 0
   let longestDark = 0
@@ -60,7 +64,8 @@ export function computeMetrics(d: SiteData, landing: Date, days: number): Metric
     lightSum += f
     if (e) commCount++
     if (f >= 0.5) {
-      elLitSum += sun.el[i] - sunHorizon
+      clearanceLitSum += sun.el[i] - sunHorizon
+      elevationLitSum += sun.el[i]
       litSteps++
       dark = 0
     } else {
@@ -79,7 +84,8 @@ export function computeMetrics(d: SiteData, landing: Date, days: number): Metric
   return {
     lightPct: (100 * lightSum) / count,
     commPct: (100 * commCount) / count,
-    meanSunElLit: litSteps ? elLitSum / litSteps : 0,
+    meanSunClearanceLit: litSteps ? clearanceLitSum / litSteps : 0,
+    meanSunElevationLit: litSteps ? elevationLitSum / litSteps : 0,
     longestDarkHours: longestDark * h,
     litAtLanding,
     earthAtLanding,

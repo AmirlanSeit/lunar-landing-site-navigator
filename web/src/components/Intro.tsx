@@ -9,7 +9,7 @@ export function Intro({ onDemo }: { onDemo: () => void }) {
         </li>
         <li>
           <b>2 · Compare the squad</b>
-          <span>Every site gets a player card: sunlight, Earth link, night survival and a GO / RISKY / NO-GO verdict.</span>
+          <span>Every site gets a player card: sunlight, Earth in view, night survival and a GO / RISKY / NO-GO verdict.</span>
         </li>
         <li>
           <b>3 · Follow the tactics</b>

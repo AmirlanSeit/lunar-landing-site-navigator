@@ -1,7 +1,9 @@
 import {
-  flatPanelPct, hillAngle, maxSunElevation, nominalEarthElevation, SUN_DEG_PER_DAY, SUNRISE_HOURS, verticalPanelPct,
+  flatPanelPct, hillAngle, maxSunElevation, nominalEarthElevation, SUN_DEG_PER_DAY, sunriseHours, sunriseRateDegPerDay,
+  verticalPanelPct,
 } from '../lib/explain'
 import type { Scenario } from '../lib/tactics'
+import { formatHours } from '../lib/verdict'
 
 const f1 = (x: number) => x.toFixed(1)
 
@@ -17,7 +19,8 @@ export function ExplainMath({ s }: { s: Scenario }) {
   const absLat = Math.abs(site.lat)
   const theoryMax = maxSunElevation(site.lat)
   const terrainMax = mask ? Math.max(...mask.mask_el_deg) : 0
-  const sunEl = Math.max(0, m.meanSunElLit)
+  // geometric elevation above the level horizon – what a panel actually sees (not the clearance above terrain)
+  const sunEl = Math.max(0, m.meanSunElevationLit)
   const polar = absLat > 75
 
   return (
@@ -47,11 +50,12 @@ export function ExplainMath({ s }: { s: Scenario }) {
       </div>
 
       <div className="note">
-        <h4>3 · Sun height → solar power</h4>
-        <code>flat panel ∝ sin(height) · vertical panel facing the Sun ∝ cos(height)</code>
+        <h4>3 · Sun height → panel geometry</h4>
+        <code>flat panel ∝ sin(elevation) · vertical panel facing the Sun ∝ cos(elevation)</code>
         <p>
-          Average Sun height here while lit: <b>{f1(sunEl)}°</b>. A flat panel gets <b>{Math.round(flatPanelPct(sunEl))}%</b> of
-          full power, a vertical one <b>{Math.round(verticalPanelPct(sunEl))}%</b>.
+          Average Sun elevation here while lit, above the level horizon: <b>{f1(sunEl)}°</b>. The ideal geometric factor
+          is <b>{Math.round(flatPanelPct(sunEl))}%</b> for a flat panel and <b>{Math.round(verticalPanelPct(sunEl))}%</b> for
+          a vertical one turned toward the Sun – before losses, dust or temperature, so not the mission's electrical power.
           {polar && ' That is why polar landers stand their solar panels upright.'}
         </p>
       </div>
@@ -62,8 +66,8 @@ export function ExplainMath({ s }: { s: Scenario }) {
         <p>
           The Moon always shows Earth the same face, so Earth hangs almost still in the sky. But the Moon wobbles
           (libration) by up to ±7°, so Earth rocks up and down: during this mission between <b>{f1(earthMin)}°</b> and{' '}
-          <b>{f1(earthMax)}°</b>. When it dips below the terrain, the radio link drops – here {Math.round(m.commPct)}% of
-          the time it is up.
+          <b>{f1(earthMax)}°</b>. When it dips below the terrain, the line of sight for a direct-to-Earth link is lost – here
+          some part of Earth is in view {Math.round(m.commPct)}% of the time (geometry only, not a radio link budget).
         </p>
       </div>
 
@@ -71,8 +75,10 @@ export function ExplainMath({ s }: { s: Scenario }) {
         <h4>5 · How we score sunlight</h4>
         <code>Light % = Σ (visible part of the Sun’s disk, 0…1) ÷ number of hours = {Math.round(m.lightPct)}%</code>
         <p>
-          A lunar day lasts 29.5 Earth days, so the Sun moves only {f1(SUN_DEG_PER_DAY)}° per day – it needs about{' '}
-          {f1(SUNRISE_HOURS)} hours just to rise by its own width. One slow sunset can mean two weeks of night.
+          A lunar day lasts 29.5 Earth days, so the Sun's hour angle moves only {f1(SUN_DEG_PER_DAY)}° per day. While
+          rising, it climbs that rate × cos(latitude) = <b>{sunriseRateDegPerDay(site.lat).toFixed(2)}° per day</b> here, so
+          the whole 0.53° disk needs about <b>{formatHours(sunriseHours(site.lat))}</b> to clear a flat horizon
+          (about 1 hour at the equator; terrain changes it). One slow sunset can mean two weeks of night.
         </p>
       </div>
     </div>

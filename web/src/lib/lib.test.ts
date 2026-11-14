@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import {
-  flatPanelPct, hillAngle, maxSunElevation, nominalEarthElevation, SUNRISE_HOURS, verticalPanelPct,
+  flatPanelPct, hillAngle, maxSunElevation, nominalEarthElevation, sunriseHours, verticalPanelPct,
 } from './explain'
 import { computeMetrics } from './metrics'
 import { bestPick, nearestGoShift, rank, evaluate } from './tactics'
@@ -56,6 +56,12 @@ describe('metrics', () => {
     expect(m.sunChangeHours).toBe(100)
     expect(m.longestDarkHours).toBe(14 * 24 - 100)
   })
+  it('separates the Sun elevation from its clearance above the terrain', () => {
+    // Sun 5° above the level horizon, terrain rising 3°: 5° for panels, 2° of clearance
+    const m = computeMetrics(fake(() => 5, () => 5, 24 * 60, 3), new Date(START), 14)!
+    expect(m.meanSunElevationLit).toBeCloseTo(5)
+    expect(m.meanSunClearanceLit).toBeCloseTo(2)
+  })
   it('returns null outside the data range', () => {
     expect(computeMetrics(fake(() => 5, () => 5), new Date('2030-01-01'), 14)).toBeNull()
   })
@@ -78,9 +84,11 @@ describe('explain math', () => {
     expect(nominalEarthElevation(0, 0)).toBeCloseTo(90)
     expect(nominalEarthElevation(-90, 0)).toBeCloseTo(0)
   })
-  it('a lunar sunrise lasts about an hour', () => {
-    expect(SUNRISE_HOURS).toBeGreaterThan(0.9)
-    expect(SUNRISE_HOURS).toBeLessThan(1.2)
+  it('a lunar sunrise takes about an hour at the equator but most of a day near the pole', () => {
+    expect(sunriseHours(0)).toBeGreaterThan(0.9)
+    expect(sunriseHours(0)).toBeLessThan(1.2)
+    expect(sunriseHours(-86.75)).toBeGreaterThan(17) // Haworth: ~18 h
+    expect(sunriseHours(-86.75)).toBeLessThan(20)
   })
 })
 

@@ -62,8 +62,8 @@ export function reasonsFor(m: Metrics, t: Thresholds): Reason[] {
   if (!m.earthAtLanding) {
     r.push({
       text: m.earthChangeHours === null
-        ? 'No direct link to Earth during the mission – relay needed'
-        : `No Earth link at landing – Earth rises after ${formatHours(m.earthChangeHours)}`,
+        ? 'Earth never in view during the mission – a relay satellite would be needed'
+        : `Earth not in view at landing – it rises after ${formatHours(m.earthChangeHours)}`,
       good: false,
     })
   } else if (m.earthChangeHours !== null) {

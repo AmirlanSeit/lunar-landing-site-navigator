@@ -49,10 +49,14 @@ rises above the terrain. A ridge 3.7 km away gets 85% sunlight and sees Earth 62
 
 ## Validation
 
-- Sunlight at the six polar sites agrees with NASA's own LOLA average-illumination map
-  (PGDA product 69, Mazarico et al. 2011) within −1.0 to +2.5 percentage points:
-  [`docs/validation.md`](docs/validation.md).
-- Horizon masks re-derived independently from NASA Moon Trek's LOLA service agree within about 0.2°.
+- At the six polar site reference points, our two-year sunlight averages differ from NASA's long-term
+  LOLA average-illumination map (PGDA product 69, Mazarico et al. 2011) by −1.0 to +2.5 percentage points
+  ([`docs/validation.md`](docs/validation.md)). Periods and model settings differ, and the map squares
+  and individual mission windows are not separately validated.
+- Horizon masks re-derived with independent code from NASA Moon Trek's LOLA service agree within about
+  0.2° (both use LOLA, so this checks consistency, not absolute accuracy).
+- For the nearby-spot grids, Sun and Earth directions are rotated into each point's local frame; at a
+  Haworth candidate 3.9 km away they match JPL Horizons queried directly there within 0.005°.
 - Sun positions checked against the Apollo 11 landing (Sun about 10.7° high in the east at 20:17 UT)
   and against the 90° − |latitude| + 1.54° limit at every site.
 - 120 automated tests (`npm test`).

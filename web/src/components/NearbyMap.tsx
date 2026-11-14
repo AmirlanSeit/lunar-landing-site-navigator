@@ -10,7 +10,7 @@ const RAMPS: Record<Metric, string[]> = {
   light: ['#1b1e2a', '#3a3424', '#6e5a1f', '#a9851f', '#e0b32c', '#ffd54a', '#fff0b3'],
   earth: ['#1b1e2a', '#162a4a', '#184f95', '#2a78d6', '#5598e7', '#9ec5f4', '#cde2fb'],
 }
-const LABELS: Record<Metric, string> = { light: 'Sunlight', earth: 'Earth link' }
+const LABELS: Record<Metric, string> = { light: 'Sunlight', earth: 'Earth in view' }
 
 function rampColor(stops: string[], pct: number): string {
   const t = (Math.min(100, Math.max(0, pct)) / 100) * (stops.length - 1)
@@ -29,7 +29,7 @@ function describe(nb: Neighborhood, p: NearbyPoint) {
   const km = isBest ? nb.best.distance_km : Math.hypot(e, n)
   const bearing = isBest ? nb.best.bearing_deg : (Math.atan2(e, n) * 180) / Math.PI
   const where = km < 0.05 ? 'the reference point' : `${km.toFixed(1)} km ${compass(bearing)}`
-  return `${where} · sunlight ${p.light_pct.toFixed(0)}% · Earth link ${p.earth_pct.toFixed(0)}% · slope ${p.slope_deg.toFixed(1)}°`
+  return `${where} · sunlight ${p.light_pct.toFixed(0)}% · Earth in view ${p.earth_pct.toFixed(0)}% · slope ${p.slope_deg.toFixed(1)}°`
 }
 
 /** Heat map of two-year sunlight / Earth-link averages on a 240 m grid around a polar site. */
@@ -93,9 +93,9 @@ export function NearbyMap({ nb }: { nb: Neighborhood }) {
         </div>
       </div>
       <p className="nearby-summary">
-        Reference point: sunlight {c.light_pct.toFixed(0)}%, Earth link {c.earth_pct.toFixed(0)}%.
+        Reference point: sunlight {c.light_pct.toFixed(0)}%, Earth in view {c.earth_pct.toFixed(0)}%.
         {' '}Best spot within {nb.radius_km} km: <b>{b.distance_km.toFixed(1)} km {compass(b.bearing_deg)}</b>,
-        {' '}sunlight <b>{b.light_pct.toFixed(0)}%</b>, Earth link <b>{b.earth_pct.toFixed(0)}%</b>, slope {b.slope_deg.toFixed(1)}°.
+        {' '}sunlight <b>{b.light_pct.toFixed(0)}%</b>, Earth in view <b>{b.earth_pct.toFixed(0)}%</b>, slope {b.slope_deg.toFixed(1)}°.
       </p>
       <svg
         className="nearby-svg" viewBox={`0 0 ${SIZE} ${SIZE}`} role="img"
@@ -125,8 +125,10 @@ export function NearbyMap({ nb }: { nb: Neighborhood }) {
         {hover ? `Hovered: ${describe(nb, hover)}` : `★ Best spot: ${describe(nb, nb.best)}`}
       </p>
       <p className="chart-caption">
-        Each square is {nb.spacing_m} m. Two-year averages (Nov 2026 – Dec 2028, hourly) from LRO LOLA terrain and
-        JPL Horizons; site values agree with NASA's LOLA average-illumination map within 2.5 percentage points.
+        Each square is {nb.spacing_m} m: two-year averages (Nov 2026 – Dec 2028, hourly) from LRO LOLA terrain and
+        JPL Horizons, not a verdict for your dates. Validation covers the six site reference points only: their averages
+        differ from NASA's long-term LOLA illumination map by at most 2.5 percentage points (periods and settings differ);
+        individual squares are not separately validated.
       </p>
     </div>
   )

@@ -48,11 +48,28 @@ export function TacticsBoard({ ranked, planned, shiftDays, landing, before, orig
             <p className="slip">
               Original date ({fmtDate(original)}): <span className={`verdict ${before.verdict}`}>{before.verdict}</span>
               {' '}→ new date: <span className={`verdict ${planned.verdict}`}>{planned.verdict}</span>
-              {' '}(sunlight {Math.round(before.metrics.lightPct)}% → {Math.round(planned.metrics.lightPct)}%)
+              {' '}(sunlight {Math.round(before.metrics.lightPct)}% → {Math.round(planned.metrics.lightPct)}%,
+              {' '}Earth in view {Math.round(before.metrics.commPct)}% → {Math.round(planned.metrics.commPct)}%)
+            </p>
+          )}
+          {!planned.metrics.litAtLanding && (
+            <p className="fine">
+              ⚠ Lands in darkness:{' '}
+              {planned.metrics.sunChangeHours === null
+                ? 'no sunlight during the mission.'
+                : `first sunlight ${formatHours(planned.metrics.sunChangeHours)} after touchdown.`}
+            </p>
+          )}
+          {!planned.metrics.earthAtLanding && (
+            <p className="fine">
+              ⚠ Earth not in view at touchdown:{' '}
+              {planned.metrics.earthChangeHours === null
+                ? 'no direct line of sight during the mission.'
+                : `it rises ${formatHours(planned.metrics.earthChangeHours)} later.`}
             </p>
           )}
           {planned.verdict === 'GO' ? (
-            <p>Still a GO on the new date – no change needed.</p>
+            <p>GO on the new date: the mission averages meet your thresholds (sunlight ≥ {t.goLight}%, Earth in view ≥ {t.goComm}%).</p>
           ) : shiftDays !== null && shiftedDate ? (
             <>
               <p>
@@ -69,7 +86,7 @@ export function TacticsBoard({ ranked, planned, shiftDays, landing, before, orig
 
       {planned && nearby && (
         <div className="tactic">
-          <h3>Better spot nearby</h3>
+          <h3>Better spot nearby · two-year averages</h3>
           {nearby.best.distance_km < 0.25 ? (
             <p>This is already the best spot within {nearby.radius_km} km.</p>
           ) : (
@@ -80,10 +97,10 @@ export function TacticsBoard({ ranked, planned, shiftDays, landing, before, orig
               </div>
               <ul>
                 <li>Sunlight {nearby.center.light_pct.toFixed(0)}% → <b>{nearby.best.light_pct.toFixed(0)}%</b></li>
-                <li>Earth link {nearby.center.earth_pct.toFixed(0)}% → <b>{nearby.best.earth_pct.toFixed(0)}%</b></li>
+                <li>Earth in view {nearby.center.earth_pct.toFixed(0)}% → <b>{nearby.best.earth_pct.toFixed(0)}%</b></li>
                 <li>Longest night {formatHours(nearby.center.longest_dark_h)} → {formatHours(nearby.best.longest_dark_h)}, slope {nearby.best.slope_deg.toFixed(1)}°</li>
               </ul>
-              <p className="fine">Two-year averages over LRO LOLA terrain – a few kilometres change everything at the pole.</p>
+              <p className="fine">Averages over Nov 2026 – Dec 2028 on LRO LOLA terrain, not a verdict for your dates – but a few kilometres change everything at the pole.</p>
             </>
           )}
           <button onClick={() => {
