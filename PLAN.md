@@ -1,237 +1,266 @@
-# Lunar Landing Site Navigator — план команды (NASA Space Apps 2026)
+# Lunar Landing Site Navigator: team plan (NASA Space Apps 2026)
 
-> **Дедлайн подачи: вс, 15 ноября 2026, 23:59 по местному времени вашего Local Event.**
-> Внутренний дедлайн: **вс 21:00** — всё отправлено, оставшиеся 3 часа — запас.
+> **Translation note.** This is the team's working plan, written in Russian on 14 November 2026 at the
+> start of the hackathon and translated to English in full; the original is in the git history.
+> Some details changed during the build: for example, the Sun/Earth ephemerides were finally written
+> by Claude Code in Node.js (`pipeline/fetch_horizons.mjs`) instead of Python, and the data format below
+> grew a neighborhood file. The current format is in [`docs/data-format.md`](docs/data-format.md);
+> who did what is logged in [`docs/SI_USAGE.md`](docs/SI_USAGE.md).
 
-## 0. Что сдаём (из Submission Guide)
+> **Submission deadline: Sunday 15 November 2026, 23:59 local time of your Local Event.**
+> Internal deadline: **Sunday 21:00**, everything submitted; the remaining 3 hours are a buffer.
 
-| Что | Требование |
+## 0. What we submit (from the Submission Guide)
+
+| What | Requirement |
 |---|---|
-| Final Project | Публичная ссылка без логина: задеплоенный сайт + GitHub-репо |
-| Demo | **Видео ≤ 30 сек** (речь любая, но английские субтитры) **или ≤ 7 слайдов** на английском. Превышение = дисквалификация с глобального судейства |
-| Тексты | Название, High-Level Summary, Detailed Description, NASA Data, References, Use of SI — всё на английском |
-| SI-правила | Идею решения придумывает **команда, не ИИ**. Код/данные от ИИ подписываются в README и метаданных. Картинки от ИИ — с водяным знаком. Логотипы NASA нельзя |
-| Состав | Все участники зарегистрированы на один Local Event и видны во вкладке Members |
+| Final Project | Public link without login: the deployed site + the GitHub repository |
+| Demo | **Video ≤ 30 s** (any spoken language, but English subtitles) **or ≤ 7 slides** in English. Exceeding the limit = disqualification from global judging |
+| Texts | Name, High-Level Summary, Detailed Description, NASA Data, References, Use of SI, all in English |
+| SI rules | The solution idea is invented **by the team, not by AI**. AI-written code/data is acknowledged in the README and metadata. AI images carry a watermark. No NASA logos |
+| Team | All members are registered for the same Local Event and appear on the Members tab |
 
-Судейство: Impact, Creativity, Validity, **Relevance (NASA-данные как ядро, а не украшение)**, Presentation — по 5 баллов каждый. Поэтому две вещи важнее всего: **реальные данные Horizons + LOLA** и **сильное демо**.
+Judging: Impact, Creativity, Validity, **Relevance (NASA data as the core, not decoration)** and
+Presentation, 5 points each. So two things matter most: **real Horizons + LOLA data** and **a strong demo**.
 
-## 1. Что люди решают сами (ИИ сюда не пускаем — так требуют правила)
+## 1. What the humans decide themselves (AI stays out of this, as the rules require)
 
-До старта работы, ~20 минут, только люди:
-1. **Идея и ракурс продукта**: для кого он в первую очередь (планировщик миссии / школьник), какая «фишка» его отличает, как называется.
-2. Видео или слайды для демо, кто его ведёт.
-3. Кто нажимает «Submit» и в каком часовом поясе ваш Local Event.
+Before work starts, about 20 minutes, humans only:
+1. **The idea and the product angle**: who it is primarily for (mission planner / student), what
+   "hook" sets it apart, what it is called.
+2. Video or slides for the demo, and who leads it.
+3. Who presses "Submit", and the time zone of your Local Event.
 
-Ниже — только **инженерная** разбивка задачи из условия челленджа. Ее ИИ может делать.
+Below is only the **engineering** breakdown of the task from the challenge statement; AI may do that.
 
-### 1.1 Решение команды (14.11)
+### 1.1 Team decision (14 November)
 
-- **Герой демо:** планировщик миссии, у которого перенесли запуск. Учителя и публика — второй слой того же инструмента.
-- **Главный сценарий:** ввёл **новую дату посадки** → инструмент подбирает **лучшую площадку из соседних** на эту дату.
-- **Ответ:** **вердикт + почему**: цифры, понятные слова, графики и картинки.
-- **Подача в стиле игр (CS2 / FIFA), но это не игра:**
-  - площадки сравниваются **как игроки**: у каждой «карточка» с характеристиками;
-  - **«тактика»**: инструмент показывает путь к подходящему решению проблемы выбора.
-- **Для школьников и публики** — тот же каркас в игровом стиле плюс объяснение математики: углы возвышения, сферическая геометрия, проценты освещённости, почему Солнце на полюсе ходит по кругу у горизонта.
-- **Демо:** видео ≤ 30 с в стиле YC — сначала проблема (одним кадром), потом решение.
+- **Hero of the demo:** a mission planner whose launch slipped. Teachers and the public are a second
+  layer of the same tool.
+- **Main scenario:** enter **the new landing date** → the tool picks **the best of the nearby sites**
+  for that date.
+- **Answer:** **a verdict + why**: numbers, plain words, charts and pictures.
+- **Presentation in the style of games (CS2 / FIFA), but it is not a game:**
+  - sites are compared **like players**: each has a "card" with stats;
+  - **"tactics"**: the tool shows a path to a suitable solution of the choice problem.
+- **For students and the public:** the same game-style frame plus an explanation of the math:
+  elevation angles, spherical geometry, illumination percentages, why at the pole the Sun circles
+  along the horizon.
+- **Demo:** a ≤ 30 s video in the YC style: first the problem (in one shot), then the solution.
 
-Детали:
-- **Длительность миссии:** по умолчанию **14 земных суток** после посадки, пользователь может поменять.
-- **Пороги вердикта** задаёт пользователь ползунками. По умолчанию:
-  - «годится» — свет > 70% и связь > 50%;
-  - «рискованно» — свет 40–70% или связь 25–50%;
-  - «нет» — ниже.
-- **«Тактика»** показывает три вещи:
-  1. лучшую соседнюю площадку на эту дату и почему;
-  2. на сколько дней сдвинуть посадку, чтобы выбранная площадка стала «годится»;
-  3. сильные и слабые стороны площадок «как в матче».
+Details:
+- **Mission length:** **14 Earth days** after landing by default; the user can change it.
+- **Verdict thresholds** are set by the user with sliders. Defaults:
+  - "GO": sunlight > 70% and Earth link > 50%;
+  - "RISKY": sunlight 40–70% or Earth link 25–50%;
+  - "NO-GO": below that.
+- **"Tactics"** shows three things:
+  1. the best nearby site for this date, and why;
+  2. by how many days to shift the landing so that the chosen site becomes "GO";
+  3. the strengths and weaknesses of the sites "as in a match".
 
-## 2. Архитектура (самое простое, что реально успеть)
+## 2. Architecture (the simplest thing that can really be finished)
 
 ```
 nasa/
-├── pipeline/            ← ChatGPT №1 (Codex), Python
-│   ├── fetch_horizons.py    Sun/Earth az/el с JPL Horizons → data/ephem/*.json
-│   ├── horizon_mask.py      маска горизонта из LOLA DEM → data/horizon/*.json
+├── pipeline/            ← ChatGPT #1 (Codex), Python
+│   ├── fetch_horizons.py    Sun/Earth az/el from JPL Horizons → data/ephem/*.json
+│   ├── horizon_mask.py      horizon mask from the LOLA DEM → data/horizon/*.json
 │   └── README.md
-├── web/                 ← Claude, Vite + TypeScript, статический сайт
-│   ├── public/data/     ← сюда копируются JSON из pipeline
-│   ├── api/horizons.ts  ← прокси на Vercel для произвольных координат (CORS)
+├── web/                 ← Claude, Vite + TypeScript, static site
+│   ├── public/data/     ← the pipeline's JSON is copied here
+│   ├── api/horizons.ts  ← Vercel proxy for arbitrary coordinates (CORS)
 │   └── src/...
-├── docs/                ← ChatGPT №2: тексты, источники, демо
+├── docs/                ← ChatGPT #2: texts, sources, demo
 │   ├── sites-sources.md
-│   ├── submission.md        все поля формы на английском
+│   ├── submission.md        all form fields in English
 │   ├── demo-script.md
-│   └── SI_USAGE.md          лог использования ИИ (пишут все трое)
+│   └── SI_USAGE.md          SI usage log (all three write to it)
 └── PLAN.md
 ```
 
-Деплой: **Vercel** (бесплатно, публичная ссылка, serverless-функция для прокси Horizons).
-- Сайт: **https://lunar-landing-site-navigator-sigma.vercel.app**
-- Репозиторий: **https://github.com/AmirlanSeit/lunar-landing-site-navigator**
-- Каждый `git push` в `main` пересобирает сайт сам, примерно за минуту.
-- Прокси нужен: API Horizons не отдаёт CORS-заголовок, поэтому напрямую из браузера его не вызвать.
+Deployment: **Vercel** (free, public link, serverless function for the Horizons proxy).
+- Site: **https://lunar-landing-site-navigator-sigma.vercel.app**
+- Repository: **https://github.com/AmirlanSeit/lunar-landing-site-navigator**
+- Every `git push` to `main` rebuilds the site automatically in about a minute.
+- The proxy is needed because the Horizons API sends no CORS header, so a browser cannot call it directly.
 
-### 2.1 Контракт данных — фиксируем СЕЙЧАС, чтобы все работали параллельно
+### 2.1 Data contract: fixed NOW so that everyone can work in parallel
 
-Claude строит фронт на фейковых данных этого формата, Codex генерирует настоящие. Менять формат — только договорившись.
+Claude builds the front end on fake data in this format, Codex generates the real data. The format
+changes only by agreement. (Current version: [`docs/data-format.md`](docs/data-format.md).)
 
-Все файлы данных лежат в **`web/public/data/`**. Сейчас там заглушки с полем `"mock": true`, их делает `web/scripts/make-mock-data.mjs`. Настоящий файл (без `mock`) просто кладётся поверх, и сайт подхватывает его сам. Пока в данных есть `mock`, на сайте висит жёлтая плашка «Development build».
+All data files live in **`web/public/data/`**. For now they hold placeholders with `"mock": true`,
+made by `web/scripts/make-mock-data.mjs`. A real file (without `mock`) is simply dropped on top, and
+the site picks it up by itself. While any data has `mock`, the site shows a yellow "Development build"
+banner.
 
 **`web/public/data/sites.json`**
 ```json
 [{ "id": "artemis_haworth", "name": "Haworth", "lat": -86.75, "lon": -22.8, "elev_m": null,
    "category": "apollo_landed|artemis_region_reference|clps_historical_target|clps_landed|international_landed|custom",
    "mission": "Artemis candidate region (NASA 2024 list)",
-   "source": ["https://... (основной источник первым)", "https://..."], "note": "..." }]
+   "source": ["https://... (primary source first)", "https://..."], "note": "..." }]
 ```
-- `lat` — градусы (юг отрицательный), `lon` — **восточная долгота**, −180..180. Сайт принимает и 0..360, но в файле храним ±180.
-- `elev_m` может быть `null`, если нет проверенной высоты. `source` — массив ссылок.
-- Всё, что видно на сайте (`name`, `mission`, `note`), пишем на английском.
-- Список проверил ChatGPT друга 14.11: 12 площадок. Оригинал с пояснениями лежит в `docs/sites-sources.md`.
+- `lat` in degrees (south negative), `lon` is **east longitude**, −180..180. The site also accepts
+  0..360, but the file stores ±180.
+- `elev_m` may be `null` when there is no verified elevation. `source` is an array of links.
+- Everything visible on the site (`name`, `mission`, `note`) is written in English.
+- The list was checked by the teammate's ChatGPT on 14 November: 12 sites. The original with
+  explanations is in `docs/sites-sources.md`.
 
 **`data/ephem/<id>.json`**
 ```json
 { "site_id": "shackleton-rim", "start_utc": "2026-11-01T00:00:00Z", "step_min": 60,
-  "sun":   { "az": [/* градусы, от севера по часовой */], "el": [/* градусы */] },
+  "sun":   { "az": [/* degrees, from north, clockwise */], "el": [/* degrees */] },
   "earth": { "az": [], "el": [] },
   "source": "JPL Horizons API, observer coord@301, QUANTITIES=4, airless" }
 ```
-- Период: **2026-11-01 → 2028-12-31**, шаг 1 час, округление до 0.01°.
-- `el` — над **сферическим** горизонтом (без рельефа и без рефракции: у Луны нет атмосферы).
+- Period: **2026-11-01 → 2028-12-31**, 1-hour step, rounded to 0.01°.
+- `el` is above the **spherical** horizon (no terrain and no refraction: the Moon has no atmosphere).
 
 **`data/horizon/<id>.json`**
 ```json
-{ "site_id": "shackleton-rim", "az_step_deg": 1, "mask_el_deg": [/* 360 значений */],
+{ "site_id": "shackleton-rim", "az_step_deg": 1, "mask_el_deg": [/* 360 values */],
   "dem": "LOLA ...", "max_range_km": 150 }
 ```
 
-**Правила видимости (одни для всех):**
-- Солнце видно, если `sun.el > mask(az) - 0.27` (половина диска 0.53°). Доля диска над рельефом — для оценки мощности.
-- Земля видна, если `earth.el > mask(az) - 0.95` (Земля с Луны ~1.9°).
-- Если маски нет (кастомная точка) — `mask = 0`, в UI пометка «без учёта рельефа».
+**Visibility rules (the same for everyone):**
+- The Sun is visible if `sun.el > mask(az) - 0.27` (half the disk, 0.53°). The fraction of the disk
+  above the terrain is used to estimate power.
+- Earth is visible if `earth.el > mask(az) - 0.95` (Earth seen from the Moon spans ~1.9°).
+- If there is no mask (a custom point), `mask = 0`, and the UI says "terrain not modeled".
 
-### 2.2 Функции продукта по приоритету
+### 2.2 Product features by priority
 
-| P | Функция | Почему |
+| P | Feature | Why |
 |---|---|---|
-| P0 | **Первый экран:** новая дата (+ регион, длительность миссии) → рейтинг соседних площадок с вердиктом | главный сценарий команды |
-| P0 | **Карточки площадок «как игроки»**: % света, высота Солнца, % связи с Землёй, до заката / до захода Земли, вердикт + «почему» словами | сравнение, power & comms |
-| P0 | **Полярная карта неба**: силуэт горизонта (LOLA) + Солнце и Земля + их траектории | главный визуал, «почему» |
-| P0 | Сравнение 2–4 площадок рядом («матч») | «rapid comparison» |
-| P0 | Игровой визуальный стиль (CS2 / FIFA) для всего интерфейса | Creativity |
-| P1 | Таймлайн миссии: полосы «свет / тень / связь» | «почему», temporal dynamics |
-| P1 | «Тактика»: подсказка, как прийти к подходящему решению | решение команды |
-| P1 | Слой «объясни математику» для школьников и публики | accessibility, Impact |
-| P1 | Произвольные координаты (через прокси Horizons, без рельефа) | из условия |
-| P2 | 3D-рельеф (Three.js) | только если останется время |
+| P0 | **First screen:** new date (+ region, mission length) → ranking of nearby sites with a verdict | the team's main scenario |
+| P0 | **Site cards "like players"**: % sunlight, Sun height, % Earth link, time to sunset / Earthset, verdict + "why" in words | comparison, power & comms |
+| P0 | **Polar sky map**: horizon silhouette (LOLA) + the Sun and Earth + their paths | main visual, "why" |
+| P0 | 2–4 sites side by side (a "match") | "rapid comparison" |
+| P0 | Game visual style (CS2 / FIFA) for the whole interface | Creativity |
+| P1 | Mission timeline: "light / shadow / link" strips | "why", temporal dynamics |
+| P1 | "Tactics": a hint on how to reach a suitable solution | team decision |
+| P1 | "Explain the math" layer for students and the public | accessibility, Impact |
+| P1 | Arbitrary coordinates (through the Horizons proxy, no terrain) | from the challenge |
+| P2 | 3D terrain (Three.js) | only if time remains |
 
-## 3. Кто что делает
+## 3. Who does what
 
-### 🟣 Claude (этот чат, Claude Code) — главный инженер: `web/`, интеграция, деплой
-Самая тяжёлая по коду часть, поэтому весь фронт у меня, а данные и тексты отдаём ChatGPT.
+### 🟣 Claude (Claude Code): lead engineer for `web/`, integration, deployment
+The heaviest coding part, so the whole front end is Claude's; data and texts go to ChatGPT.
 
-| Задача | Модель / усилие |
+| Task | Model / effort |
 |---|---|
-| Каркас, репо, структура, мок-данные | **Sonnet 5.5 / medium** |
-| Карта неба, метрики, сравнение, таймлайн | **Sonnet 5.5 / medium** |
-| Геометрия видимости, сложные баги, финальная интеграция | **Opus 5.5 / high** (только на эти куски) |
-| Мелкие правки текста и стилей | **Sonnet 5.5 / low** |
+| Scaffold, repository, structure, mock data | **Sonnet 5.5 / medium** |
+| Sky map, metrics, comparison, timeline | **Sonnet 5.5 / medium** |
+| Visibility geometry, hard bugs, final integration | **Opus 5.5 / high** (only for these parts) |
+| Small text and style edits | **Sonnet 5.5 / low** |
 
-Как экономить мой лимит: новая сессия на каждый крупный этап, без субагентов, без Fast mode, большие JSON не показывать мне целиком.
+How to save Claude's usage limit: a new session for each large stage, no subagents, no Fast mode,
+never paste large JSON files in full.
 
-Подключённые скиллы: `writing-plans`, `systematic-debugging` и `verification-before-completion` из superpowers (лежат в `.claude/skills/`), плюс встроенные `dataviz` (графики) и `run` (проверка сайта в браузере). Брейншторм и TDD из superpowers не ставил: первый генерирует идеи (по правилам идею придумывают люди), а TDD за 34 часа не окупится.
+Installed skills: `writing-plans`, `systematic-debugging` and `verification-before-completion` from
+superpowers (in `.claude/skills/`), plus the built-in `dataviz` (charts) and `run` (checking the site
+in a browser). Superpowers' brainstorming and TDD were not installed: the first generates ideas (by
+the rules, humans come up with the idea), and TDD would not pay off within 34 hours.
 
-### 🟢 ChatGPT №1 (твой) — данные: `pipeline/` через **Codex**
-Codex входит в Plus. Сессию открывать в папке проекта, трогать только `pipeline/` и `web/public/data/`.
-**Модель:** самая новая GPT-5.x-Codex из списка; **reasoning: high** на геометрию горизонта, **medium** на загрузку из Horizons. Точные названия моделей в ноябре 2026 я не знаю, бери верхнюю Codex-модель в выборе.
+### 🟢 ChatGPT #1 (team lead's account): data in `pipeline/` through **Codex**
+Codex is included in Plus. Open the session in the project folder; touch only `pipeline/` and
+`web/public/data/`.
+**Model:** the newest GPT-5.x-Codex in the list; **reasoning: high** for the horizon geometry,
+**medium** for the Horizons download. The exact model names in November 2026 were unknown to Claude;
+pick the top Codex model in the picker.
 
-### 🔵 ChatGPT №2 (друга) — исследование, тексты, демо: `docs/`
-Обычный чат. **Thinking + веб-поиск** на проверку координат и источников, обычный режим на тексты.
-Плюс в воскресенье друг — главный тестировщик: проверяет сайт с телефона и с чужого компьютера.
+### 🔵 ChatGPT #2 (teammate's account): research, texts, demo in `docs/`
+Regular chat. **Thinking + web search** for checking coordinates and sources, normal mode for texts.
+On Sunday the teammate is also the main tester: checks the site from a phone and from someone else's
+computer.
 
-## 4. Таймлайн
+## 4. Timeline
 
-| Когда | Claude | ChatGPT №1 (Codex) | ChatGPT №2 | Люди |
+| When | Claude | ChatGPT #1 (Codex) | ChatGPT #2 | Humans |
 |---|---|---|---|---|
-| **Сб, сейчас → +1 ч** | репо на GitHub, каркас `web/`, мок-данные по контракту | — | список площадок с координатами и источниками | **решить идею и название** (п. 1) |
-| **Сб +1 → +7 ч** | карта неба, метрики, сравнение | `fetch_horizons.py` → ephem JSON для всех площадок | тексты для режима «объясни», черновик submission | следить, тестировать |
-| **Сб вечер** | подключить реальные данные, **деплой v1 на Vercel** | `horizon_mask.py` на LOLA (начать) | проверка v1 в браузере, список багов | первая живая ссылка ✅ |
-| **Вс утро → 14:00** | таймлайн, кастомные координаты, режим «объясни», полировка | маски горизонта готовы + сверка с Quickmap | сценарий демо, References, NASA Data | скриншоты / запись экрана |
-| **Вс 14:00** | **заморозка фич**, только баги | — | — | — |
-| **Вс 14 → 19** | фиксы, README с пометками SI | — | финальные тексты, слайды / субтитры | запись видео ≤ 30 с |
-| **Вс 19 → 21** | финальный деплой, проверка ссылки в инкогнито | — | вставить всё в форму | **Submit** ✅ |
+| **Sat, now → +1 h** | GitHub repository, `web/` scaffold, mock data per the contract | – | site list with coordinates and sources | **decide the idea and the name** (§1) |
+| **Sat +1 → +7 h** | sky map, metrics, comparison | `fetch_horizons.py` → ephem JSON for all sites | texts for the "explain" mode, submission draft | follow along, test |
+| **Sat evening** | connect real data, **deploy v1 to Vercel** | `horizon_mask.py` on LOLA (start) | check v1 in the browser, bug list | first live link ✅ |
+| **Sun morning → 14:00** | timeline, custom coordinates, "explain" mode, polish | horizon masks done + check against Quickmap | demo script, References, NASA Data | screenshots / screen recording |
+| **Sun 14:00** | **feature freeze**, bugs only | – | – | – |
+| **Sun 14 → 19** | fixes, README with SI notes | – | final texts, slides / subtitles | record the ≤ 30 s video |
+| **Sun 19 → 21** | final deploy, check the link in incognito | – | paste everything into the form | **Submit** ✅ |
 
-## 5. Готовые промпты
+## 5. Ready-made prompts
 
-### → ChatGPT №1 (Codex), задача 1: эфемериды
+### → ChatGPT #1 (Codex), task 1: ephemerides
 ```
-Проект: веб-приложение для сравнения лунных посадочных площадок (NASA Space Apps 2026,
-челлендж "Lunar Landing Site Navigator"). Ты отвечаешь только за папку pipeline/.
-Прочитай PLAN.md, раздел 2.1 — это жёсткий контракт формата данных.
+Project: a web app for comparing lunar landing sites (NASA Space Apps 2026,
+challenge "Lunar Landing Site Navigator"). You are responsible only for the pipeline/ folder.
+Read PLAN.md, section 2.1: it is the strict data-format contract.
 
-Задача: pipeline/fetch_horizons.py (Python 3, только requests + стандартная библиотека).
-- Читает web/public/data/sites.json, для каждой площадки дважды вызывает JPL Horizons API
-  (https://ssd.jpl.nasa.gov/api/horizons.api): COMMAND='10' (Солнце) и COMMAND='399' (Земля),
+Task: pipeline/fetch_horizons.py (Python 3, only requests + the standard library).
+- Reads web/public/data/sites.json and, for each site, calls the JPL Horizons API twice
+  (https://ssd.jpl.nasa.gov/api/horizons.api): COMMAND='10' (Sun) and COMMAND='399' (Earth),
   CENTER='coord@301', COORD_TYPE='GEODETIC', SITE_COORD='<lon_east>,<lat>,<alt_km>',
   EPHEM_TYPE='OBSERVER', QUANTITIES='4', ANG_FORMAT='DEG', CSV_FORMAT='YES', APPARENT='AIRLESS',
-  STEP_SIZE='1 h', с 2026-11-01 по 2028-12-31. Если упрёшься в лимит строк ответа — бей на куски.
-- Пишет web/public/data/ephem/<id>.json строго по контракту. Кэширует сырые ответы в pipeline/cache/.
-- Проверь знак долготы для тела 301 (восток положительный?) и формат SITE_COORD по документации
-  Horizons. Санити-тест: у Apollo 11 (0.674N, 23.473E) высота Солнца должна быть небольшой
-  положительной утром 20 июля 1969 UTC, поэтому дай скрипту флаг для произвольного интервала дат.
-- В pipeline/README.md: как запускать, что проверено, отметка, что код написан с помощью SI.
-Ничего вне pipeline/ и web/public/data/ не меняй.
+  STEP_SIZE='1 h', from 2026-11-01 to 2028-12-31. If you hit the response line limit, split into chunks.
+- Writes web/public/data/ephem/<id>.json strictly per the contract. Caches raw responses in pipeline/cache/.
+- Check the longitude sign for body 301 (is east positive?) and the SITE_COORD format in the Horizons
+  documentation. Sanity test: at Apollo 11 (0.674N, 23.473E) the Sun's elevation should be small and
+  positive on the morning of 20 July 1969 UTC, so give the script a flag for an arbitrary date range.
+- In pipeline/README.md: how to run it, what was checked, a note that the code was written with SI.
+Change nothing outside pipeline/ and web/public/data/.
 ```
 
-### → ChatGPT №1 (Codex), задача 2: маска горизонта по LOLA
+### → ChatGPT #1 (Codex), task 2: LOLA horizon mask
 ```
-Задача: pipeline/horizon_mask.py. Для каждой площадки из web/public/data/sites.json с lat < -80
-посчитать маску горизонта по рельефу LOLA (NASA LRO):
-- Найди и скачай подходящую полярную DEM LOLA для южного полюса (PDS Geosciences LOLA GDR
-  polar или NASA PGDA south pole DEMs). Возьми разрешение, которое реально обработать на ноутбуке
-  (60–240 м/пиксель достаточно), и обрежь ~150 км вокруг площадок. Запиши в README точный продукт и URL.
-- Для каждого азимута 0..359 (шаг 1°) пройди лучом до 150 км и возьми максимальный угол возвышения
-  рельефа с учётом кривизны Луны (R = 1737.4 км; падение ≈ d²/2R), относительно наблюдателя
-  на высоте площадки + 2 м (высота панелей/антенны).
-- Пиши web/public/data/horizon/<id>.json по контракту из PLAN.md 2.1.
-- Сделай pipeline/plot_mask.py: PNG-график маски для визуальной сверки с Quickmap.
-Reasoning: high. Если DEM слишком тяжёлая — скажи об этом и предложи вариант, а не молча упрощай.
+Task: pipeline/horizon_mask.py. For each site in web/public/data/sites.json with lat < -80,
+compute the horizon mask from LOLA terrain (NASA LRO):
+- Find and download a suitable LOLA polar DEM of the south pole (PDS Geosciences LOLA GDR
+  polar or NASA PGDA south pole DEMs). Take a resolution that a laptop can really process
+  (60–240 m/pixel is enough) and crop ~150 km around the sites. Record the exact product and URL in the README.
+- For each azimuth 0..359 (1° step), march a ray out to 150 km and take the maximum terrain elevation
+  angle, accounting for the Moon's curvature (R = 1737.4 km; drop ≈ d²/2R), relative to an observer
+  at the site's height + 2 m (height of panels/antenna).
+- Write web/public/data/horizon/<id>.json per the contract in PLAN.md 2.1.
+- Make pipeline/plot_mask.py: a PNG plot of the mask for a visual check against Quickmap.
+Reasoning: high. If the DEM is too heavy, say so and propose an option instead of silently simplifying.
 ```
 
-### → ChatGPT №2 (друга), задача 1: площадки и источники
+### → ChatGPT #2 (teammate), task 1: sites and sources
 ```
-Мы делаем на NASA Space Apps 2026 инструмент для сравнения лунных посадочных площадок
-(челлендж "Lunar Landing Site Navigator"): где Солнце и Земля над горизонтом,
-сколько света для панелей и когда есть прямая связь с Землёй.
+For NASA Space Apps 2026 we are building a tool to compare lunar landing sites
+(challenge "Lunar Landing Site Navigator"): where the Sun and Earth are above the horizon,
+how much light there is for solar panels, and when there is a direct link to Earth.
 
-Собери 10–12 площадок с ПРОВЕРЕННЫМИ координатами (селенографическая широта и
-ВОСТОЧНАЯ долгота, высота, если есть) и ссылкой на первоисточник (NASA, LROC/ASU, ISRO, ESA,
-статьи):
-- 2–3 площадки Apollo (для контраста с полюсом: Apollo 11, 15, 17);
-- кандидатные регионы Artemis III у южного полюса (из официального списка NASA);
-- CLPS-цели у полюса (например, Mons Mouton / VIPER, площадки Intuitive Machines);
-- Chandrayaan-3 и другие международные посадки или цели.
-Выдай Markdown-таблицу (id, name, lat, lon_east, elev_m, category, mission, source_url, note)
-и тот же список в JSON по схеме:
+Collect 10–12 sites with VERIFIED coordinates (selenographic latitude and
+EAST longitude, elevation if available) and a link to the primary source (NASA, LROC/ASU, ISRO, ESA,
+papers):
+- 2–3 Apollo sites (for contrast with the pole: Apollo 11, 15, 17);
+- Artemis III candidate regions near the south pole (from NASA's official list);
+- CLPS targets near the pole (for example, Mons Mouton / VIPER, Intuitive Machines sites);
+- Chandrayaan-3 and other international landings or targets.
+Return a Markdown table (id, name, lat, lon_east, elev_m, category, mission, source_url, note)
+and the same list in JSON with the schema:
 {id, name, lat, lon, elev_m, category, mission, source, note}.
-Если источники расходятся — укажи оба. Ничего не выдумывай: нет источника — пометь «unverified».
+If sources disagree, give both. Invent nothing: no source means mark it "unverified".
 ```
 
-### → ChatGPT №2, задача 2 (воскресенье): тексты и демо
+### → ChatGPT #2, task 2 (Sunday): texts and demo
 ```
-Вот наш проект: <ссылка на сайт> и <README>. Напиши на английском:
-1) Project Name + tagline; 2) High-Level Summary (≤150 слов); 3) Detailed Description
-(что делает, как работает, польза, стек); 4) NASA Data (JPL Horizons, LOLA/LRO, Quickmap/Moon Trek
-для сверки — с URL); 5) References (все библиотеки, данные, картинки);
-6) сценарий видео ровно на 30 секунд по таймингу Submission Guide (0:00 команда,
-0:02 проблема, 0:05 название, 0:10 демо, 0:20 будущее) + английские субтитры
-ИЛИ структура 7 слайдов. Тексты — человеческим языком, без рекламных штампов.
+Here is our project: <link to the site> and <README>. Write in English:
+1) Project Name + tagline; 2) High-Level Summary (≤150 words); 3) Detailed Description
+(what it does, how it works, benefits, stack); 4) NASA Data (JPL Horizons, LOLA/LRO, Quickmap/Moon Trek
+for cross-checking, with URLs); 5) References (all libraries, data, images);
+6) a video script of exactly 30 seconds following the Submission Guide timing (0:00 team,
+0:02 problem, 0:05 name, 0:10 demo, 0:20 future) + English subtitles
+OR a 7-slide structure. Texts in plain human language, without advertising clichés.
 ```
 
-## 6. Правила работы для всех троих
-1. **Каждый ИИ трогает только свою папку.** Общие файлы (`PLAN.md`, контракт) меняет только человек.
-2. Любой ИИ, который что-то сделал, дописывает 1–2 строки в `docs/SI_USAGE.md`: что сделал и каким инструментом. Из этого собирается поле «Use of SI».
-3. Всё, что пойдёт судьям, — на английском. Внутренние заметки — как удобно.
-4. Сгенерированные ИИ картинки — только с водяным знаком «AI-generated». Логотипы NASA не используем.
-5. В воскресенье в 14:00 замораживаем фичи. После этого только баги и демо.
+## 6. Working rules for all three
+1. **Each AI touches only its own folder.** Shared files (`PLAN.md`, the contract) are changed only by a human.
+2. Any AI that did something adds 1–2 lines to `docs/SI_USAGE.md`: what it did and with which tool.
+   The "Use of SI" field is assembled from this.
+3. Everything that goes to the judges is in English. Internal notes in whatever language is convenient.
+4. AI-generated images only with an "AI-generated" watermark. We do not use NASA logos.
+5. On Sunday at 14:00 we freeze features. After that, only bugs and the demo.
