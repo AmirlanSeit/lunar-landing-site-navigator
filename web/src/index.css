@@ -82,7 +82,7 @@ button, input, select { font: inherit; color: inherit; }
 .control input[type='datetime-local'], .control select, .control input[type='number'] {
   background: var(--panel-2); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; min-width: 0;
 }
-.control input[type='range'] { accent-color: var(--go); }
+.control input[type='range'] { accent-color: var(--go); min-height: 28px; }
 .control .value { font-family: var(--font-display); font-size: 18px; font-weight: 700; }
 
 /* Tactics */
@@ -129,7 +129,7 @@ button, input, select { font: inherit; color: inherit; }
 .tags { display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap; }
 .tag { font-size: 11px; padding: 1px 6px; border-radius: 4px; background: #ffffff1a; }
 .tag.gold { background: var(--gold); color: #2a1f00; font-weight: 600; }
-.match-toggle { position: absolute; top: 12px; left: 50%; transform: translateX(-50%); font-size: 11px; background: #0006; border: 1px solid #fff3; border-radius: 6px; padding: 1px 6px; cursor: pointer; }
+.match-toggle { position: absolute; top: 12px; left: 50%; transform: translateX(-50%); font-size: 12px; background: #0006; border: 1px solid #fff3; border-radius: 6px; padding: 4px 10px; min-height: 26px; cursor: pointer; }
 .match-toggle.on { background: var(--earth); color: #00172b; border-color: var(--earth); }
 
 /* Detail */

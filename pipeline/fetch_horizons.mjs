@@ -1,6 +1,6 @@
 // Fetches apparent (airless) azimuth/elevation of the Sun and Earth for every
 // site in web/public/data/sites.json from the JPL Horizons API and writes
-// web/public/data/ephem/<id>.json in the format of PLAN.md §2.1.
+// web/public/data/ephem/<id>.json in the format of docs/data-format.md.
 //
 // Usage (from repo root):  node pipeline/fetch_horizons.mjs [site_id ...]
 // Raw Horizons responses are cached in pipeline/cache/ (git-ignored).

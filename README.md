@@ -1,31 +1,78 @@
 # Lunar Landing Site Navigator
 
-NASA Space Apps Challenge 2026 – challenge "Lunar Landing Site Navigator".
+**NASA Space Apps Challenge 2026 · Challenge: Lunar Landing Site Navigator**
 
-**Live:** https://lunar-landing-site-navigator-sigma.vercel.app
+Launch slipped? Pick the new landing date and see which lunar landing sites still work, and why.
 
-Launch slipped? Enter the new landing date and the tool ranks nearby landing sites like players:
-each site gets a card with sunlight, Earth-link and night-survival stats, a GO / RISKY / NO-GO verdict,
-the reasons behind it, and tactics (best alternative site, date shift that makes your site work).
-Add the original date to see what the slip changed, scan a two-month launch window calendar, find a
-**better spot within 5 km** on a LOLA-based sunlight / Earth-link map, try any lunar coordinates, and share
-a scenario as a link (the URL always mirrors the current scenario). **▶ Demo** loads a real case found in
-the data: Mons Mouton is GO on 13 Nov 2027 and NO-GO after a two-week slip.
+- **Live app:** https://lunar-landing-site-navigator-sigma.vercel.app
+- **Demo scenario** (a two-week slip at Mons Mouton):
+  https://lunar-landing-site-navigator-sigma.vercel.app/?region=south-pole&date=2027-11-27T12:00&orig=2027-11-13T12:00&site=viper_mons_mouton_target
+- **A few kilometres change everything** (Nobile Rim 1):
+  https://lunar-landing-site-navigator-sigma.vercel.app/?region=south-pole&date=2027-11-27T12:00&site=artemis_nobile_rim_1&sel=artemis_nobile_rim_1
 
-At the pole a few kilometres change everything: the Nobile Rim 1 reference point gets 29% sunlight and
-never sees Earth; a ridge 3.7 km to the north gets 85% sunlight and a 62% direct-to-Earth link.
+![Two-year sunlight within 5 km of the Nobile Rim 1 reference point](docs/images/neighborhood-artemis_nobile_rim_1.png)
 
-> **Status:** all data is real – team-verified site coordinates, JPL Horizons Sun/Earth ephemerides,
-> LRO LOLA terrain horizons for the polar sites (flat horizon for custom points and low latitudes).
+At the Nobile Rim 1 reference point (on a 13° slope) the Sun is up 29% of the time and Earth never
+rises above the terrain. A ridge 3.7 km away gets 85% sunlight and sees Earth 62% of the time.
 
-## Layout
+## What it does
 
-| Folder | What | Owner |
-|---|---|---|
-| `web/` | Vite + React + TypeScript site | Claude Code |
-| `web/public/data/` | Site list, ephemerides, horizon masks (format: `PLAN.md` §2.1) | pipeline |
-| `pipeline/` | JPL Horizons fetch (Node), LOLA horizon masks and neighborhood grids (Python) | ChatGPT Codex, Claude Code |
-| `docs/` | Sources, submission texts, demo script, SI usage log | ChatGPT |
+- **Ranks sites like players.** Each site gets a card with sunlight, Earth link, night survival,
+  time to sunset and Earthset, and Sun height, plus a GO / RISKY / NO-GO verdict against thresholds you set.
+- **Shows why.** A 360° horizon panorama with the Sun and Earth paths over the mission, a day-by-day
+  light and link timeline, and plain-language reasons.
+- **Suggests tactics.** The best alternative site for the new date, the nearest date shift that makes
+  your planned site GO, and a "match preview" of its strengths and weaknesses.
+- **Compares before and after.** Enter the original date to see what the slip changed.
+- **Launch window calendar.** Verdicts for every site from 14 days before to 45 days after the chosen
+  date; click a day to adopt it.
+- **Better spot nearby** (polar sites). A 240 m map of two-year sunlight and Earth visibility within
+  5 km, with the best spot named.
+- **Any coordinates.** Add a custom point; its Sun and Earth positions come live from JPL Horizons
+  (flat horizon, flagged in the app).
+- **Explain the math.** Coach notes put each site's numbers into the formulas, and an interactive
+  latitude lab shows why the polar Sun stays low.
+- **Share.** The URL always mirrors the scenario.
+
+## How it works
+
+1. **Sun and Earth:** JPL Horizons, apparent airless azimuth and elevation, hourly from 1 Nov 2026 to
+   31 Dec 2028, for 12 sites ([`pipeline/fetch_horizons.mjs`](pipeline/fetch_horizons.mjs)). Custom
+   points use the same query through a server function ([`web/api/horizons.ts`](web/api/horizons.ts)).
+2. **Terrain:** LRO LOLA `LDEM_75S_120M` (120 m). For each polar site, the highest terrain angle in
+   each of 360 directions out to 150 km, including lunar curvature, seen from 2 m above the ground
+   ([`pipeline/horizon_mask.py`](pipeline/horizon_mask.py)); the same for 1,361 points within 5 km
+   ([`pipeline/neighborhood.py`](pipeline/neighborhood.py)).
+3. **Every hour:** the visible fraction of the solar disk above the terrain, and whether any part of
+   Earth clears it. Mission averages give the verdict; the same evaluation drives the ranking, the date
+   shift and the calendar. Formats and formulas: [`docs/data-format.md`](docs/data-format.md).
+
+## Validation
+
+- Sunlight at the six polar sites agrees with NASA's own LOLA average-illumination map
+  (PGDA product 69, Mazarico et al. 2011) within −1.0 to +2.5 percentage points:
+  [`docs/validation.md`](docs/validation.md).
+- Horizon masks re-derived independently from NASA Moon Trek's LOLA service agree within about 0.2°.
+- Sun positions checked against the Apollo 11 landing (Sun about 10.7° high in the east at 20:17 UT)
+  and against the 90° − |latitude| + 1.54° limit at every site.
+- 120 automated tests (`npm test`).
+
+## Limitations
+
+- GO means the mission-average thresholds are met. It is not a promise of continuous sunlight, a radio
+  link budget, or a safe landing.
+- Terrain is modeled for the six polar catalog sites. Custom points and lower-latitude sites use a flat
+  horizon, which is optimistic near the pole; the app flags custom polar points and never offers one as
+  the best pick.
+- The nearby-spot map shows two-year averages, not a verdict for a specific date.
+- Candidate-region reference points from the literature are not approved landing sites.
+
+## Data sources
+
+NASA JPL Horizons, LRO LOLA (PDS Geosciences), NASA GSFC PGDA, NASA Moon Trek, LROC, NASA NSSDC,
+NASA mission pages, ISRO and JAXA. Site coordinates and their provenance:
+[`docs/sites-sources.md`](docs/sites-sources.md). Full references and credits:
+[`docs/submission.md`](docs/submission.md).
 
 ## Run locally
 
@@ -33,22 +80,25 @@ never sees Earth; a ridge 3.7 km to the north gets 85% sunlight and a 62% direct
 cd web
 npm install
 npm run dev      # http://localhost:5173
-npm test         # logic tests
+npm test         # 120 logic tests
 ```
 
-## Data
+Data pipeline (from the repository root): `node pipeline/fetch_horizons.mjs` for ephemerides;
+`python pipeline/horizon_mask.py` and `python pipeline/neighborhood.py` for terrain
+(see [`pipeline/README.md`](pipeline/README.md)).
 
-- **JPL Horizons** – apparent azimuth/elevation of the Sun and Earth from each site (airless, topocentric on the Moon),
-  hourly from 2026-11-01 to 2028-12-31. Regenerate with `node pipeline/fetch_horizons.mjs` from the repo root.
-  Checked against the Apollo 11 landing (Sun ~10.7° in the east at 20:17 UT) and against 90° − |lat| + 1.54° for every site.
-- **LRO LOLA** – south-pole elevation model (`LDEM_75S_120M`) used to compute each polar site's 360° terrain
-  horizon and the 240 m "best spot nearby" grids (`pipeline/horizon_mask.py`, `pipeline/neighborhood.py`).
-- **Validation** – sunlight at all six polar sites agrees with NASA's own LOLA average-illumination map
-  (PGDA, Mazarico et al. 2011) within 2.5 percentage points ([`docs/validation.md`](docs/validation.md)); horizon
-  masks were re-derived independently from NASA Moon Trek's LOLA service (agreement within ~0.2°).
+## Repository
+
+| Path | Contents |
+|---|---|
+| `web/` | React + TypeScript + Vite app, and the Horizons server function for custom points |
+| `web/public/data/` | Site catalog, ephemerides, horizon masks, neighborhood grids |
+| `pipeline/` | Data pipeline: JPL Horizons (Node.js), LOLA terrain (Python) |
+| `docs/` | Data format, sources, validation, submission texts, demo script, SI usage log |
 
 ## Use of Super Intelligence (SI)
 
-This project was built with help from SI tools: Claude Code (Anthropic) wrote most of the code in `web/`,
-ChatGPT / Codex (OpenAI) wrote the data pipeline and helped with research and texts.
-The idea, product decisions and final review are the team's. Details: [`docs/SI_USAGE.md`](docs/SI_USAGE.md).
+The team chose the idea, the target users, the features and the thresholds, and reviewed every result.
+SI tools helped build it: Claude Code (Anthropic) with the web app, the Horizons script and reviews;
+ChatGPT and Codex (OpenAI) with source research, the LOLA terrain pipeline, two app features and the
+submission texts. Every contribution is logged in [`docs/SI_USAGE.md`](docs/SI_USAGE.md).

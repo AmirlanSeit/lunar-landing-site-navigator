@@ -1,10 +1,10 @@
 # Lunar data pipeline
 
-These scripts generate the real data served from `web/public/data/` in the format fixed by `PLAN.md` §2.1. `fetch_horizons.mjs` supplies Sun/Earth ephemerides (`node pipeline/fetch_horizons.mjs` from the repo root); this README documents the LOLA terrain-mask pipeline.
+These scripts generate the real data served from `web/public/data/` in the format fixed by [`docs/data-format.md`](../docs/data-format.md). `fetch_horizons.mjs` supplies Sun/Earth ephemerides (`node pipeline/fetch_horizons.mjs` from the repo root); this README documents the LOLA terrain-mask pipeline.
 
 ## LOLA horizon masks
 
-`horizon_mask.py` generates terrain masks for every entry in `web/public/data/sites.json` with latitude south of 75°S. It reads the `LDEM_75S_120M.JP2` LOLA polar GDR, then writes one JSON per qualifying site to `web/public/data/horizon/` using the fixed schema in `PLAN.md` §2.1.
+`horizon_mask.py` generates terrain masks for every entry in `web/public/data/sites.json` with latitude south of 75°S. It reads the `LDEM_75S_120M.JP2` LOLA polar GDR, then writes one JSON per qualifying site to `web/public/data/horizon/` using the fixed schema in [`docs/data-format.md`](../docs/data-format.md).
 
 ### DEM source
 

@@ -1,4 +1,4 @@
-// Mirrors the data contract in PLAN.md §2.1. Change both together.
+// Mirrors the data format in docs/data-format.md. Change both together.
 
 export type Category =
   | 'apollo_landed'
