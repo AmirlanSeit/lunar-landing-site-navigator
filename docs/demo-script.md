@@ -4,7 +4,7 @@ Project: Lunar Landing Site Navigator
 
 Team: Ninjago: Masters of Claudejitzu
 
-Members: [MEMBERS]
+Members: Islam Sabitov, Amirlan Seitkadyrov, Akezhan Omashev, Shakhnazar Akhmer
 
 Chosen tagline: The Moon gives us a destination.
 
@@ -72,7 +72,7 @@ Use this deck instead of the video if recording is not ready. The seven-slide co
 | Slide | Title | Content and visual |
 |---|---|---|
 | 1 | Lunar Landing Site Navigator | The Moon gives us a destination. and the public live-site URL. Plain title treatment, without NASA logos. |
-| 2 | The team | Ninjago: Masters of Claudejitzu and [MEMBERS]. Replace member credits only with information permitted by the event's age and consent rules. Do not include identifiable minors' names or likenesses. |
+| 2 | The team | Ninjago: Masters of Claudejitzu and Islam Sabitov, Amirlan Seitkadyrov, Akezhan Omashev, Shakhnazar Akhmer. Show names only with each member's consent, as the event's age and consent rules require. Do not include identifiable minors' names or likenesses. |
 | 3 | A delayed landing changes the conditions | Explain the hypothetical Mons Mouton date slip: 13 to 27 November 2027. Show 70% to 35% sunlight and GO to NO-GO for the same 14-day window length. Identify Mons Mouton as a historical VIPER target. |
 | 4 | Compare sites and dates | Show the flow: set a date, compare sunlight and Earth visibility, try a suggested shift or select a calendar cell. State the 70% sunlight and 50% Earth-visibility thresholds. |
 | 5 | The working result | Use three readable screenshots: the delayed NO-GO, the five-day shift to 2 December with GO, and the "Within 5 km" map (best spot 2.1 km ENE, two-year sunlight 48% → 80%). Note that GO tests mission averages, not continuous coverage or landing safety, and that the map shows two-year averages. |

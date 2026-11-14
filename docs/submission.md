@@ -1,6 +1,6 @@
 # Submission copy
 
-The fields below are ready to paste after the team replaces the remaining bracketed placeholders, including [VIDEO LINK]. Team: Ninjago: Masters of Claudejitzu; participant names stay as [MEMBERS] wherever they are needed. Proposed next steps are for the team to review.
+The fields below are ready to paste after the team replaces the remaining bracketed placeholders, including [VIDEO LINK]. Team: Ninjago: Masters of Claudejitzu; members: Islam Sabitov, Amirlan Seitkadyrov, Akezhan Omashev, Shakhnazar Akhmer. Proposed next steps are for the team to review.
 
 ## Project Name
 
