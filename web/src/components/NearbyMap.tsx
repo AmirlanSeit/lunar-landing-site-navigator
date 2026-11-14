@@ -22,9 +22,13 @@ function rampColor(stops: string[], pct: number): string {
 }
 
 function describe(nb: Neighborhood, p: NearbyPoint) {
+  // The best spot uses the pipeline's great-circle distance and bearing, so this line always
+  // matches the summary above (a bearing near a compass boundary could otherwise flip label).
+  const isBest = p.lat === nb.best.lat && p.lon === nb.best.lon
   const [e, n] = offsetKm(nb.center, p)
-  const km = Math.hypot(e, n)
-  const where = km < 0.05 ? 'the reference point' : `${km.toFixed(1)} km ${compass((Math.atan2(e, n) * 180) / Math.PI)}`
+  const km = isBest ? nb.best.distance_km : Math.hypot(e, n)
+  const bearing = isBest ? nb.best.bearing_deg : (Math.atan2(e, n) * 180) / Math.PI
+  const where = km < 0.05 ? 'the reference point' : `${km.toFixed(1)} km ${compass(bearing)}`
   return `${where} · sunlight ${p.light_pct.toFixed(0)}% · Earth link ${p.earth_pct.toFixed(0)}% · slope ${p.slope_deg.toFixed(1)}°`
 }
 
