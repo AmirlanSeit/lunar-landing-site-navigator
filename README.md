@@ -2,6 +2,8 @@
 
 NASA Space Apps Challenge 2026 – challenge "Lunar Landing Site Navigator".
 
+**Live:** https://lunar-landing-site-navigator-sigma.vercel.app
+
 Launch slipped? Enter the new landing date and the tool ranks nearby landing sites like players:
 each site gets a card with sunlight, Earth-link and night-survival stats, a GO / RISKY / NO-GO verdict,
 the reasons behind it, and tactics (best alternative site, date shift that makes your site work).

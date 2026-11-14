@@ -67,6 +67,10 @@ nasa/
 ```
 
 Деплой: **Vercel** (бесплатно, публичная ссылка, serverless-функция для прокси Horizons).
+- Сайт: **https://lunar-landing-site-navigator-sigma.vercel.app**
+- Репозиторий: **https://github.com/AmirlanSeit/lunar-landing-site-navigator**
+- Каждый `git push` в `main` пересобирает сайт сам, примерно за минуту.
+- Прокси нужен: API Horizons не отдаёт CORS-заголовок, поэтому напрямую из браузера его не вызвать.
 
 ### 2.1 Контракт данных — фиксируем СЕЙЧАС, чтобы все работали параллельно
 
