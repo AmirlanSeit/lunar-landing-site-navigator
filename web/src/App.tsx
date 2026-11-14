@@ -1,40 +1,79 @@
 import { useEffect, useMemo, useState } from 'react'
 import { CustomSiteForm } from './components/CustomSiteForm'
+import { Intro } from './components/Intro'
 import { LatitudeLab } from './components/LatitudeLab'
 import { LaunchCalendar } from './components/LaunchCalendar'
 import { MatchView } from './components/MatchView'
 import { PlayerCard } from './components/PlayerCard'
+import { ShareButton } from './components/ShareButton'
 import { SiteDetail } from './components/SiteDetail'
 import { TacticsBoard } from './components/TacticsBoard'
+import { createCustomSite } from './lib/custom-site'
 import { loadSiteData, loadSites, REGION_LABELS, regionOf, type Region } from './lib/data'
 import { dataRange } from './lib/metrics'
 import { evaluate, nearestGoShift, rank } from './lib/tactics'
 import type { Site, SiteData } from './lib/types'
+import { buildUrlState, customIndex, parseUrlState } from './lib/url'
 import { DEFAULT_THRESHOLDS, type Thresholds } from './lib/verdict'
 
 // <input type="datetime-local"> values are treated as UTC.
 const toInput = (d: Date) => d.toISOString().slice(0, 16)
 const fromInput = (v: string) => new Date(`${v}:00Z`)
 
+const DEFAULT_LANDING = '2027-03-15T12:00'
+const DEFAULT_DAYS = 14
+
+// Found in the real data: Mons Mouton (VIPER's target) is GO on 13 Nov 2027, NO-GO after a
+// two-week slip; the tactics offer both a 5-day wait and a switch to Nobile Rim 2.
+const DEMO = {
+  site: 'viper_mons_mouton_target',
+  original: '2027-11-13T12:00',
+  landing: '2027-11-27T12:00',
+}
+
+// A shared link restores the scenario, including custom points.
+const initialUrl = parseUrlState(window.location.search)
+const initialCustom = initialUrl.custom.flatMap((c) => {
+  try {
+    return [createCustomSite(c)]
+  } catch {
+    return []
+  }
+})
+const fromRef = (ref: string | undefined) => {
+  const i = customIndex(ref)
+  return i === null ? ref ?? null : initialCustom[i]?.id ?? null
+}
+
 export default function App() {
-  const [sites, setSites] = useState<Site[]>([])
-  const [region, setRegion] = useState<Region>('south-pole')
+  const [sites, setSites] = useState<Site[]>(initialCustom)
+  const [catalogReady, setCatalogReady] = useState(false)
+  const [region, setRegion] = useState<Region>(initialUrl.region ?? 'south-pole')
   const [data, setData] = useState<SiteData[]>([])
-  const [landing, setLanding] = useState('2027-03-15T12:00')
-  const [days, setDays] = useState(14)
-  const [t, setT] = useState<Thresholds>(DEFAULT_THRESHOLDS)
-  const [plannedId, setPlannedId] = useState<string | null>(null)
-  const [selectedId, setSelectedId] = useState<string | null>(null)
+  const [landing, setLanding] = useState(initialUrl.date ?? DEFAULT_LANDING)
+  const [original, setOriginal] = useState(initialUrl.orig ?? '')
+  const [days, setDays] = useState(initialUrl.days ?? DEFAULT_DAYS)
+  const [t, setT] = useState<Thresholds>({
+    goLight: initialUrl.light ?? DEFAULT_THRESHOLDS.goLight,
+    goComm: initialUrl.comm ?? DEFAULT_THRESHOLDS.goComm,
+  })
+  const [plannedId, setPlannedId] = useState<string | null>(fromRef(initialUrl.site))
+  const [selectedId, setSelectedId] = useState<string | null>(fromRef(initialUrl.sel))
   const [matchIds, setMatchIds] = useState<string[]>([])
-  const [explain, setExplain] = useState(false)
+  const [explain, setExplain] = useState(initialUrl.explain ?? false)
 
   useEffect(() => {
-    loadSites().then((catalog) => setSites((current) => [...catalog, ...current.filter((s) => s.category === 'custom')]))
+    loadSites()
+      .then((catalog) => setSites((current) => [...catalog, ...current.filter((s) => s.category === 'custom')]))
+      .catch(() => undefined) // the page still works with custom points only
+      .finally(() => setCatalogReady(true))
   }, [])
 
   const regionSites = useMemo(() => sites.filter((s) => regionOf(s) === region), [sites, region])
 
   useEffect(() => {
+    // Until the catalog is in, a planned site from a shared link would look "not in region" and be reset.
+    if (!catalogReady) return
     let live = true
     Promise.allSettled(regionSites.map(loadSiteData)).then((res) => {
       if (!live) return
@@ -44,7 +83,7 @@ export default function App() {
     setSelectedId((id) => regionSites.some((s) => s.id === id) ? id : null)
     setMatchIds([])
     return () => { live = false }
-  }, [regionSites])
+  }, [regionSites, catalogReady])
 
   const landingDate = fromInput(landing)
   const ranked = useMemo(
@@ -59,8 +98,47 @@ export default function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [planned?.data, planned?.verdict, landing, days, t],
   )
+  const plannedBefore = useMemo(
+    () => (planned && original ? evaluate(planned.data, fromInput(original), days, t) : null),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [planned?.data, original, days, t],
+  )
   const selected = byId(selectedId) ?? ranked[0] ?? null
   const matchList = matchIds.flatMap((id) => byId(id) ?? [])
+
+  // Keep the address bar in sync with the scenario, so "Share" is just the current URL.
+  useEffect(() => {
+    if (!catalogReady) return
+    const customs = sites.filter((s) => s.category === 'custom')
+    const ref = (id: string | null) => {
+      const i = customs.findIndex((s) => s.id === id)
+      return i >= 0 ? `custom-${i}` : id ?? undefined
+    }
+    const query = buildUrlState({
+      region,
+      date: landing,
+      orig: original || undefined,
+      site: ref(plannedId),
+      sel: ref(selectedId),
+      days: days === DEFAULT_DAYS ? undefined : days,
+      light: t.goLight === DEFAULT_THRESHOLDS.goLight ? undefined : t.goLight,
+      comm: t.goComm === DEFAULT_THRESHOLDS.goComm ? undefined : t.goComm,
+      explain,
+      custom: customs.map((s) => ({ lat: String(s.lat), lon: String(s.lon), name: s.name.startsWith('Custom (') ? '' : s.name })),
+    })
+    window.history.replaceState(null, '', `${window.location.pathname}?${query}`)
+  }, [catalogReady, sites, region, landing, original, plannedId, selectedId, days, t, explain])
+
+  function loadDemo() {
+    setRegion('south-pole')
+    setPlannedId(DEMO.site)
+    setSelectedId(null)
+    setOriginal(DEMO.original)
+    setLanding(DEMO.landing)
+    setDays(DEFAULT_DAYS)
+    setT(DEFAULT_THRESHOLDS)
+    document.getElementById('tactics')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
 
   const [minDate, maxDate] = data[0] ? dataRange(data[0]) : [null, null]
   const maxLanding = maxDate ? new Date(maxDate.getTime() - days * 86400000) : null
@@ -79,9 +157,12 @@ export default function App() {
           <h1>Lunar Landing Site Navigator</h1>
           <p>Launch slipped? Pick the new date – we rank the sites.</p>
         </div>
-        <button className={`explain-toggle${explain ? ' on' : ''}`} onClick={() => setExplain(!explain)} aria-pressed={explain}>
-          🎓 {explain ? 'Explain mode: ON' : 'Explain the math'}
-        </button>
+        <div className="header-actions">
+          <ShareButton />
+          <button className={`explain-toggle${explain ? ' on' : ''}`} onClick={() => setExplain(!explain)} aria-pressed={explain}>
+            🎓 {explain ? 'Explain mode: ON' : 'Explain the math'}
+          </button>
+        </div>
       </header>
       {(mockEphem || mockTerrain || unverifiedSites) && (
         <div className="mock-banner">
@@ -97,6 +178,8 @@ export default function App() {
         </div>
       )}
 
+      <Intro onDemo={loadDemo} />
+
       <section className="controls">
         <div className="control">
           <label htmlFor="landing">New landing date (UTC)</label>
@@ -105,6 +188,15 @@ export default function App() {
             min={minDate ? toInput(minDate) : undefined}
             max={maxLanding ? toInput(maxLanding) : undefined}
             onChange={(e) => e.target.value && setLanding(e.target.value)}
+          />
+        </div>
+        <div className="control">
+          <label htmlFor="original">Original date (optional, UTC)</label>
+          <input
+            id="original" type="datetime-local" value={original}
+            min={minDate ? toInput(minDate) : undefined}
+            max={maxLanding ? toInput(maxLanding) : undefined}
+            onChange={(e) => setOriginal(e.target.value)}
           />
         </div>
         <div className="control">
@@ -144,9 +236,10 @@ export default function App() {
         <p className="section-title">No data for this date range – pick a date between {minDate && toInput(minDate)} and {maxLanding && toInput(maxLanding)}.</p>
       )}
 
-      <h2 className="section-title">Tactics</h2>
+      <h2 className="section-title" id="tactics">Tactics</h2>
       <TacticsBoard
         ranked={ranked} planned={planned} shiftDays={shiftDays} landing={landingDate} t={t}
+        before={plannedBefore} original={original ? fromInput(original) : null}
         onTryDate={(d) => setLanding(toInput(d))}
         onSelect={setSelectedId}
       />

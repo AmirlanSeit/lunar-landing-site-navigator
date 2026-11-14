@@ -7,9 +7,12 @@ NASA Space Apps Challenge 2026 – challenge "Lunar Landing Site Navigator".
 Launch slipped? Enter the new landing date and the tool ranks nearby landing sites like players:
 each site gets a card with sunlight, Earth-link and night-survival stats, a GO / RISKY / NO-GO verdict,
 the reasons behind it, and tactics (best alternative site, date shift that makes your site work).
+Add the original date to see what the slip changed, try any lunar coordinates, and share a scenario
+as a link (the URL always mirrors the current scenario). **▶ Demo** loads a real case found in the data:
+Mons Mouton is GO on 13 Nov 2027 and NO-GO after a two-week slip.
 
-> **Status:** development build. Site coordinates and geometry are placeholders until the
-> JPL Horizons + LOLA pipeline lands (see `PLAN.md`).
+> **Status:** all data is real – team-verified site coordinates, JPL Horizons Sun/Earth ephemerides,
+> LRO LOLA terrain horizons for the polar sites (flat horizon for custom points and low latitudes).
 
 ## Layout
 
