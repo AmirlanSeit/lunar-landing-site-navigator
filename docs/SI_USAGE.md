@@ -10,3 +10,4 @@ Every SI tool that contributes something adds a line here. This becomes the "Use
 | 2026-11-14 | Claude Code (Opus 5.5) | Converted the verified site list to the data contract (English text, ±180° longitude), showed sources and notes in the UI | Team review |
 | 2026-11-14 | Claude Code (Opus 5.5) | Built the "Explain the math" layer: coach notes with site-specific formulas, interactive latitude lab, stat tooltips | Team chose education/math as the angle and what to explain |
 | 2026-11-14 | Claude Code (Opus 5.5) | Scaffolded `web/` (React + TS): visibility/metrics/verdict/tactics logic with tests, player-card UI, horizon panorama, mission timeline, match view, placeholder data generator | Team reviews in the browser |
+| 2026-11-14 | ChatGPT Codex (GPT-6) | Selected and processed the LOLA polar GDR DEM, generated six terrain horizon masks, and added polar PNG plots and pipeline documentation | Team reviewed the data source and sanity-check results |
