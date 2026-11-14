@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { buildCalendar } from '../lib/calendar'
 import type { Scenario } from '../lib/tactics'
 import type { SiteData } from '../lib/types'
@@ -34,6 +34,13 @@ export function LaunchCalendar({ data, ranked, landing, days, t, onPick }: Launc
       .sort((a, b) => a.order - b.order)
       .map(({ row }) => row)
   }, [rows, ranked])
+  // Keep the selected date in view: on a phone the calendar would otherwise open 14 days earlier.
+  const scrollRef = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    const box = scrollRef.current
+    const current = box?.querySelector<HTMLElement>('th.launch-calendar-current')
+    if (box && current) box.scrollLeft = current.offsetLeft - box.clientWidth / 2
+  }, [landingMs, rows.length])
   const dates = useMemo(
     () => Array.from({ length: TO_OFFSET - FROM_OFFSET + 1 }, (_, index) => new Date(landingMs + (FROM_OFFSET + index) * DAY_MS)),
     [landingMs],
@@ -55,7 +62,7 @@ export function LaunchCalendar({ data, ranked, landing, days, t, onPick }: Launc
       {sortedRows.length === 0 ? (
         <p className="launch-calendar-empty">No site data available for this region.</p>
       ) : (
-        <div className="launch-calendar-scroll" role="region" aria-label="Launch windows by site and UTC date" aria-describedby="launch-calendar-help" tabIndex={0}>
+        <div ref={scrollRef} className="launch-calendar-scroll" role="region" aria-label="Launch windows by site and UTC date" aria-describedby="launch-calendar-help" tabIndex={0}>
           <table className="launch-calendar-table">
             <thead>
               <tr>
