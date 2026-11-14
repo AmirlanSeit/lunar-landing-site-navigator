@@ -7,6 +7,9 @@ interface Props {
   planned: Scenario | null
   shiftDays: number | null
   landing: Date
+  /** The planned site evaluated on the original (pre-slip) date, if one was given. */
+  before: Scenario | null
+  original: Date | null
   t: Thresholds
   onTryDate: (d: Date) => void
   onSelect: (id: string) => void
@@ -14,7 +17,7 @@ interface Props {
 
 const fmtDate = (d: Date) => d.toISOString().slice(0, 16).replace('T', ' ') + ' UTC'
 
-export function TacticsBoard({ ranked, planned, shiftDays, landing, t, onTryDate, onSelect }: Props) {
+export function TacticsBoard({ ranked, planned, shiftDays, landing, before, original, t, onTryDate, onSelect }: Props) {
   const best = ranked[0]
   if (!best) return null
   const sw = planned ? strengthsWeaknesses(planned, ranked) : null
@@ -35,6 +38,13 @@ export function TacticsBoard({ ranked, planned, shiftDays, landing, t, onTryDate
         <div className="tactic">
           <h3>Your planned site</h3>
           <div className="big">{planned.data.site.name} <span className={`verdict ${planned.verdict}`}>{planned.verdict}</span></div>
+          {before && original && (
+            <p className="slip">
+              Original date ({fmtDate(original)}): <span className={`verdict ${before.verdict}`}>{before.verdict}</span>
+              {' '}→ new date: <span className={`verdict ${planned.verdict}`}>{planned.verdict}</span>
+              {' '}(sunlight {Math.round(before.metrics.lightPct)}% → {Math.round(planned.metrics.lightPct)}%)
+            </p>
+          )}
           {planned.verdict === 'GO' ? (
             <p>Still a GO on the new date – no change needed.</p>
           ) : shiftDays !== null && shiftedDate ? (
