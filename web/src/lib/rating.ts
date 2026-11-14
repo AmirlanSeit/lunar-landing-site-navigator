@@ -19,6 +19,15 @@ export const STAT_LABELS: Record<keyof Stats, string> = {
   ELV: 'Sun height',
 }
 
+export const STAT_HELP: Record<keyof Stats, string> = {
+  LGT: 'Share of the mission the solar disk is above the terrain – this is your power budget.',
+  COM: 'Share of the mission Earth is above the terrain – direct radio link without a relay satellite.',
+  NGT: 'How short the longest dark stretch is. 99 = never dark; 0 = dark the whole mission.',
+  SUN: 'How long after landing the Sun stays up. 0 = you land in darkness.',
+  ERT: 'How long after landing Earth stays in view. 0 = no link at touchdown.',
+  ELV: 'How high the Sun climbs above the terrain. Low Sun = long shadows and weak flat panels.',
+}
+
 const WEIGHTS: Record<keyof Stats, number> = { LGT: 0.35, COM: 0.25, NGT: 0.2, SUN: 0.1, ERT: 0.05, ELV: 0.05 }
 
 const cap = (x: number) => Math.round(Math.min(99, Math.max(0, x)))

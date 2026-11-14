@@ -1,4 +1,7 @@
 import { describe, expect, it } from 'vitest'
+import {
+  flatPanelPct, hillAngle, maxSunElevation, nominalEarthElevation, SUNRISE_HOURS, verticalPanelPct,
+} from './explain'
 import { computeMetrics } from './metrics'
 import { nearestGoShift, rank, evaluate } from './tactics'
 import type { SiteData } from './types'
@@ -55,6 +58,29 @@ describe('metrics', () => {
   })
   it('returns null outside the data range', () => {
     expect(computeMetrics(fake(() => 5, () => 5), new Date('2030-01-01'), 14)).toBeNull()
+  })
+})
+
+describe('explain math', () => {
+  it('Sun barely clears the horizon near the pole', () => {
+    expect(maxSunElevation(-89.5)).toBeCloseTo(2.04)
+    expect(maxSunElevation(0)).toBe(90)
+  })
+  it('curvature lowers a distant hill', () => {
+    expect(hillAngle(1, 30)).toBeCloseTo(1.44, 1)
+    expect(hillAngle(1, 30)).toBeLessThan((Math.atan(1 / 30) * 180) / Math.PI)
+  })
+  it('flat panels starve at low Sun, vertical ones do not', () => {
+    expect(flatPanelPct(2)).toBeCloseTo(3.5, 1)
+    expect(verticalPanelPct(2)).toBeGreaterThan(99)
+  })
+  it('Earth sits overhead at 0°N 0°E and on the horizon at the pole', () => {
+    expect(nominalEarthElevation(0, 0)).toBeCloseTo(90)
+    expect(nominalEarthElevation(-90, 0)).toBeCloseTo(0)
+  })
+  it('a lunar sunrise lasts about an hour', () => {
+    expect(SUNRISE_HOURS).toBeGreaterThan(0.9)
+    expect(SUNRISE_HOURS).toBeLessThan(1.2)
   })
 })
 

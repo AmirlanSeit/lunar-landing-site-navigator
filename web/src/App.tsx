@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { LatitudeLab } from './components/LatitudeLab'
 import { MatchView } from './components/MatchView'
 import { PlayerCard } from './components/PlayerCard'
 import { SiteDetail } from './components/SiteDetail'
@@ -23,6 +24,7 @@ export default function App() {
   const [plannedId, setPlannedId] = useState<string | null>(null)
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [matchIds, setMatchIds] = useState<string[]>([])
+  const [explain, setExplain] = useState(false)
 
   useEffect(() => { loadSites().then(setSites) }, [])
 
@@ -66,8 +68,13 @@ export default function App() {
   return (
     <div className="app">
       <header className="header">
-        <h1>Lunar Landing Site Navigator</h1>
-        <p>Launch slipped? Pick the new date – we rank the sites.</p>
+        <div>
+          <h1>Lunar Landing Site Navigator</h1>
+          <p>Launch slipped? Pick the new date – we rank the sites.</p>
+        </div>
+        <button className={`explain-toggle${explain ? ' on' : ''}`} onClick={() => setExplain(!explain)} aria-pressed={explain}>
+          🎓 {explain ? 'Explain mode: ON' : 'Explain the math'}
+        </button>
       </header>
       {isMock && (
         <div className="mock-banner">
@@ -147,7 +154,14 @@ export default function App() {
       {selected && (
         <>
           <h2 className="section-title">Why</h2>
-          <SiteDetail s={selected} t={t} />
+          <SiteDetail s={selected} t={t} explain={explain} />
+        </>
+      )}
+
+      {explain && selected && (
+        <>
+          <h2 className="section-title">Learn</h2>
+          <LatitudeLab siteLat={selected.data.site.lat} siteName={selected.data.site.name} />
         </>
       )}
 

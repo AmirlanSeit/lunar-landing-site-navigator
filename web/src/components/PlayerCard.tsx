@@ -1,4 +1,4 @@
-import type { Stats } from '../lib/rating'
+import { STAT_HELP, STAT_LABELS, type Stats } from '../lib/rating'
 import type { Scenario } from '../lib/tactics'
 
 interface Props {
@@ -40,7 +40,7 @@ export function PlayerCard({ s, rank, best, planned, selected, inMatch, onSelect
       </div>
       <div className="stats">
         {ORDER.map((k) => (
-          <div key={k}><b>{s.stats[k]}</b> <span>{k}</span></div>
+          <div key={k} title={`${STAT_LABELS[k]}: ${STAT_HELP[k]}`}><b>{s.stats[k]}</b> <span>{k}</span></div>
         ))}
       </div>
     </div>
