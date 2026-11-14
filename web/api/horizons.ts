@@ -1,6 +1,6 @@
-import { parseCoordinates } from '../src/lib/coordinates'
-import { buildHorizonsUrl, HORIZONS_SOURCE, parseHorizonsTable, START_UTC, STEP_MIN } from '../src/lib/horizons'
-import type { Ephem } from '../src/lib/types'
+import { parseCoordinates } from '../src/lib/coordinates.js'
+import { buildHorizonsUrl, HORIZONS_SOURCE, parseHorizonsTable, START_UTC, STEP_MIN } from '../src/lib/horizons.js'
+import type { Ephem } from '../src/lib/types.js'
 
 function errorResponse(message: string, status: number): Response {
   return Response.json({ error: message }, { status, headers: { 'Cache-Control': 'no-store' } })
