@@ -13,7 +13,7 @@ const START = '2027-01-01T00:00:00Z'
 function fake(sunEl: (i: number) => number, earthEl: (i: number) => number, n = 24 * 60, maskEl = 0): SiteData {
   const idx = Array.from({ length: n }, (_, i) => i)
   return {
-    site: { id: 'x', name: 'X', lat: -89, lon: 0, elev_m: 0, category: 'custom', mission: '', source: '', note: '' },
+    site: { id: 'x', name: 'X', lat: -89, lon: 0, elev_m: 0, category: 'custom', mission: '', source: [], note: '' },
     ephem: {
       site_id: 'x', start_utc: START, step_min: 60, source: 'test',
       sun: { az: idx.map(() => 90), el: idx.map(sunEl) },

@@ -1,12 +1,176 @@
 [
-  { "id": "apollo-11", "name": "Apollo 11 – Tranquility Base", "lat": 0.674, "lon": 23.473, "elev_m": -1930, "category": "apollo", "mission": "Apollo 11 (1969)", "source": "", "note": "PLACEHOLDER – awaiting verified list" },
-  { "id": "apollo-15", "name": "Apollo 15 – Hadley Rille", "lat": 26.132, "lon": 3.634, "elev_m": -1900, "category": "apollo", "mission": "Apollo 15 (1971)", "source": "", "note": "PLACEHOLDER – awaiting verified list" },
-  { "id": "apollo-17", "name": "Apollo 17 – Taurus-Littrow", "lat": 20.191, "lon": 30.772, "elev_m": -1780, "category": "apollo", "mission": "Apollo 17 (1972)", "source": "", "note": "PLACEHOLDER – awaiting verified list" },
-  { "id": "chandrayaan-3", "name": "Chandrayaan-3 – Shiv Shakti Point", "lat": -69.373, "lon": 32.319, "elev_m": 0, "category": "international", "mission": "Chandrayaan-3 (2023)", "source": "", "note": "PLACEHOLDER – awaiting verified list" },
-  { "id": "shackleton-ridge", "name": "Shackleton–de Gerlache Ridge", "lat": -89.45, "lon": -137.0, "elev_m": 1900, "category": "artemis", "mission": "Artemis III candidate region", "source": "", "note": "PLACEHOLDER – awaiting verified list" },
-  { "id": "de-gerlache-rim", "name": "de Gerlache Rim", "lat": -88.6, "lon": -68.0, "elev_m": 1500, "category": "artemis", "mission": "Artemis III candidate region", "source": "", "note": "PLACEHOLDER – awaiting verified list" },
-  { "id": "malapert-massif", "name": "Malapert Massif", "lat": -86.0, "lon": -2.9, "elev_m": 4800, "category": "artemis", "mission": "Artemis III candidate region", "source": "", "note": "PLACEHOLDER – awaiting verified list" },
-  { "id": "nobile-rim", "name": "Nobile Rim", "lat": -85.4, "lon": 37.0, "elev_m": 1800, "category": "artemis", "mission": "Artemis III candidate region", "source": "", "note": "PLACEHOLDER – awaiting verified list" },
-  { "id": "haworth", "name": "Haworth", "lat": -86.8, "lon": -10.0, "elev_m": 1200, "category": "artemis", "mission": "Artemis III candidate region", "source": "", "note": "PLACEHOLDER – awaiting verified list" },
-  { "id": "mons-mouton", "name": "Mons Mouton", "lat": -84.5, "lon": 31.2, "elev_m": 5000, "category": "clps", "mission": "CLPS target", "source": "", "note": "PLACEHOLDER – awaiting verified list" }
+  {
+    "id": "apollo_11",
+    "name": "Apollo 11 – Lunar Module",
+    "lat": 0.67416,
+    "lon": 23.47314,
+    "elev_m": -1926,
+    "category": "apollo_landed",
+    "mission": "Apollo 11 (1969)",
+    "source": [
+      "https://www.lroc.asu.edu/data/support/downloads/2016_LROC_Coordinates_of_Human_Features.pdf",
+      "https://nssdc.gsfc.nasa.gov/planetary/lunar/lunar_sites.html",
+      "https://www.apollojournals.org/alsj/alsjcoords.html"
+    ],
+    "note": "LROC 2016, ME/DE421 frame. Older Davies 1987 solution: (0.67409, 23.47298) – do not average."
+  },
+  {
+    "id": "apollo_15",
+    "name": "Apollo 15 – Lunar Module",
+    "lat": 26.13239,
+    "lon": 3.6333,
+    "elev_m": -1931,
+    "category": "apollo_landed",
+    "mission": "Apollo 15 (1971)",
+    "source": [
+      "https://www.lroc.asu.edu/data/support/downloads/2016_LROC_Coordinates_of_Human_Features.pdf",
+      "https://nssdc.gsfc.nasa.gov/planetary/lunar/lunar_sites.html",
+      "https://www.apollojournals.org/alsj/alsjcoords.html"
+    ],
+    "note": "LROC 2016, ME/DE421 frame. Older Davies 1987 solution: (26.13224, 3.63400) – do not average."
+  },
+  {
+    "id": "apollo_17",
+    "name": "Apollo 17 – Lunar Module",
+    "lat": 20.1911,
+    "lon": 30.7723,
+    "elev_m": -2626,
+    "category": "apollo_landed",
+    "mission": "Apollo 17 (1972)",
+    "source": [
+      "https://www.lroc.asu.edu/data/support/downloads/2016_LROC_Coordinates_of_Human_Features.pdf",
+      "https://nssdc.gsfc.nasa.gov/planetary/lunar/lunar_sites.html",
+      "https://www.apollojournals.org/alsj/alsjcoords.html"
+    ],
+    "note": "LROC 2016, ME/DE421 frame. Older Davies 1987 solution: (20.18809, 30.77475) – do not average."
+  },
+  {
+    "id": "artemis_haworth",
+    "name": "Haworth",
+    "lat": -86.75,
+    "lon": -22.8,
+    "elev_m": null,
+    "category": "artemis_region_reference",
+    "mission": "Artemis candidate region (NASA 2024 list)",
+    "source": [
+      "https://www.mdpi.com/2072-4292/17/9/1579",
+      "https://www.nasa.gov/news-release/nasa-provides-update-on-artemis-iii-moon-landing-regions/",
+      "https://www.preprints.org/manuscript/202511.1488"
+    ],
+    "note": "Region reference point from Table 1 of the paper, not an approved landing site. Alternative: (-86.753, -22.836), preprint Table 4. Elevation unverified."
+  },
+  {
+    "id": "artemis_nobile_rim_1",
+    "name": "Nobile Rim 1",
+    "lat": -85.42,
+    "lon": 37.38,
+    "elev_m": null,
+    "category": "artemis_region_reference",
+    "mission": "Artemis candidate region (NASA 2024 list)",
+    "source": [
+      "https://www.mdpi.com/2072-4292/17/9/1579",
+      "https://www.nasa.gov/news-release/nasa-provides-update-on-artemis-iii-moon-landing-regions/",
+      "https://www.preprints.org/manuscript/202511.1488"
+    ],
+    "note": "Region reference point from Table 1 of the paper, not an approved landing site. Alternative: (-85.431, 37.241), preprint Table 4. Elevation unverified."
+  },
+  {
+    "id": "artemis_nobile_rim_2",
+    "name": "Nobile Rim 2",
+    "lat": -83.93,
+    "lon": 58.83,
+    "elev_m": null,
+    "category": "artemis_region_reference",
+    "mission": "Artemis candidate region (NASA 2024 list)",
+    "source": [
+      "https://www.mdpi.com/2072-4292/17/9/1579",
+      "https://www.nasa.gov/news-release/nasa-provides-update-on-artemis-iii-moon-landing-regions/",
+      "https://www.preprints.org/manuscript/202511.1488"
+    ],
+    "note": "Region reference point from Table 1 of the paper, not an approved landing site. Alternative: (-83.963, 58.654), preprint Table 4. Elevation unverified."
+  },
+  {
+    "id": "viper_mons_mouton_target",
+    "name": "Mons Mouton – VIPER target",
+    "lat": -85.4451243175,
+    "lon": 30.9437378907,
+    "elev_m": null,
+    "category": "clps_historical_target",
+    "mission": "VIPER (earlier CLPS plan)",
+    "source": [
+      "https://assets.science.nasa.gov/content/dam/science/psd/lunar-science/documents/VIPER_Technical_Information_AFPP.pdf"
+    ],
+    "note": "NASA draft, §5.2, PDF pp. 6–7; ME frame. Planned target of the earlier program, not a landing result. Elevation unverified."
+  },
+  {
+    "id": "im_1_odysseus",
+    "name": "IM-1 Odysseus",
+    "lat": -80.1276,
+    "lon": 1.4367,
+    "elev_m": 2579,
+    "category": "clps_landed",
+    "mission": "Intuitive Machines IM-1 (2024)",
+    "source": [
+      "https://www.nasa.gov/wp-content/uploads/2026/02/42-240a.pdf",
+      "https://www.nasa.gov/missions/lro/nasas-lro-images-intuitive-machines-odysseus-lander/"
+    ],
+    "note": "Actual landing, JPL PDF pp. 28–29. NASA/LRO rounds to (-80.13, 1.44). Planned point per JPL: (-80.18, 0.98), 2705 m."
+  },
+  {
+    "id": "im_2_athena",
+    "name": "IM-2 Athena – Mons Mouton",
+    "lat": -84.7906,
+    "lon": 29.1957,
+    "elev_m": 5321,
+    "category": "clps_landed",
+    "mission": "Intuitive Machines IM-2 (2025)",
+    "source": [
+      "https://lroc.im-ldi.com/featured_sites/im2/flip-book"
+    ],
+    "note": "Actual position from LROC: the lander ended up on its side in a 20 m crater."
+  },
+  {
+    "id": "chandrayaan_3",
+    "name": "Chandrayaan-3 – Shiv Shakti Point",
+    "lat": -69.373,
+    "lon": 32.319,
+    "elev_m": 529.2,
+    "category": "international_landed",
+    "mission": "Chandrayaan-3 / ISRO (2023)",
+    "source": [
+      "https://www.nasa.gov/wp-content/uploads/2026/02/42-240a.pdf",
+      "https://www.isro.gov.in/ISRO_EN/Chandrayaan3_Details.html",
+      "https://www.hou.usra.edu/meetings/lpsc2024/pdf/1411.pdf"
+    ],
+    "note": "Landing point and elevation: JPL PDF p. 25; elevation datum unverified. ISRO planned point: (-69.367621, 32.348126). LPSC 1411 gives 31.319°E – conflicting, not used."
+  },
+  {
+    "id": "change_4",
+    "name": "Chang'e-4 – Statio Tianhe (far side)",
+    "lat": -45.4562,
+    "lon": 177.5885,
+    "elev_m": -5927,
+    "category": "international_landed",
+    "mission": "Chang'e-4 / CNSA (2019)",
+    "source": [
+      "https://lroc.im-ldi.com/images/1168",
+      "https://lroc.im-ldi.com/images/1100",
+      "https://www.nature.com/articles/s41467-019-12278-3"
+    ],
+    "note": "LROC 2020: ±13 m (95%). Elevation from LROC 2019 (lat -45.4561). Liu et al. 2019: (-45.4446, 177.5991), -5935 m – a different cartographic solution. Far side: no direct Earth link expected (control case)."
+  },
+  {
+    "id": "slim",
+    "name": "SLIM – near Shioli crater",
+    "lat": -13.316,
+    "lon": 25.251,
+    "elev_m": -912,
+    "category": "international_landed",
+    "mission": "SLIM / JAXA (2024)",
+    "source": [
+      "https://www.nasa.gov/missions/lro/nasas-lro-spots-japans-moon-lander/",
+      "https://global.jaxa.jp/press/2024/01/file/jaxa_doc01_20240125_e.pdf"
+    ],
+    "note": "Actual landing per NASA/LRO. JAXA target: (-13.31549, 25.24889) – the planned point, not an alternative landing measurement."
+  }
 ]

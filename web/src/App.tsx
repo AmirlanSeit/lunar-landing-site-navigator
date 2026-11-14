@@ -60,7 +60,8 @@ export default function App() {
 
   const [minDate, maxDate] = data[0] ? dataRange(data[0]) : [null, null]
   const maxLanding = maxDate ? new Date(maxDate.getTime() - days * 86400000) : null
-  const isMock = data.some((d) => d.ephem.mock || d.mask?.mock) || sites.some((s) => !s.source)
+  const mockGeometry = data.some((d) => d.ephem.mock || d.mask?.mock)
+  const unverifiedSites = sites.some((s) => !s.source?.length)
 
   const toggleMatch = (id: string) =>
     setMatchIds((ids) => (ids.includes(id) ? ids.filter((x) => x !== id) : [...ids, id].slice(-4)))
@@ -76,9 +77,13 @@ export default function App() {
           🎓 {explain ? 'Explain mode: ON' : 'Explain the math'}
         </button>
       </header>
-      {isMock && (
+      {(mockGeometry || unverifiedSites) && (
         <div className="mock-banner">
-          Development build: placeholder geometry and unverified site coordinates. Do not use for planning.
+          Development build:{' '}
+          {[mockGeometry && 'placeholder Sun/Earth geometry and terrain', unverifiedSites && 'unverified site coordinates']
+            .filter(Boolean)
+            .join(' and ')}
+          . Do not use for planning.
         </div>
       )}
 

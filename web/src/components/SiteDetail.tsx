@@ -27,6 +27,17 @@ export function SiteDetail({ s, t, explain }: { s: Scenario; t: Thresholds; expl
       <div className="chart-caption">What an astronaut would see turning a full circle at the site during the mission.</div>
       <MissionTimeline m={s.metrics} stepHours={stepHours(s.data)} />
       {explain && <ExplainMath s={s} />}
+      <div className="sources">
+        {site.note && <p>{site.note}</p>}
+        {site.source.length > 0 && (
+          <p>
+            Sources:{' '}
+            {site.source.map((url, i) => (
+              <span key={url}>{i > 0 && ' · '}<a href={url} target="_blank" rel="noreferrer">[{i + 1}] {new URL(url).hostname.replace(/^www\./, '')}</a></span>
+            ))}
+          </p>
+        )}
+      </div>
     </div>
   )
 }

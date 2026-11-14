@@ -1,16 +1,31 @@
 // Mirrors the data contract in PLAN.md §2.1. Change both together.
 
-export type Category = 'artemis' | 'apollo' | 'clps' | 'international' | 'custom'
+export type Category =
+  | 'apollo_landed'
+  | 'artemis_region_reference'
+  | 'clps_historical_target'
+  | 'clps_landed'
+  | 'international_landed'
+  | 'custom'
+
+export const CATEGORY_LABELS: Record<Category, string> = {
+  apollo_landed: 'Landed',
+  artemis_region_reference: 'Region reference',
+  clps_historical_target: 'Planned target',
+  clps_landed: 'Landed',
+  international_landed: 'Landed',
+  custom: 'Custom point',
+}
 
 export interface Site {
   id: string
   name: string
   lat: number // degrees, south negative
   lon: number // east longitude, -180..180
-  elev_m: number
+  elev_m: number | null // null = no verified value
   category: Category
   mission: string
-  source: string
+  source: string[] // primary source first
   note: string
 }
 

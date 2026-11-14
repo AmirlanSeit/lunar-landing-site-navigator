@@ -124,6 +124,10 @@ button, input, select { font: inherit; color: inherit; }
 .match th:first-child, .match td:first-child { text-align: left; color: var(--muted); }
 .match td.win { color: var(--go); font-weight: 700; }
 
+.sources { margin-top: 14px; color: var(--muted); font-size: 12px; }
+.sources p { margin: 4px 0; }
+.sources a { color: var(--earth); }
+
 /* Explain mode */
 .explain-toggle {
   background: var(--panel-2); border: 1px solid var(--gold); color: var(--gold);

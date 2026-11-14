@@ -80,11 +80,15 @@ Claude строит фронт на фейковых данных этого ф�
 
 **`web/public/data/sites.json`**
 ```json
-[{ "id": "shackleton-rim", "name": "Shackleton Rim", "lat": -89.45, "lon": -137.3,
-   "elev_m": 1650, "category": "artemis|apollo|clps|international|custom",
-   "mission": "Artemis III candidate", "source": "https://...", "note": "" }]
+[{ "id": "artemis_haworth", "name": "Haworth", "lat": -86.75, "lon": -22.8, "elev_m": null,
+   "category": "apollo_landed|artemis_region_reference|clps_historical_target|clps_landed|international_landed|custom",
+   "mission": "Artemis candidate region (NASA 2024 list)",
+   "source": ["https://... (основной источник первым)", "https://..."], "note": "..." }]
 ```
-- `lat` — градусы (юг отрицательный), `lon` — **восточная долгота**, −180..180.
+- `lat` — градусы (юг отрицательный), `lon` — **восточная долгота**, −180..180. Сайт принимает и 0..360, но в файле храним ±180.
+- `elev_m` может быть `null`, если нет проверенной высоты. `source` — массив ссылок.
+- Всё, что видно на сайте (`name`, `mission`, `note`), пишем на английском.
+- Список проверил ChatGPT друга 14.11: 12 площадок. Оригинал с пояснениями лежит в `docs/sites-sources.md`.
 
 **`data/ephem/<id>.json`**
 ```json
