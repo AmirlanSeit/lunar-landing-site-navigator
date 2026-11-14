@@ -1,0 +1,39 @@
+# Lunar Landing Site Navigator
+
+NASA Space Apps Challenge 2026 – challenge "Lunar Landing Site Navigator".
+
+Launch slipped? Enter the new landing date and the tool ranks nearby landing sites like players:
+each site gets a card with sunlight, Earth-link and night-survival stats, a GO / RISKY / NO-GO verdict,
+the reasons behind it, and tactics (best alternative site, date shift that makes your site work).
+
+> **Status:** development build. Site coordinates and geometry are placeholders until the
+> JPL Horizons + LOLA pipeline lands (see `PLAN.md`).
+
+## Layout
+
+| Folder | What | Owner |
+|---|---|---|
+| `web/` | Vite + React + TypeScript site | Claude Code |
+| `web/public/data/` | Site list, ephemerides, horizon masks (format: `PLAN.md` §2.1) | pipeline |
+| `pipeline/` | Python: JPL Horizons fetch, LOLA horizon masks | ChatGPT Codex |
+| `docs/` | Sources, submission texts, demo script, SI usage log | ChatGPT |
+
+## Run locally
+
+```bash
+cd web
+npm install
+npm run dev      # http://localhost:5173
+npm test         # logic tests
+```
+
+## Data
+
+- **JPL Horizons** – apparent azimuth/elevation of the Sun and Earth from each site (airless, topocentric on the Moon).
+- **LRO LOLA** – south-pole elevation model used to compute each site's terrain horizon.
+
+## Use of Super Intelligence (SI)
+
+This project was built with help from SI tools: Claude Code (Anthropic) wrote most of the code in `web/`,
+ChatGPT / Codex (OpenAI) wrote the data pipeline and helped with research and texts.
+The idea, product decisions and final review are the team's. Details: [`docs/SI_USAGE.md`](docs/SI_USAGE.md).

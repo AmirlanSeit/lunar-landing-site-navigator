@@ -1,0 +1,12 @@
+[
+  { "id": "apollo-11", "name": "Apollo 11 – Tranquility Base", "lat": 0.674, "lon": 23.473, "elev_m": -1930, "category": "apollo", "mission": "Apollo 11 (1969)", "source": "", "note": "PLACEHOLDER – awaiting verified list" },
+  { "id": "apollo-15", "name": "Apollo 15 – Hadley Rille", "lat": 26.132, "lon": 3.634, "elev_m": -1900, "category": "apollo", "mission": "Apollo 15 (1971)", "source": "", "note": "PLACEHOLDER – awaiting verified list" },
+  { "id": "apollo-17", "name": "Apollo 17 – Taurus-Littrow", "lat": 20.191, "lon": 30.772, "elev_m": -1780, "category": "apollo", "mission": "Apollo 17 (1972)", "source": "", "note": "PLACEHOLDER – awaiting verified list" },
+  { "id": "chandrayaan-3", "name": "Chandrayaan-3 – Shiv Shakti Point", "lat": -69.373, "lon": 32.319, "elev_m": 0, "category": "international", "mission": "Chandrayaan-3 (2023)", "source": "", "note": "PLACEHOLDER – awaiting verified list" },
+  { "id": "shackleton-ridge", "name": "Shackleton–de Gerlache Ridge", "lat": -89.45, "lon": -137.0, "elev_m": 1900, "category": "artemis", "mission": "Artemis III candidate region", "source": "", "note": "PLACEHOLDER – awaiting verified list" },
+  { "id": "de-gerlache-rim", "name": "de Gerlache Rim", "lat": -88.6, "lon": -68.0, "elev_m": 1500, "category": "artemis", "mission": "Artemis III candidate region", "source": "", "note": "PLACEHOLDER – awaiting verified list" },
+  { "id": "malapert-massif", "name": "Malapert Massif", "lat": -86.0, "lon": -2.9, "elev_m": 4800, "category": "artemis", "mission": "Artemis III candidate region", "source": "", "note": "PLACEHOLDER – awaiting verified list" },
+  { "id": "nobile-rim", "name": "Nobile Rim", "lat": -85.4, "lon": 37.0, "elev_m": 1800, "category": "artemis", "mission": "Artemis III candidate region", "source": "", "note": "PLACEHOLDER – awaiting verified list" },
+  { "id": "haworth", "name": "Haworth", "lat": -86.8, "lon": -10.0, "elev_m": 1200, "category": "artemis", "mission": "Artemis III candidate region", "source": "", "note": "PLACEHOLDER – awaiting verified list" },
+  { "id": "mons-mouton", "name": "Mons Mouton", "lat": -84.5, "lon": 31.2, "elev_m": 5000, "category": "clps", "mission": "CLPS target", "source": "", "note": "PLACEHOLDER – awaiting verified list" }
+]
