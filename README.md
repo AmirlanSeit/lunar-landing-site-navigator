@@ -31,7 +31,9 @@ npm test         # logic tests
 
 ## Data
 
-- **JPL Horizons** – apparent azimuth/elevation of the Sun and Earth from each site (airless, topocentric on the Moon).
+- **JPL Horizons** – apparent azimuth/elevation of the Sun and Earth from each site (airless, topocentric on the Moon),
+  hourly from 2026-11-01 to 2028-12-31. Regenerate with `node pipeline/fetch_horizons.mjs` from the repo root.
+  Checked against the Apollo 11 landing (Sun ~10.7° in the east at 20:17 UT) and against 90° − |lat| + 1.54° for every site.
 - **LRO LOLA** – south-pole elevation model used to compute each site's terrain horizon.
 
 ## Use of Super Intelligence (SI)

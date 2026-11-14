@@ -60,7 +60,8 @@ export default function App() {
 
   const [minDate, maxDate] = data[0] ? dataRange(data[0]) : [null, null]
   const maxLanding = maxDate ? new Date(maxDate.getTime() - days * 86400000) : null
-  const mockGeometry = data.some((d) => d.ephem.mock || d.mask?.mock)
+  const mockEphem = data.some((d) => d.ephem.mock)
+  const mockTerrain = data.some((d) => d.mask?.mock)
   const unverifiedSites = sites.some((s) => !s.source?.length)
 
   const toggleMatch = (id: string) =>
@@ -77,12 +78,16 @@ export default function App() {
           🎓 {explain ? 'Explain mode: ON' : 'Explain the math'}
         </button>
       </header>
-      {(mockGeometry || unverifiedSites) && (
+      {(mockEphem || mockTerrain || unverifiedSites) && (
         <div className="mock-banner">
           Development build:{' '}
-          {[mockGeometry && 'placeholder Sun/Earth geometry and terrain', unverifiedSites && 'unverified site coordinates']
+          {[
+            mockEphem && 'placeholder Sun/Earth positions',
+            mockTerrain && 'placeholder terrain (real LOLA horizons coming)',
+            unverifiedSites && 'unverified site coordinates',
+          ]
             .filter(Boolean)
-            .join(' and ')}
+            .join(', ')}
           . Do not use for planning.
         </div>
       )}
