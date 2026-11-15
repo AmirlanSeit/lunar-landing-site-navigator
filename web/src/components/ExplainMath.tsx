@@ -25,7 +25,7 @@ export function ExplainMath({ s }: { s: Scenario }) {
 
   return (
     <div className="coach">
-      <h3>🎓 Coach notes – the math behind {site.name}</h3>
+      <h3>Coach notes: the math behind {site.name}</h3>
 
       <div className="note">
         <h4>1 · How high can the Sun get here?</h4>
@@ -33,7 +33,7 @@ export function ExplainMath({ s }: { s: Scenario }) {
         <p>
           During this mission it peaks at <b>{f1(sunPeak)}°</b>.{' '}
           {polar
-            ? 'The Moon’s axis is tilted only 1.5°, so near the pole the Sun never climbs – it circles the horizon like a lighthouse beam.'
+            ? 'The Moon’s axis is tilted only 1.5°, so near the pole the Sun stays low and circles the horizon like a lighthouse beam.'
             : 'Close to the equator the Sun climbs high overhead, just like noon in the tropics on Earth.'}
         </p>
       </div>
@@ -45,7 +45,7 @@ export function ExplainMath({ s }: { s: Scenario }) {
           Example: a 1 km hill 30 km away rises {f1(hillAngle(1, 30))}° above the horizon
           (the second term is the Moon’s curvature, R_moon = 1737 km). The Sun’s disk is only 0.53° wide.
           {mask && <> Highest terrain around this site: <b>{f1(terrainMax)}°</b> vs. Sun peak <b>{f1(sunPeak)}°</b>.</>}
-          {mask && terrainMax >= sunPeak && ' The terrain is taller than the Sun ever gets – some directions are in shadow all the time.'}
+          {mask && terrainMax >= sunPeak && ' The terrain rises higher than the Sun ever gets, so in some directions the Sun is always hidden.'}
         </p>
       </div>
 
@@ -55,7 +55,7 @@ export function ExplainMath({ s }: { s: Scenario }) {
         <p>
           Average Sun elevation here while lit, above the level horizon: <b>{f1(sunEl)}°</b>. The ideal geometric factor
           is <b>{Math.round(flatPanelPct(sunEl))}%</b> for a flat panel and <b>{Math.round(verticalPanelPct(sunEl))}%</b> for
-          a vertical one turned toward the Sun – before losses, dust or temperature, so not the mission's electrical power.
+          a vertical one turned toward the Sun. These are ideal numbers before dust, heat and other losses, not the mission's electrical power.
           {polar && ' That is why polar landers stand their solar panels upright.'}
         </p>
       </div>
@@ -66,8 +66,8 @@ export function ExplainMath({ s }: { s: Scenario }) {
         <p>
           The Moon always shows Earth the same face, so Earth hangs almost still in the sky. But the Moon wobbles
           (libration) by up to ±7°, so Earth rocks up and down: during this mission between <b>{f1(earthMin)}°</b> and{' '}
-          <b>{f1(earthMax)}°</b>. When it dips below the terrain, the line of sight for a direct-to-Earth link is lost – here
-          some part of Earth is in view {Math.round(m.commPct)}% of the time (geometry only, not a radio link budget).
+          <b>{f1(earthMax)}°</b>. When it dips below the terrain, a direct-to-Earth link loses its line of sight. Here some part
+          of Earth is in view {Math.round(m.commPct)}% of the time. That is geometry only, not a radio link budget.
         </p>
       </div>
 
@@ -78,7 +78,7 @@ export function ExplainMath({ s }: { s: Scenario }) {
           A lunar day lasts 29.5 Earth days, so the Sun's hour angle moves only {f1(SUN_DEG_PER_DAY)}° per day. While
           rising, it climbs that rate × cos(latitude) = <b>{sunriseRateDegPerDay(site.lat).toFixed(2)}° per day</b> here, so
           the whole 0.53° disk needs about <b>{formatHours(sunriseHours(site.lat))}</b> to clear a flat horizon
-          (about 1 hour at the equator; terrain changes it). One slow sunset can mean two weeks of night.
+          (about 1 hour at the equator; terrain changes it).{polar ? ' Near the pole, darkness comes mostly from terrain shadows, so its length varies (see Longest darkness above).' : ' After sunset, a lunar night lasts about two weeks.'}
         </p>
       </div>
     </div>

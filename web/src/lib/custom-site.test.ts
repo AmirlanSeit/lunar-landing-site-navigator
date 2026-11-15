@@ -14,7 +14,7 @@ describe('custom site metadata', () => {
       category: 'custom',
       mission: 'User-defined landing site',
       source: [],
-      note: 'Custom point – terrain not modeled (flat horizon)',
+      note: 'Custom point: terrain not modeled (flat horizon)',
     })
     expect(regionOf(site)).toBe('south-pole')
   })

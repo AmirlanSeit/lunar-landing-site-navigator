@@ -17,7 +17,7 @@ export function ShareButton() {
 
   return (
     <button className="share-button" onClick={share} aria-live="polite">
-      {copied ? '✓ Link copied' : '🔗 Share scenario'}
+      {copied ? 'Link copied' : 'Share scenario'}
     </button>
   )
 }

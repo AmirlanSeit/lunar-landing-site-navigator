@@ -112,7 +112,7 @@ The Python pipeline uses NumPy and Pillow plus Python's standard library. Pillow
 
 ### Fonts and media
 
-The interface loads [Rajdhani](https://fonts.google.com/specimen/Rajdhani) and [Inter](https://fonts.google.com/specimen/Inter) through Google Fonts. Both use the SIL Open Font License 1.1: [Rajdhani license](https://github.com/google/fonts/blob/main/ofl/rajdhani/OFL.txt), [Inter license](https://github.com/google/fonts/blob/main/ofl/inter/OFL.txt).
+The interface loads [IBM Plex Sans](https://fonts.google.com/specimen/IBM+Plex+Sans), [IBM Plex Sans Condensed](https://fonts.google.com/specimen/IBM+Plex+Sans+Condensed) and [IBM Plex Mono](https://fonts.google.com/specimen/IBM+Plex+Mono) through Google Fonts. All three use the SIL Open Font License 1.1: [IBM Plex license](https://github.com/IBM/plex/blob/master/LICENSE.txt).
 
 Video credits to complete after recording: [VIDEO RECORDING AND EDITING TOOLS]; [VOICE SOURCE AND SI DISCLOSURE, IF APPLICABLE]; [MUSIC TRACK, CREATOR, LICENSE AND URL, OR NO MUSIC]. The recording plan uses the team's own screen capture of the application.
 

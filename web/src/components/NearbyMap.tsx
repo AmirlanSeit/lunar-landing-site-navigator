@@ -83,7 +83,7 @@ export function NearbyMap({ nb }: { nb: Neighborhood }) {
   return (
     <div className="nearby" id="nearby-map">
       <div className="nearby-head">
-        <h3>Within {nb.radius_km} km: where is it better?</h3>
+        <h3>Within {nb.radius_km} km: sunlight and Earth in view around the site</h3>
         <div className="nearby-toggle" role="group" aria-label="Map metric">
           {(Object.keys(LABELS) as Metric[]).map((m) => (
             <button key={m} aria-pressed={metric === m} className={metric === m ? 'on' : ''} onClick={() => setMetric(m)}>
@@ -118,14 +118,14 @@ export function NearbyMap({ nb }: { nb: Neighborhood }) {
       <div className="nearby-legend">
         <span>0%</span>
         <i style={{ background: `linear-gradient(90deg, ${RAMPS[metric].join(', ')})` }} />
-        <span>100% {LABELS[metric].toLowerCase()}</span>
+        <span>100% · {LABELS[metric]}</span>
         <span className="nearby-keys">○ reference point · ★ best spot</span>
       </div>
       <p className="nearby-readout" aria-live="polite">
         {hover ? `Hovered: ${describe(nb, hover)}` : `★ Best spot: ${describe(nb, nb.best)}`}
       </p>
       <p className="chart-caption">
-        Each square is {nb.spacing_m} m: two-year averages (Nov 2026 – Dec 2028, hourly) from LRO LOLA terrain and
+        Each square is {nb.spacing_m} m: two-year averages (Nov 2026 to Dec 2028, hourly) from LRO LOLA terrain and
         JPL Horizons, not a verdict for your dates. Validation covers the six site reference points only: their averages
         differ from NASA's long-term LOLA illumination map by at most 2.5 percentage points (periods and settings differ);
         individual squares are not separately validated.

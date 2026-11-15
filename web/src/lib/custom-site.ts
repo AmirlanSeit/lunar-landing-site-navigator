@@ -13,6 +13,6 @@ export function createCustomSite(input: { name: string; lat: string; lon: string
     category: 'custom',
     mission: 'User-defined landing site',
     source: [],
-    note: 'Custom point – terrain not modeled (flat horizon)',
+    note: 'Custom point: terrain not modeled (flat horizon)',
   }
 }

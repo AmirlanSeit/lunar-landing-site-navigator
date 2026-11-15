@@ -36,7 +36,7 @@ export function CustomSiteForm({ onAdd }: { onAdd: (site: Site) => void }) {
   return (
     <form className="custom-site-form" onSubmit={handleSubmit} noValidate aria-labelledby="custom-site-title" aria-busy={loading}>
       <h2 id="custom-site-title" className="section-title">Add a custom site</h2>
-      <p className="custom-site-note">Custom point – terrain not modeled (flat horizon)</p>
+      <p className="custom-site-note">Custom point: terrain not modeled (flat horizon)</p>
       <fieldset disabled={loading}>
         <legend className="custom-site-legend">Lunar coordinates</legend>
         <div className="control">

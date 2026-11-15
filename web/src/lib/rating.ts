@@ -21,7 +21,7 @@ export const STAT_LABELS: Record<keyof Stats, string> = {
 
 export const STAT_HELP: Record<keyof Stats, string> = {
   LGT: 'Mission average of how much of the solar disk is above the terrain (modeled sunlight, not electrical power).',
-  COM: 'Share of the mission any part of Earth is above the terrain – line of sight for a direct link, not a radio link budget.',
+  COM: 'Share of the mission any part of Earth is above the terrain. This is line of sight for a direct link, not a radio link budget.',
   NGT: 'How short the longest dark stretch is. 99 = never dark; 0 = dark the whole mission.',
   SUN: 'How long after landing the Sun stays up. 0 = you land in darkness.',
   ERT: 'How long after landing Earth stays in view. 0 = Earth not in view at touchdown.',

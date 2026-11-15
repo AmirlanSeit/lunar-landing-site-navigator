@@ -158,12 +158,12 @@ export default function App() {
       <header className="header">
         <div>
           <h1>Lunar Landing Site Navigator</h1>
-          <p>Launch slipped? Pick the new date – we rank the sites.</p>
+          <p>Launch slipped? Pick the new date and see which landing sites still work.</p>
         </div>
         <div className="header-actions">
           <ShareButton />
           <button className={`explain-toggle${explain ? ' on' : ''}`} onClick={() => setExplain(!explain)} aria-pressed={explain}>
-            🎓 {explain ? 'Explain mode: ON' : 'Explain the math'}
+            Explain the math
           </button>
         </div>
       </header>
@@ -230,7 +230,7 @@ export default function App() {
 
       {/* Collapsed by default so the results start on the first screen. */}
       <details className="custom-site-details">
-        <summary>➕ Try any lunar coordinates (custom site)</summary>
+        <summary>Try any lunar coordinates (custom site)</summary>
         <CustomSiteForm onAdd={(site) => {
           setSites((current) => [...current, site])
           setRegion(regionOf(site))
@@ -240,7 +240,7 @@ export default function App() {
       </details>
 
       {ranked.length === 0 && data.length > 0 && (
-        <p className="section-title">No data for this date range – pick a date between {minDate && toInput(minDate)} and {maxLanding && toInput(maxLanding)}.</p>
+        <p className="section-title">No data for this date range. Pick a date between {minDate && toInput(minDate)} and {maxLanding && toInput(maxLanding)}.</p>
       )}
 
       <h2 className="section-title" id="tactics">Tactics</h2>
@@ -308,7 +308,7 @@ export default function App() {
       )}
 
       <footer className="footer">
-        Data: JPL Horizons (Sun/Earth positions), LRO LOLA (terrain). Built for NASA Space Apps 2026 with help from SI tools – see docs/SI_USAGE.md.
+        Data: JPL Horizons (Sun/Earth positions), LRO LOLA (terrain). Built for NASA Space Apps 2026 with help from SI tools (see docs/SI_USAGE.md).
       </footer>
     </div>
   )

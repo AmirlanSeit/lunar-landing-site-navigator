@@ -48,7 +48,7 @@ The final edit is exactly **29 seconds**, from **0:00 through 0:29**. Cut the re
 | 0:09 | 0:13 | Show the Demo click, then cut to the settled Tactics panel. Frame Mons Mouton's original GO, delayed NO-GO, and 70% to 35% comparison. | The demo changes sunlight from 70% to 35%: NO-GO. |
 | 0:13 | 0:16 | Click **Try that date**. Hold on the new date, 2 December at 12:00 UTC, and Mons Mouton's GO. Add a small label: "GO = mission-average thresholds". | Try five days later: December 2 returns GO. |
 | 0:16 | 0:19 | Scroll to the calendar. Frame the Mons Mouton row and selected 2 December column; hover its cell to show the tooltip. | Compare daily landing windows in the calendar. |
-| 0:19 | 0:24 | In the **Why** panel for Mons Mouton, frame the "Within 5 km: where is it better?" map with its summary line and the ★. Hover the ★ cell. Add a small label: "Two-year averages". | Or move 2.1 km: two-year sunlight rises from 48% to 80%. |
+| 0:19 | 0:24 | In the **Why** panel for Mons Mouton, frame the "Within 5 km: sunlight and Earth in view around the site" map with its summary line and the ★. Hover the ★ cell. Add a small label: "Two-year averages". | Or move 2.1 km: two-year sunlight rises from 48% to 80%. |
 | 0:24 | 0:29 | End card with text credits for JPL Horizons and LRO LOLA, the line "Checked against NASA's LOLA illumination map", and the project URL. Use no agency logos. Stop at 0:29. | NASA Horizons and LOLA data. Next: terrain for any point. |
 
 Nobile Rim 2 is a verified alternative on the delayed date, but leave that branch out of this 29-second cut. The main sequence follows one site and one corrective action.

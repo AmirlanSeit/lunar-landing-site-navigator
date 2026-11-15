@@ -28,7 +28,9 @@ export function SiteDetail({ s, t, explain }: { s: Scenario; t: Thresholds; expl
       </ul>
       <HorizonView data={s.data} m={s.metrics} />
       <div className="chart-caption">What an astronaut would see turning a full circle at the site during the mission.</div>
-      <MissionTimeline m={s.metrics} stepHours={stepHours(s.data)} />
+      <div className="chart-scroll" tabIndex={0} role="region" aria-label="Mission timeline (scrolls sideways on small screens)">
+        <MissionTimeline m={s.metrics} stepHours={stepHours(s.data)} />
+      </div>
       {nearby && <NearbyMap nb={nearby} />}
       {explain && <ExplainMath s={s} />}
       <div className="sources">

@@ -1,84 +1,55 @@
-.launch-calendar { min-width: 0; max-width: 100%; margin-top: 28px; }
+.launch-calendar { min-width: 0; max-width: 100%; }
 
 .launch-calendar-title {
-  margin: 0 0 8px;
-  font-family: var(--font-display);
-  font-size: 14px;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+  margin: var(--s-8) 0 var(--s-2); padding-top: var(--s-3); border-top: 1px solid var(--line-strong);
+  font: 600 26px/1.15 var(--font-display); color: var(--text);
 }
-
-.launch-calendar-help { margin: 0; font-size: 13px; }
-.launch-calendar-legend { display: flex; flex-wrap: wrap; gap: 8px 16px; margin: 10px 0; font-size: 12px; }
+.launch-calendar-help { margin: 0; max-width: 80ch; font-size: 13px; color: var(--text-2); }
+.launch-calendar-legend {
+  display: flex; flex-wrap: wrap; gap: var(--s-2) var(--s-4); margin: var(--s-3) 0;
+  font: 500 11px/1.3 var(--font-mono); letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-2);
+}
 .launch-calendar-legend span { display: inline-flex; align-items: center; gap: 6px; }
-.launch-calendar-legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; }
-.launch-calendar-current-key { background: var(--panel); border: 2px solid var(--risky); }
+.launch-calendar-legend i { display: inline-block; width: 12px; height: 12px; border-radius: var(--r-1); }
+.launch-calendar-current-key { border: 2px solid var(--text); background: transparent; }
 
 .launch-calendar-scroll {
-  max-width: 100%;
-  overflow-x: auto;
-  overscroll-behavior-x: contain;
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  background: var(--panel);
+  max-width: 100%; overflow-x: auto; overscroll-behavior-x: contain;
+  border-top: 1px solid var(--line-strong); border-bottom: 1px solid var(--line); background: var(--bg);
 }
-
-.launch-calendar-scroll:focus-visible { outline: 2px solid var(--risky); outline-offset: 2px; }
+.launch-calendar-scroll:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 .launch-calendar-table { width: max-content; border-collapse: separate; border-spacing: 0; font-size: 12px; }
 .launch-calendar-table th, .launch-calendar-table td { padding: 3px; border-bottom: 1px solid var(--line); }
 .launch-calendar-table tbody tr:last-child th, .launch-calendar-table tbody tr:last-child td { border-bottom: 0; }
 
 .launch-calendar-site {
-  position: sticky;
-  left: 0;
-  z-index: 2;
-  width: 184px;
-  min-width: 184px;
-  max-width: 184px;
-  border-right: 1px solid var(--line);
-  background: var(--panel);
-  text-align: left;
+  position: sticky; left: 0; z-index: 2; width: 184px; min-width: 184px; max-width: 184px;
+  border-right: 1px solid var(--line-strong); background: var(--bg); text-align: left;
+  font: 500 14px/1.2 var(--font-display);
 }
-
-.launch-calendar-table .launch-calendar-site { padding: 8px 12px; }
+.launch-calendar-table .launch-calendar-site { padding: 8px 12px 8px 0; }
+thead .launch-calendar-site { font: 500 11px/1.3 var(--font-mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-3); }
 .launch-calendar-site span { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.launch-calendar-date { position: relative; width: 30px; min-width: 30px; height: 58px; text-align: left; }
-.launch-calendar-week, .launch-calendar-selected-label { position: absolute; left: 4px; white-space: nowrap; }
-.launch-calendar-week { top: 9px; }
-.launch-calendar-selected-label { bottom: 8px; font-size: 10px; }
-.launch-calendar-current { background: var(--line); box-shadow: inset 2px 0 var(--risky), inset -2px 0 var(--risky); }
+.launch-calendar-date { position: relative; width: 30px; min-width: 30px; height: 58px; text-align: left; font-weight: 400; }
+.launch-calendar-week, .launch-calendar-selected-label { position: absolute; left: 4px; white-space: nowrap; font-family: var(--font-mono); }
+.launch-calendar-week { top: 9px; font-size: 11px; color: var(--text-2); }
+.launch-calendar-selected-label { bottom: 8px; font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text); }
+.launch-calendar-current { background: var(--surface-2); box-shadow: inset 1px 0 var(--text), inset -1px 0 var(--text); }
 
 .launch-calendar-cell {
-  display: block;
-  width: 24px;
-  height: 30px;
-  padding: 0;
-  border: 1px solid var(--panel);
-  border-radius: 4px;
-  color: var(--panel);
-  font-size: 15px;
-  font-weight: 700;
-  line-height: 1;
-  cursor: pointer;
+  display: block; width: 24px; height: 30px; padding: 0; border: 0; border-radius: var(--r-1);
+  color: var(--on-light); font-size: 14px; font-weight: 700; line-height: 1; cursor: pointer;
 }
-
 .launch-calendar-GO { background: var(--go); }
 .launch-calendar-RISKY { background: var(--risky); }
 .launch-calendar-NO-GO { background: var(--nogo); }
-.launch-calendar-unavailable { background: var(--line); color: inherit; }
+.launch-calendar-unavailable { background: var(--surface-2); color: var(--text-3); }
 .launch-calendar-cell:disabled { cursor: not-allowed; }
-.launch-calendar-cell:not(:disabled):hover { outline: 2px solid var(--risky); }
-.launch-calendar-cell:focus-visible { position: relative; z-index: 1; outline: 3px solid var(--risky); outline-offset: 1px; }
-.launch-calendar-empty { margin: 12px 0 0; padding: 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); }
+.launch-calendar-cell:not(:disabled):hover { outline: 2px solid var(--text); outline-offset: 1px; }
+.launch-calendar-cell:focus-visible { position: relative; z-index: 1; outline: 3px solid var(--focus); outline-offset: 1px; }
+.launch-calendar-empty { margin: var(--s-3) 0 0; padding: var(--s-3) 0; border-top: 1px solid var(--line); color: var(--text-2); }
 
-.launch-calendar-sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
-}
+.launch-calendar-sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 
 @media (max-width: 640px) {
   .launch-calendar-site { width: 140px; min-width: 140px; max-width: 140px; }

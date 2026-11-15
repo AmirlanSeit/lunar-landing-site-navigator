@@ -28,41 +28,44 @@ export function TacticsBoard({ ranked, planned, shiftDays, landing, before, orig
 
   return (
     <div className="tactics">
-      <div className="tactic">
-        <h3>Best pick for this date</h3>
-        <div className="big">{best.data.site.name} <span className={`verdict ${best.verdict}`}>{best.verdict}</span></div>
-        <ul>
-          {reasonsFor(best.metrics, t).slice(0, 2).map((r) => <li key={r.text}>{r.text}</li>)}
-        </ul>
-        <button onClick={() => onSelect(best.data.site.id)}>See why</button>
-      </div>
-
+      {/* The planned site leads: it is the question the user came with. DOM order = reading and focus order. */}
       {planned && (
-        <div className="tactic">
+        <div className={`tactic tactic--planned v-${planned.verdict}`}>
           <h3>Your planned site</h3>
           <div className="big">{planned.data.site.name} <span className={`verdict ${planned.verdict}`}>{planned.verdict}</span></div>
           {flatHorizonPolar(planned.data.site) && (
-            <p className="fine">⚠ Flat horizon: terrain is not modeled for custom points, and near the pole real terrain usually lowers these numbers.</p>
-          )}
-          {before && original && (
-            <p className="slip">
-              Original date ({fmtDate(original)}): <span className={`verdict ${before.verdict}`}>{before.verdict}</span>
-              {' '}→ new date: <span className={`verdict ${planned.verdict}`}>{planned.verdict}</span>
-              {' '}(sunlight {Math.round(before.metrics.lightPct)}% → {Math.round(planned.metrics.lightPct)}%,
-              {' '}Earth in view {Math.round(before.metrics.commPct)}% → {Math.round(planned.metrics.commPct)}%)
+            <p className="fine warn">
+              Flat horizon: terrain is not modeled for custom points. Near the pole, real terrain usually lowers these numbers.
             </p>
           )}
+          {before && original && (
+            <div className="slip-board">
+              <div className="slip-col">
+                <div className="slip-when">Original · {fmtDate(original)}</div>
+                <span className={`verdict ${before.verdict}`}>{before.verdict}</span>
+                <div>Sunlight <b>{Math.round(before.metrics.lightPct)}%</b></div>
+                <div>Earth in view <b>{Math.round(before.metrics.commPct)}%</b></div>
+              </div>
+              <div className="slip-arrow" aria-hidden="true">→</div>
+              <div className="slip-col">
+                <div className="slip-when">New · {fmtDate(landing)}</div>
+                <span className={`verdict ${planned.verdict}`}>{planned.verdict}</span>
+                <div>Sunlight <b>{Math.round(planned.metrics.lightPct)}%</b></div>
+                <div>Earth in view <b>{Math.round(planned.metrics.commPct)}%</b></div>
+              </div>
+            </div>
+          )}
           {!planned.metrics.litAtLanding && (
-            <p className="fine">
-              ⚠ Lands in darkness:{' '}
+            <p className="fine warn">
+              Lands in darkness:{' '}
               {planned.metrics.sunChangeHours === null
                 ? 'no sunlight during the mission.'
                 : `first sunlight ${formatHours(planned.metrics.sunChangeHours)} after touchdown.`}
             </p>
           )}
           {!planned.metrics.earthAtLanding && (
-            <p className="fine">
-              ⚠ Earth not in view at touchdown:{' '}
+            <p className="fine warn">
+              Earth not in view at touchdown:{' '}
               {planned.metrics.earthChangeHours === null
                 ? 'no direct line of sight during the mission.'
                 : `it rises ${formatHours(planned.metrics.earthChangeHours)} later.`}
@@ -79,10 +82,19 @@ export function TacticsBoard({ ranked, planned, shiftDays, landing, before, orig
               <button onClick={() => onTryDate(shiftedDate)}>Try that date</button>
             </>
           ) : (
-            <p>No GO date within ±30 days – switch to the best pick or relax the thresholds.</p>
+            <p>No GO date within ±30 days. Switch to the best pick or relax the thresholds.</p>
           )}
         </div>
       )}
+
+      <div className="tactic">
+        <h3>Best pick for this date</h3>
+        <div className="big">{best.data.site.name} <span className={`verdict ${best.verdict}`}>{best.verdict}</span></div>
+        <ul>
+          {reasonsFor(best.metrics, t).slice(0, 2).map((r) => <li key={r.text}>{r.text}</li>)}
+        </ul>
+        <button onClick={() => onSelect(best.data.site.id)}>See why</button>
+      </div>
 
       {planned && nearby && (
         <div className="tactic">
@@ -100,7 +112,7 @@ export function TacticsBoard({ ranked, planned, shiftDays, landing, before, orig
                 <li>Earth in view {nearby.center.earth_pct.toFixed(0)}% → <b>{nearby.best.earth_pct.toFixed(0)}%</b></li>
                 <li>Longest night {formatHours(nearby.center.longest_dark_h)} → {formatHours(nearby.best.longest_dark_h)}, slope {nearby.best.slope_deg.toFixed(1)}°</li>
               </ul>
-              <p className="fine">Averages over Nov 2026 – Dec 2028 on LRO LOLA terrain, not a verdict for your dates – but a few kilometres change everything at the pole.</p>
+              <p className="fine">Averages for Nov 2026 to Dec 2028 over LRO LOLA terrain. They are not a verdict for your dates.</p>
             </>
           )}
           <button onClick={() => {

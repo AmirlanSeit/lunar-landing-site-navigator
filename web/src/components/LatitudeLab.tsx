@@ -28,10 +28,10 @@ export function LatitudeLab({ siteLat, siteName }: { siteLat: number; siteName: 
   return (
     <div className="lab">
       <div className="lab-text">
-        <h3>🧪 Latitude lab</h3>
+        <h3>Latitude lab</h3>
         <p>
           Sunlight hits the Moon almost exactly side-on. Your <b>horizon</b> is the line touching the surface where you
-          stand. The further you go from the equator, the more that line tilts toward the Sun – and the lower the Sun sits.
+          stand. The further you go from the equator, the more that line tilts toward the Sun, and the lower the Sun sits.
         </p>
         <label htmlFor="lab-lat">Latitude: <b>{Math.abs(lat).toFixed(1)}°{lat < 0 ? 'S' : 'N'}</b></label>
         <input id="lab-lat" type="range" min={-90} max={90} step={0.5} value={lat} onChange={(e) => setLat(+e.target.value)} />
@@ -53,12 +53,12 @@ export function LatitudeLab({ siteLat, siteName }: { siteLat: number; siteName: 
         {/* incoming ray to the observer */}
         <line x1={W - 24} x2={p.x} y1={p.y} y2={p.y} stroke="var(--sun)" strokeWidth={2} />
         {/* local horizon (tangent) and local "up" */}
-        <line x1={p.x - 70 * t.x} y1={p.y - 70 * t.y} x2={p.x + 70 * t.x} y2={p.y + 70 * t.y} stroke="var(--go)" strokeWidth={2} />
+        <line x1={p.x - 70 * t.x} y1={p.y - 70 * t.y} x2={p.x + 70 * t.x} y2={p.y + 70 * t.y} stroke="var(--text)" strokeWidth={2} />
         <line x1={p.x} y1={p.y} x2={p.x + 40 * up.x} y2={p.y + 40 * up.y} stroke="#fff" strokeDasharray="3 3" />
         <path d={`M${arcStart.x},${arcStart.y} A${ARC},${ARC} 0 0 ${sweep} ${arcEnd.x},${arcEnd.y}`} fill="none" stroke="var(--sun)" strokeWidth={2} />
         <circle cx={p.x} cy={p.y} r={5} fill="#fff" />
         <text x={p.x + ARC + 6} y={p.y + (lat >= 0 ? 14 : -6)} fontSize="13" fill="var(--sun)" fontWeight={700}>{el.toFixed(1)}°</text>
-        <text x={p.x - 70 * t.x - 4} y={p.y - 70 * t.y + (lat >= 0 ? -6 : 14)} fontSize="11" fill="var(--go)" textAnchor="end">your horizon</text>
+        <text x={p.x - 70 * t.x - 4} y={p.y - 70 * t.y + (lat >= 0 ? -6 : 14)} fontSize="11" fill="var(--text)" textAnchor="end">your horizon</text>
       </svg>
     </div>
   )

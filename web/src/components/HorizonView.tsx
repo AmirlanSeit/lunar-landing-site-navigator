@@ -29,6 +29,8 @@ export function HorizonView({ data, m }: { data: SiteData; m: Metrics }) {
 
   return (
     <div>
+      {/* On phones the chart keeps a readable width and scrolls sideways instead of shrinking its labels. */}
+      <div className="chart-scroll" tabIndex={0} role="region" aria-label="Horizon panorama (scrolls sideways on small screens)">
       <svg className="chart" viewBox={`0 0 ${W} ${H}`} role="img" aria-label="Horizon panorama with Sun and Earth tracks">
         <defs>
           <clipPath id="plot-area"><rect x={PAD_L} y={0} width={W - PAD_L} height={H - PAD_B} /></clipPath>
@@ -55,9 +57,10 @@ export function HorizonView({ data, m }: { data: SiteData; m: Metrics }) {
           <text key={k} x={x(k * 90)} y={H - 6} fontSize="12" fill="#8a93a8" textAnchor="middle">{d}</text>
         ))}
       </svg>
+      </div>
       <div className="legend">
         <span><i style={{ background: 'var(--sun)' }} />Sun path (bright = above terrain)</span>
-        <span><i style={{ background: 'var(--earth)' }} />Earth path (bright = link possible)</span>
+        <span><i style={{ background: 'var(--earth)' }} />Earth path (bright = Earth in view)</span>
         <span><i style={{ background: 'var(--terrain)', borderRadius: 2 }} />
           {data.mask ? `Terrain horizon${data.mask.mock ? ' (placeholder)' : ' (LRO LOLA)'}` : 'Flat horizon (terrain not modeled)'}
         </span>

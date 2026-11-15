@@ -45,7 +45,7 @@ export function reasonsFor(m: Metrics, t: Thresholds): Reason[] {
     r.push({
       text: m.sunChangeHours === null
         ? 'Lands in darkness and the Sun never rises during the mission'
-        : `Lands in darkness – first sunlight after ${formatHours(m.sunChangeHours)}`,
+        : `Lands in darkness. First sunlight after ${formatHours(m.sunChangeHours)}`,
       good: false,
     })
   } else if (m.sunChangeHours !== null) {
@@ -55,15 +55,15 @@ export function reasonsFor(m: Metrics, t: Thresholds): Reason[] {
   }
   if (m.longestDarkHours > 0) {
     r.push({
-      text: `Longest darkness: ${formatHours(m.longestDarkHours)} – batteries must survive it`,
+      text: `Longest darkness: ${formatHours(m.longestDarkHours)}. Batteries must last through it`,
       good: m.longestDarkHours <= 48,
     })
   }
   if (!m.earthAtLanding) {
     r.push({
       text: m.earthChangeHours === null
-        ? 'Earth never in view during the mission – a relay satellite would be needed'
-        : `Earth not in view at landing – it rises after ${formatHours(m.earthChangeHours)}`,
+        ? 'Earth never in view during the mission, so a relay satellite would be needed'
+        : `Earth not in view at landing. It rises after ${formatHours(m.earthChangeHours)}`,
       good: false,
     })
   } else if (m.earthChangeHours !== null) {
