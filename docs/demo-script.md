@@ -20,7 +20,7 @@ This is a hypothetical two-week landing delay using calculated NASA-data-based c
 
 Open the [live site](https://lunar-landing-site-navigator-sigma.vercel.app) and click **Demo: a two-week slip at the south pole**. The button selects the South Pole region, Mons Mouton, a 14-day mission, and GO thresholds of at least 70% sunlight and 50% Earth visibility. The original date is 13 November 2027 at 12:00 UTC; the delayed date is 27 November 2027 at 12:00 UTC.
 
-The following values were checked in the live Demo and the resulting **Try that date** state on 14 November 2026. Percentages are the rounded values displayed by the interface, except where the calendar tooltip is identified.
+The following values were checked in the live Demo and the resulting **Try that date** state on 14 November 2026; the nearby-spot verdict on the delayed date was checked on 15 November 2026. Percentages are the rounded values displayed by the interface, except where the calendar tooltip is identified.
 
 | Site and scenario | Landing date, UTC | Verdict | Sunlight | Earth visibility |
 |---|---|---|---|---|
@@ -28,6 +28,7 @@ The following values were checked in the live Demo and the resulting **Try that 
 | Mons Mouton, two-week delay | 2027-11-27 12:00 | NO-GO | 35% | 100% |
 | Mons Mouton, suggested five-day shift | 2027-12-02 12:00 | GO | 70.5% in calendar tooltip | 100% |
 | Nobile Rim 2, alternative on delayed date | 2027-11-27 12:00 | GO | 70% | 77% |
+| Mons Mouton best spot 2.1 km ENE, delayed date ("Better spot nearby" tactic) | 2027-11-27 12:00 | GO | 100% | 80% |
 | Mons Mouton reference point → best spot 2.1 km ENE (Why panel map) | all dates, Nov 2026 – Dec 2028 | no verdict: two-year averages | 48% → 80% | 100% → 68% |
 
 The sunlight metric is the mission-average fraction of the solar disk visible above the modeled horizon. Earth visibility is the fraction of hourly samples with Earth in view. GO means that both mission-average thresholds pass. It does not mean continuous sunlight, verified radio performance, or a safe landing.
@@ -48,16 +49,16 @@ The final edit is exactly **29 seconds**, from **0:00 through 0:29**. Cut the re
 | 0:09 | 0:13 | Show the Demo click, then cut to the settled Tactics panel. Frame Mons Mouton's original GO, delayed NO-GO, and 70% to 35% comparison. | The demo changes sunlight from 70% to 35%: NO-GO. |
 | 0:13 | 0:16 | Click **Try that date**. Hold on the new date, 2 December at 12:00 UTC, and Mons Mouton's GO. Add a small label: "GO = mission-average thresholds". | Try five days later: December 2 returns GO. |
 | 0:16 | 0:19 | Scroll to the calendar. Frame the Mons Mouton row and selected 2 December column; hover its cell to show the tooltip. | Compare daily landing windows in the calendar. |
-| 0:19 | 0:24 | In the **Why** panel for Mons Mouton, frame the "Within 5 km: sunlight and Earth in view around the site" map with its summary line and the ★. Hover the ★ cell. Add a small label: "Two-year averages". | Or move 2.1 km: two-year sunlight rises from 48% to 80%. |
+| 0:19 | 0:24 | Record this clip on the delayed date (use the delayed scenario link, not the state after **Try that date**). Frame the "Better spot nearby" tactic: "Move 2.1 km ENE" and the line "On your dates the spot is GO: sunlight 100%, Earth in view 80%". Add a small label: "Same 27 November landing". | Or move 2.1 km: GO on the delayed date. |
 | 0:24 | 0:29 | End card with text credits for JPL Horizons and LRO LOLA, the line "Checked against NASA's LOLA illumination map", and the project URL. Use no agency logos. Stop at 0:29. | NASA Horizons and LOLA data. Next: terrain for any point. |
 
-Nobile Rim 2 is a verified alternative on the delayed date, but leave that branch out of this 29-second cut. The main sequence follows one site and one corrective action.
+Nobile Rim 2 is a verified alternative on the delayed date, but leave that branch out of this 29-second cut. The main sequence follows one site and its two fixes: a later date or a nearby spot.
 
 ## Capture and export
 
 1. Open the live site in a clean browser window. Close notifications and hide bookmarks or other personal information. Use a 1920 x 1080 recording canvas at 30 frames per second. Increase the page zoom until the dates and verdicts are readable in the intended crop.
 2. Record the browser with OBS Studio, or Xbox Game Bar on Windows. Disable camera capture. Keep microphone capture off unless an eligible adult has agreed to narrate and to the required use of their voice. Record each action with a few seconds before and after it; these extra seconds are editing material, not part of the final runtime.
-3. Capture four screen clips: Demo and the changed verdict; **Try that date** and the recovered GO; the calendar; the "Within 5 km" map. Wait for data and animations to settle. For the map clip, select Mons Mouton's card (or click **Show the map** in its "Better spot nearby" tactic) so the **Why** panel describes the same site; its summary should read 48% → best spot 2.1 km ENE, 80%.
+3. Capture four screen clips: Demo and the changed verdict; **Try that date** and the recovered GO; the calendar; the "Better spot nearby" tactic on the delayed date. Wait for data and animations to settle. Record the nearby-spot clip from the delayed scenario link so the landing date is 27 November; the tactic should read "Move 2.1 km ENE" and "On your dates the spot is GO: sunlight 100%, Earth in view 80% (your site: 35% and 100%)". The verdict line appears a second or two after the rest of the tactic, while the spot's terrain loads.
 4. Assemble the clips and plain title cards in Clipchamp or CapCut. Crop and zoom the relevant panels rather than showing unreadable full-page footage. Use cuts; any transition must stay inside its assigned slot. The timeline ends at 0:29, which is 870 frames at 30 frames per second. Do not append an outro or credits after that point.
 5. Burn the English subtitle cues into the video. Use a readable font, strong contrast, and no more than two lines per cue. Keep each complete cue at or below 12 words, including substituted names and taglines. Keep subtitles away from the dates, verdicts, and buttons being demonstrated.
 6. Use no music unless its license permits the intended use and the team can supply the required attribution. A silent recording with subtitles is sufficient. Do not display NASA logos, flags, or mission emblems.
@@ -75,7 +76,7 @@ Use this deck instead of the video if recording is not ready. The seven-slide co
 | 2 | The team | Ninjago: Masters of Claudejitzu and Islam Sabitov, Amirlan Seitkadyrov, Akezhan Omashev, Shakhnazar Akhmer. Show names only with each member's consent, as the event's age and consent rules require. Do not include identifiable minors' names or likenesses. |
 | 3 | A delayed landing changes the conditions | Explain the hypothetical Mons Mouton date slip: 13 to 27 November 2027. Show 70% to 35% sunlight and GO to NO-GO for the same 14-day window length. Identify Mons Mouton as a historical VIPER target. |
 | 4 | Compare sites and dates | Show the flow: set a date, compare sunlight and Earth visibility, try a suggested shift or select a calendar cell. State the 70% sunlight and 50% Earth-visibility thresholds. |
-| 5 | The working result | Use three readable screenshots: the delayed NO-GO, the five-day shift to 2 December with GO, and the "Within 5 km" map (best spot 2.1 km ENE, two-year sunlight 48% → 80%). Note that GO tests mission averages, not continuous coverage or landing safety, and that the map shows two-year averages. |
+| 5 | The working result | Use three readable screenshots: the delayed NO-GO, the five-day shift to 2 December with GO, and the "Better spot nearby" tactic on the delayed date (2.1 km ENE: GO, sunlight 100%, Earth in view 80%). Note that GO tests mission averages, not continuous coverage or landing safety. |
 | 6 | NASA data behind the comparison | Name JPL Horizons for hourly Sun/Earth positions and LRO LOLA for polar terrain horizons. State that the six site reference points' sunlight averages are within 2.5 percentage points of NASA's long-term LOLA illumination map (different periods and settings; map squares are not separately validated). Link the relevant sources from the submission references. Explain that custom points south of 83.5°S get a LOLA terrain horizon and slope on demand; other custom points use a flat horizon. |
 | 7 | Proposed next steps | Terrain for custom points north of 83.5°S, a date-specific search over every nearby point, and explicit uncertainty estimates. Keep these labeled as proposals. Include the live-project link and public source repository. |
 
