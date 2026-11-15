@@ -1,6 +1,6 @@
 # Submission copy
 
-The fields below are ready to paste. Team: Ninjago: Masters of Claudejitzu; members: Islam Sabitov, Amirlan Seitkadyrov, Akezhan Omashev, Shakhnazar Akhmer. Proposed next steps are for the team to review.
+The fields below follow the 2026 project form and are ready to paste. Team: Ninjago: Masters of Claudejitzu; members: Islam Sabitov, Amirlan Seitkadyrov, Akezhan Omashev, Shakhnazar Akhmer.
 
 ## Project Name
 
@@ -10,55 +10,77 @@ Lunar Landing Site Navigator
 
 The Moon gives us a destination.
 
-## High-Level Project Summary
+## Summary
 
-Lunar Landing Site Navigator compares lunar landing sites when a mission's landing date changes. It combines NASA JPL Horizons Sun and Earth positions with LRO LOLA terrain to model sunlight and direct Earth visibility for a chosen mission length. Users compare ranked site cards, inspect horizon and timeline views, scan a launch window calendar, and find better spots within 5 km on a terrain map. A built-in example shows a hypothetical two-week delay turning the historical VIPER target at Mons Mouton from GO to NO-GO; the tool then suggests a five-day shift or another site. At the Nobile Rim 1 reference point, a ridge 3.7 km away raises average sunlight from 29% to 85%. Engineers can explore early tradeoffs; students learn the geometry through explanations and a latitude lab. At six polar reference points, our sunlight averages are within 2.5 percentage points of NASA's long-term LOLA illumination map.
+Lunar Landing Site Navigator helps mission planners when a lunar landing date slips. It shows which sites still get enough sunlight and enough time with Earth in view on the new date. It combines hourly Sun and Earth positions from NASA JPL Horizons with LRO LOLA terrain around the polar sites.
 
-## Link to Project Demo
+Each site gets a GO, RISKY or NO-GO verdict, and the tool suggests a fix: another date, another site or a better spot within 5 km. In a hypothetical example, a two-week delay cuts sunlight at the historical VIPER target on Mons Mouton from 70% to 35%. Landing five days later only just reaches GO; a spot 2.1 km away is GO on the delayed date.
+
+Near the south pole a few days or kilometres can turn GO into NO-GO. At six polar reference points our sunlight averages are within 2.5 percentage points of NASA's LOLA illumination map.
+
+## Project Demonstration
 
 https://youtu.be/Q5i6QY7FjTo
 
-## Link to Final Project
+## Project
 
-Live application: https://lunar-landing-site-navigator-sigma.vercel.app
+https://lunar-landing-site-navigator-sigma.vercel.app
 
-Source repository: https://github.com/AmirlanSeit/lunar-landing-site-navigator
+The form takes one URL here. The repository and the demo video are linked in Project Details.
 
-If the form accepts one URL, paste the live application URL. The repository is also linked in the description below.
+## Project Details
 
-## Detailed Project Description
+### What it does
 
-### What the user does
+Lunar Landing Site Navigator helps when a lunar mission's landing date changes. You choose a region, the site you planned to land at and the new landing date in UTC. You can add the original date to see what the delay changed, and set the mission length and the sunlight and Earth-visibility thresholds for GO. The tool ranks every site in the region for that date, gives each one a GO, RISKY or NO-GO verdict and explains why.
 
-1. Choose a region, a planned site and a new landing date in UTC. Optionally enter the original date to compare before and after the change. Set the mission duration and the sunlight and Earth-visibility thresholds.
-2. Read the ranked site cards and their GO, RISKY or NO-GO results. Inspect the reasons, the horizon panorama and the mission timeline. Compare two to four sites side by side.
-3. Use Tactics to inspect the best alternative in the region or try the nearest whole-day shift that meets the selected GO thresholds within 30 days in either direction. For the six polar sites, Tactics also names a better spot within 5 km, and the site's Why panel maps sunlight and Earth visibility on a 240 m grid around it.
-4. Explore the launch window calendar, covering 14 days before through 45 days after the selected landing date. Clicking a cell sets its date and site as the new plan.
-5. Add arbitrary lunar coordinates for a flat-horizon comparison, open Explain the math, or copy a scenario link to revisit the settings.
+Tactics then suggests the next move: the smallest date shift within 30 days that makes your site GO, the best other site for that date, and, for polar sites, a better spot within 5 km. A launch window calendar shows the verdict for every site from 14 days before to 45 days after the chosen date, and a match view compares two to four sites side by side.
 
 ### How it works
 
-The catalog contains 12 sites, including actual landings, historical targets and published reference points for candidate regions. Node.js scripts obtain hourly, airless Sun and Earth azimuths and elevations from JPL Horizons for 1 November 2026 through 31 December 2028. Python scripts sample the 120 m LRO LOLA south-pole DEM to build terrain horizons for six catalog sites south of 75 degrees south. Each mask has 360 bearings and considers terrain out to 150 km, lunar curvature and an observer 2 m above the DEM surface.
+The catalog has 12 sites: actual landings, historical targets and published reference points for candidate regions near the south pole. Hourly Sun and Earth azimuths and elevations for each site come from NASA JPL Horizons, from 1 November 2026 to 31 December 2028. For the six sites south of 75°S, our Python pipeline reads the 120 m LRO LOLA south-pole DEM and computes the terrain horizon in 360 directions out to 150 km, including lunar curvature and an observer 2 m above the ground.
 
-The browser compares the Sun and Earth elevations with the horizon in the corresponding direction. It estimates the visible fraction of the solar disk and whether any part of Earth clears the terrain. These samples produce mission-average sunlight, Earth visibility and dark-interval metrics. The selected thresholds determine the verdict; the same evaluation drives ranking, date suggestions and the calendar. The default mission is 14 days, with GO thresholds of 70% sunlight and 50% Earth visibility. A Vercel function obtains Horizons data for custom coordinates. For custom points south of 83.5 degrees south, a second function computes the LOLA terrain horizon and slope from a packed copy of the DEM; it reproduces the catalog horizons within 0.04 degrees.
+For every hour of a mission, the browser compares the Sun and Earth with the horizon in their direction. That gives the visible fraction of the solar disk, whether any part of Earth clears the terrain, and the longest stretch of darkness. The mission averages, compared with the user's thresholds, give the verdict. The same calculation drives the ranking, the date suggestions and the calendar.
 
-For the six polar sites, a precomputed terrain search evaluates 1,361 points on a 240 m grid within 5 km, each with its own LOLA horizon. It rotates the site's Sun and Earth directions into each point's own local frame (near the pole, local north turns by up to about 3 degrees across 5 km; checked against JPL Horizons queried directly at a candidate point, within 0.005 degrees) and averages over the full stored period. The website shows the result as a sunlight or Earth-visibility map and names the best spot with at least 50% Earth visibility and a slope of 8 degrees or less. At the Nobile Rim 1 reference point, which sits on a 13-degree slope and never sees Earth, a ridge 3.7 km north-northwest receives 85% sunlight and 62% Earth visibility instead of 29% and 0%. The map shows two-year averages. The named best spot is also evaluated for the user's own dates with its own horizon: in the built-in example, a spot 2.1 km from Mons Mouton is GO on the delayed date (sunlight 100%, Earth visibility 80%) while the reference point is NO-GO. The map can also show ground slope from the 120 m DEM.
+For the six polar sites we also evaluated 1,361 points on a 240 m grid within 5 km of each site, each with its own LOLA horizon. The app maps sunlight, Earth visibility or ground slope around the site, names the best spot with at least 50% Earth visibility and a slope of 8° or less, and checks that spot for the user's own dates. Custom coordinates get live Horizons data through a server function. South of 83.5°S, a second function computes their LOLA horizon and slope on demand.
 
-### A repeatable example
+### Example
 
-Open the application and click Demo. At the historical VIPER target at Mons Mouton, a hypothetical landing-date change from 13 to 27 November 2027 changes GO to NO-GO. Displayed sunlight falls from 70% to 35% for the 14-day mission. Tactics suggests landing five days later, on 2 December, which only just reaches GO (70.5% sunlight against the 70% threshold), or inspecting Nobile Rim 2 on the delayed date. A spot 2.1 km from Mons Mouton is GO on the delayed date itself, with 100% sunlight. The calendar lets users explore the surrounding windows. These are modeled scenarios, not records of an actual VIPER launch delay.
+The Demo button loads a hypothetical delay at the historical VIPER target on Mons Mouton. The landing moves from 13 to 27 November 2027, sunlight over a 14-day mission falls from 70% to 35%, and the verdict drops from GO to NO-GO. Landing five days later, on 2 December, only just reaches GO (70.5% against the 70% threshold). Nobile Rim 2 is GO on the delayed date, and so is a spot 2.1 km from Mons Mouton, with 100% sunlight and Earth in view 80% of the time. At the Nobile Rim 1 reference point, which sits on a 13° slope and never sees Earth, a ridge 3.7 km away gets 85% sunlight and 62% Earth visibility instead of 29% and 0%.
 
-### Who it helps and what the result means
+### How we checked the numbers
 
-For mission engineers, the prototype makes early sunlight and Earth-visibility tradeoffs easier to inspect and share. For students, the horizon graphics, explanations and latitude lab connect angles and terrain with illumination and communication geometry.
+At the six polar reference points, our two-year sunlight averages differ from NASA's long-term LOLA illumination map (PGDA product 69) by -1.0 to +2.5 percentage points. Horizons we re-derived from NASA Moon Trek's LOLA service agree with ours within about 0.2°. For nearby points we rotate the Sun and Earth directions into each point's own frame; at a test point 3.9 km from Haworth they match Horizons queried directly within 0.005°. For terrain-modeled sites, the detail panel has a horizon error check that recomputes the mission with the horizon 0.2° higher and lower and says whether the verdict could change. Under that check the Mons Mouton GO dates are borderline, while the nearby spot's GO holds. The code has 142 automated tests.
 
-GO means the chosen mission-average thresholds are met. It does not promise uninterrupted sunlight or radio contact. Sunlight is a modeled visible-disk fraction, not generated electrical power; Earth visibility is geometry, not a radio link budget. Custom points north of 83.5 degrees south and the six lower-latitude catalog sites use a flat horizon. Slope comes from the 120 m DEM, so boulders and small craters are not resolved. For terrain-modeled sites, a horizon error check shows how far sunlight and Earth visibility move if the horizon is off by up to 0.2 degrees in any direction (about the largest difference found against NASA Moon Trek) and whether the verdict could flip. In the built-in example, the GO dates for Mons Mouton are borderline under this check, while the nearby spot's GO on the delayed date holds. The regional ranking does not calculate transfer distance or fuel requirements. Detailed landing hazards, energy storage and flight constraints need separate analysis.
+### Who it is for
 
-### Implementation and next steps
+Mission planners can see early, before detailed analysis, how a date change affects sunlight and the direct link to Earth at each candidate site, and share the exact scenario with colleagues. Students and teachers get the same tool with explanations: "Explain the math" puts each site's numbers into the formulas, and a latitude lab shows why the polar Sun circles low along the horizon.
 
-The interface uses React, TypeScript and Vite, with Vercel hosting and a server-side Horizons endpoint. Node.js handles ephemeris collection; Python, NumPy and Pillow handle terrain masks and diagnostic plots. Source: https://github.com/AmirlanSeit/lunar-landing-site-navigator
+### How it is creative
 
-Proposed next steps are terrain for custom points north of 83.5 degrees south, a date-specific search over every nearby point rather than only the named best spot, uncertainty from landing accuracy and terrain finer than the DEM, and mission-specific power and communication constraints. These additions are future work for the team to assess.
+We present the sites as players in a squad. Each site has a card with stats for sunlight, Earth in view, night survival, time to sunset, time to Earthset and Sun height above the terrain, plus an overall rating. Tactics suggests the next move, and the match view puts sites head to head. This lets someone compare six measures across a dozen sites at a glance, and every number on a card still comes from the Horizons and LOLA calculation.
+
+### What we considered
+
+GO means the mission averages meet the chosen thresholds. It does not promise continuous sunlight, a working radio link or a safe landing. Sunlight here is the visible fraction of the solar disk; panel power is not modeled, and Earth visibility is line of sight without a link budget. Custom points north of 83.5°S and the six lower-latitude sites use a flat horizon, which the app labels. Slope comes from the 120 m DEM, so boulders and small craters are not resolved. The ranking ignores transfer distance and fuel. Candidate-region reference points are not approved landing sites, and the delay scenario is not a record of a real VIPER delay. We tested the interface at desktop and phone widths. The app and repository are in English and use no NASA logos.
+
+### Tools
+
+React 19, TypeScript and Vite for the interface; Vitest and ESLint for checks; Vercel for hosting and the two server functions (Horizons proxy and terrain). Node.js collects the ephemerides, and Python with NumPy and Pillow (OpenJPEG) runs the terrain pipeline. No special hardware.
+
+### Links
+
+- Live app: https://lunar-landing-site-navigator-sigma.vercel.app
+- Source code: https://github.com/AmirlanSeit/lunar-landing-site-navigator
+- Demo video: https://youtu.be/Q5i6QY7FjTo
+
+### Next steps
+
+Terrain for custom points north of 83.5°S; a date-specific search over every nearby point instead of only the named best spot; uncertainty from landing accuracy and from terrain finer than the DEM; power and communication budgets for a specific mission; and sessions with mission planners and teachers to see how they use the tool.
+
+### Use of SI
+
+The team chose the idea, the users, the features, the candidate sites and the thresholds, and reviewed each result before it went in. Claude Code (Anthropic) wrote most of the interface, the visibility, ranking and tactics logic, the Horizons collection script, the terrain server function and the horizon error check. It also re-checked terrain results against NASA Moon Trek, ran a design review and edited the interface text into plain language. ChatGPT (OpenAI) researched and cross-checked landing-site coordinates and turned the demo script into subtitles. Codex (OpenAI) built the Python LOLA terrain pipeline, the 5 km neighborhood search, the NASA illumination cross-check, custom coordinates and the launch calendar, drafted the submission texts and the demo script, and reviewed the project against the judging criteria. The Sun, Earth and terrain inputs come from the cited NASA data. Every SI contribution is logged in docs/SI_USAGE.md in the repository.
 
 ## NASA Data
 
@@ -118,11 +140,9 @@ Video credits to complete after recording: [VIDEO RECORDING AND EDITING TOOLS]; 
 
 ## Use of Super Intelligence (SI)
 
-We used Super Intelligence (SI) tools for implementation, research, debugging and documentation. The team chose the project idea, target users, features, candidate sites, thresholds and product direction. The team reviewed the results and made the decisions about what to include.
+Tick: Research or Information Gathering; Data Analysis and Interpretation; Coding, Debugging, or Troubleshooting; Writing, Editing, or Translation; Visual Design or Image Creation; Presentation, Video, or Audio; Other Project-Related SI Use (project planning, code review and mock judging). Leave Ideation or Brainstorming, Building SI/ML Into the Project and None unticked: the team chose the idea, and the application itself uses no AI or ML.
 
-Claude Code (Anthropic) assisted with the React interface, JPL Horizons collection script, visibility and ranking logic, explanations, scenario links, the before-and-after comparison, the built-in demo, the better-spot map, integration review and independent re-checks of terrain results against NASA Moon Trek. ChatGPT (OpenAI) assisted with source research, landing-coordinate comparisons and documenting conflicts. Codex (OpenAI) assisted with the Python LOLA terrain pipeline, the 5 km neighborhood search, the NASA illumination cross-check, custom-coordinate support, the launch window calendar, tests, verification and these submission materials.
-
-The astronomical and terrain inputs come from the cited data sources. The code and data-processing workflow were developed with SI assistance and are disclosed in the repository. The contribution record is [docs/SI_USAGE.md](https://github.com/AmirlanSeit/lunar-landing-site-navigator/blob/main/docs/SI_USAGE.md). Final wording and the video remain subject to team review. Any SI-generated narration or other added media will be identified in the project description and the relevant file metadata.
+The form says judges do not see this answer, so the same information is in the "Use of SI" part of Project Details. The full contribution record is [docs/SI_USAGE.md](https://github.com/AmirlanSeit/lunar-landing-site-navigator/blob/main/docs/SI_USAGE.md). Any SI-generated narration or other added media in the video must be named in the project text and the file metadata.
 
 ---
 
@@ -130,7 +150,7 @@ The astronomical and terrain inputs come from the cited data sources. The code a
 
 These notes are not submission-field text.
 
-- Verified against main commit `c63ae3d` and the live Demo on 14 November 2026; the better-spot map and validation figures were added after review against main commit `0adc0f9`. The exact scenario is [the built-in two-week-slip example](https://lunar-landing-site-navigator-sigma.vercel.app/?region=south-pole&date=2027-11-27T12:00&orig=2027-11-13T12:00&site=viper_mons_mouton_target). Screen percentages in the description are rounded values.
-- The [official Project Submission Guide](https://www.spaceappschallenge.org/resources/project-submission-guide/#project-page-form-field-instructions), dated 13 November 2026, lists the fields used here. It does not publish numeric word or character limits for the text fields. The summary follows the team's requested cap of 150 words; check any counters shown by the live form when pasting.
+- The demo numbers, the nearby-spot verdict and the horizon error check were rechecked on the live site on 15 November 2026. The exact scenario is [the built-in two-week-slip example](https://lunar-landing-site-navigator-sigma.vercel.app/?region=south-pole&date=2027-11-27T12:00&orig=2027-11-13T12:00&site=viper_mons_mouton_target). Screen percentages in the description are rounded values.
+- The [official Project Submission Guide](https://www.spaceappschallenge.org/resources/project-submission-guide/#project-page-form-field-instructions), dated 13 November 2026, lists the fields used here. The live form limits Summary to 1,500 characters and suggests 50 to 200 words; the summary above has 149 words and 828 characters, within the team's cap of 150 words.
 - Demo must be a public video no longer than 30 seconds or a public presentation of no more than seven slides, including titles and introductions. All written submission materials are in English; use English subtitles for any non-English speech. See [demo requirements](https://www.spaceappschallenge.org/resources/project-submission-guide/#tips-for-creating-a-project-demo).
 - The demo video is https://youtu.be/Q5i6QY7FjTo (29 seconds, 1080p). The guide asks for shared files to be set to public access, so keep the video Public on YouTube and check the link in a private window. Review the proposed next steps and confirm the final public links. Paste only the appropriate field content, not these notes. Check that the team name matches the team page exactly.
