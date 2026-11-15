@@ -66,7 +66,7 @@ GO means the mission averages meet the chosen thresholds. It does not promise co
 
 ### Tools
 
-React 19, TypeScript and Vite for the interface; Vitest and ESLint for checks; Vercel for hosting and the two server functions (Horizons proxy and terrain). Node.js collects the ephemerides, and Python with NumPy and Pillow (OpenJPEG) runs the terrain pipeline. No special hardware.
+React 19, TypeScript and Vite for the interface; Vitest and ESLint for checks; Vercel for hosting and the two server functions (Horizons proxy and terrain). Node.js collects the ephemerides, and Python with NumPy and Pillow (OpenJPEG) runs the terrain pipeline. We assembled the demo video locally with FFmpeg; its title cards, subtitles and map animation were drawn in Python with Pillow. No special hardware.
 
 ### Links
 
@@ -80,7 +80,7 @@ Terrain for custom points north of 83.5°S; a date-specific search over every ne
 
 ### Use of SI
 
-The team chose the idea, the users, the features, the candidate sites and the thresholds, and reviewed each result before it went in. Claude Code (Anthropic) wrote most of the interface, the visibility, ranking and tactics logic, the Horizons collection script, the terrain server function and the horizon error check. It also re-checked terrain results against NASA Moon Trek, ran a design review and edited the interface text into plain language. ChatGPT (OpenAI) researched and cross-checked landing-site coordinates and turned the demo script into subtitles. Codex (OpenAI) built the Python LOLA terrain pipeline, the 5 km neighborhood search, the NASA illumination cross-check, custom coordinates and the launch calendar, drafted the submission texts and the demo script, and reviewed the project against the judging criteria. The Sun, Earth and terrain inputs come from the cited NASA data. Every SI contribution is logged in docs/SI_USAGE.md in the repository.
+The team chose the idea, the users, the features, the candidate sites and the thresholds, and reviewed each result before it went in. Claude Code (Anthropic) wrote most of the interface, the visibility, ranking and tactics logic, the Horizons collection script, the terrain server function and the horizon error check. It also re-checked terrain results against NASA Moon Trek, ran a design review and edited the interface text into plain language. ChatGPT (OpenAI) researched and cross-checked landing-site coordinates, turned the demo script into subtitles and helped write the Python (Pillow) and FFmpeg script that rendered the video's title cards, subtitles and map animation. The voices in the video are ours, and the video has no images or audio from generative models. Codex (OpenAI) built the Python LOLA terrain pipeline, the 5 km neighborhood search, the NASA illumination cross-check, custom coordinates and the launch calendar, drafted the submission texts and the demo script, and reviewed the project against the judging criteria. The Sun, Earth and terrain inputs come from the cited NASA data. Every SI contribution is logged in docs/SI_USAGE.md in the repository.
 
 ## NASA Data
 
@@ -136,7 +136,7 @@ The Python pipeline uses NumPy and Pillow plus Python's standard library. Pillow
 
 The interface loads [IBM Plex Sans](https://fonts.google.com/specimen/IBM+Plex+Sans), [IBM Plex Sans Condensed](https://fonts.google.com/specimen/IBM+Plex+Sans+Condensed) and [IBM Plex Mono](https://fonts.google.com/specimen/IBM+Plex+Mono) through Google Fonts. All three use the SIL Open Font License 1.1: [IBM Plex license](https://github.com/IBM/plex/blob/master/LICENSE.txt).
 
-Video credits to complete after recording: [VIDEO RECORDING AND EDITING TOOLS]; [VOICE SOURCE AND SI DISCLOSURE, IF APPLICABLE]; [MUSIC TRACK, CREATOR, LICENSE AND URL, OR NO MUSIC]. The recording plan uses the team's own screen capture of the application.
+The demo video uses the team's own screen recordings and voices. FFmpeg assembled it locally; a Python script using Pillow, written with ChatGPT's help, drew the title cards, subtitles and map animation. The title-card background is shaded lunar terrain from LRO LOLA. Link entries for the form: [FFmpeg](https://ffmpeg.org/) and [Pillow](https://pillow.readthedocs.io/).
 
 ## Use of Super Intelligence (SI)
 
