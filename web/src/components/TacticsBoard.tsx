@@ -13,6 +13,8 @@ interface Props {
   original: Date | null
   /** "Best spot nearby" data for the planned site (polar catalog sites only). */
   nearby: Neighborhood | null
+  /** The nearby best spot evaluated for these dates with its own terrain (south of 83.5°S only). */
+  spot: Scenario | null
   t: Thresholds
   onTryDate: (d: Date) => void
   onSelect: (id: string) => void
@@ -20,7 +22,7 @@ interface Props {
 
 const fmtDate = (d: Date) => d.toISOString().slice(0, 16).replace('T', ' ') + ' UTC'
 
-export function TacticsBoard({ ranked, planned, shiftDays, landing, before, original, nearby, t, onTryDate, onSelect }: Props) {
+export function TacticsBoard({ ranked, planned, shiftDays, landing, before, original, nearby, spot, t, onTryDate, onSelect }: Props) {
   const best = bestPick(ranked)
   if (!best) return null
   const sw = planned ? strengthsWeaknesses(planned, ranked) : null
@@ -33,9 +35,9 @@ export function TacticsBoard({ ranked, planned, shiftDays, landing, before, orig
         <div className={`tactic tactic--planned v-${planned.verdict}`}>
           <h3>Your planned site</h3>
           <div className="big">{planned.data.site.name} <span className={`verdict ${planned.verdict}`}>{planned.verdict}</span></div>
-          {flatHorizonPolar(planned.data.site) && (
+          {flatHorizonPolar(planned.data) && (
             <p className="fine warn">
-              Flat horizon: terrain is not modeled for custom points. Near the pole, real terrain usually lowers these numbers.
+              Flat horizon: terrain is modeled only for custom points south of 83.5°S. Near the pole, real terrain usually lowers these numbers.
             </p>
           )}
           {before && original && (
@@ -112,7 +114,18 @@ export function TacticsBoard({ ranked, planned, shiftDays, landing, before, orig
                 <li>Earth in view {nearby.center.earth_pct.toFixed(0)}% → <b>{nearby.best.earth_pct.toFixed(0)}%</b></li>
                 <li>Longest night {formatHours(nearby.center.longest_dark_h)} → {formatHours(nearby.best.longest_dark_h)}, slope {nearby.best.slope_deg.toFixed(1)}°</li>
               </ul>
-              <p className="fine">Averages for Nov 2026 to Dec 2028 over LRO LOLA terrain. They are not a verdict for your dates.</p>
+              {spot && (
+                <p className="spot-verdict">
+                  On your dates the spot is <span className={`verdict ${spot.verdict}`}>{spot.verdict}</span>:
+                  {' '}sunlight {Math.round(spot.metrics.lightPct)}%, Earth in view {Math.round(spot.metrics.commPct)}%
+                  {' '}(your site: {Math.round(planned.metrics.lightPct)}% and {Math.round(planned.metrics.commPct)}%).
+                </p>
+              )}
+              <p className="fine">
+                {spot
+                  ? 'The list shows averages for Nov 2026 to Dec 2028. The verdict line uses your dates and the spot’s own LRO LOLA horizon.'
+                  : 'Averages for Nov 2026 to Dec 2028 over LRO LOLA terrain. They are not a verdict for your dates.'}
+              </p>
             </>
           )}
           <button onClick={() => {

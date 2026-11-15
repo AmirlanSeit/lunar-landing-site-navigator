@@ -75,3 +75,7 @@ An independent center-value comparison with NASA's LOLA average solar illuminati
 ## SI disclosure
 
 The horizon-mask and neighborhood implementations and their plots were created with help from SI. The team selected the candidate-site list and reviewed the DEM choice, formulas, and outputs.
+
+## Packed DEM for on-demand terrain (`terrain_grid.py`)
+
+`python pipeline/terrain_grid.py` writes `web/terrain/`: `fine.i16.gz` (the 120 m DEM cropped to 3,372 × 3,372 pixels, covering every point south of 83.5°S plus 5 km), `coarse.i16.gz` (the whole DEM averaged over 4 × 4 pixel blocks, 480 m) and `grid.json`. Heights are int16 PDS codes stored as row differences, which gzip to 16.7 MB in total. `web/api/terrain.ts` uses the fine grid where a ray sample falls inside it and the coarse grid beyond. The script then rebuilds the catalog horizons inside the zone with this scheme: the largest difference from the full-resolution masks is 0.04° and the two-year averages change by at most 0.1 percentage points.

@@ -26,10 +26,11 @@ rises above the terrain. A ridge 3.7 km away gets 85% sunlight and sees Earth 62
 - **Compares before and after.** Enter the original date to see what the slip changed.
 - **Launch window calendar.** Verdicts for every site from 14 days before to 45 days after the chosen
   date; click a day to adopt it.
-- **Better spot nearby** (polar sites). A 240 m map of two-year sunlight and Earth visibility within
-  5 km, with the best spot named.
-- **Any coordinates.** Add a custom point; its Sun and Earth positions come live from JPL Horizons
-  (flat horizon, flagged in the app).
+- **Better spot nearby** (polar sites). A 240 m map of two-year sunlight, Earth visibility and ground
+  slope within 5 km, with the best spot named and checked against your own dates.
+- **Any coordinates.** Add a custom point; its Sun and Earth positions come live from JPL Horizons.
+  South of 83.5°S a server function also computes its LOLA terrain horizon and slope; elsewhere the
+  horizon is flat (flagged in the app).
 - **Explain the math.** Coach notes put each site's numbers into the formulas, and an interactive
   latitude lab shows why the polar Sun stays low.
 - **Share.** The URL always mirrors the scenario.
@@ -42,7 +43,10 @@ rises above the terrain. A ridge 3.7 km away gets 85% sunlight and sees Earth 62
 2. **Terrain:** LRO LOLA `LDEM_75S_120M` (120 m). For each polar site, the highest terrain angle in
    each of 360 directions out to 150 km, including lunar curvature, seen from 2 m above the ground
    ([`pipeline/horizon_mask.py`](pipeline/horizon_mask.py)); the same for 1,361 points within 5 km
-   ([`pipeline/neighborhood.py`](pipeline/neighborhood.py)).
+   ([`pipeline/neighborhood.py`](pipeline/neighborhood.py)). Custom points south of 83.5°S get the same
+   horizon on demand from a packed copy of the DEM ([`web/api/terrain.ts`](web/api/terrain.ts),
+   built by [`pipeline/terrain_grid.py`](pipeline/terrain_grid.py)); it reproduces the precomputed site
+   horizons within 0.04°.
 3. **Every hour:** the visible fraction of the solar disk above the terrain, and whether any part of
    Earth clears it. Mission averages give the verdict; the same evaluation drives the ranking, the date
    shift and the calendar. Formats and formulas: [`docs/data-format.md`](docs/data-format.md).
@@ -59,16 +63,22 @@ rises above the terrain. A ridge 3.7 km away gets 85% sunlight and sees Earth 62
   Haworth candidate 3.9 km away they match JPL Horizons queried directly there within 0.005°.
 - Sun positions checked against the Apollo 11 landing (Sun about 10.7° high in the east at 20:17 UT)
   and against the 90° − |latitude| + 1.54° limit at every site.
-- 120 automated tests (`npm test`).
+- The on-demand terrain horizon reproduces the five catalog horizons inside its zone within 0.04°, and
+  the date-specific check of each best spot reproduces the pipeline's two-year averages within 0.5
+  percentage points (tested in `web/src/lib/terrain.test.ts`).
+- 136 automated tests (`npm test`).
 
 ## Limitations
 
 - GO means the mission-average thresholds are met. It is not a promise of continuous sunlight, a radio
   link budget, or a safe landing.
-- Terrain is modeled for the six polar catalog sites. Custom points and lower-latitude sites use a flat
-  horizon, which is optimistic near the pole; the app flags custom polar points and never offers one as
-  the best pick.
-- The nearby-spot map shows two-year averages, not a verdict for a specific date.
+- Terrain is modeled for the six polar catalog sites and for custom points south of 83.5°S. Other custom
+  points and the lower-latitude sites use a flat horizon, which is optimistic near the pole; the app
+  flags flat-horizon polar points and never offers one as the best pick.
+- The nearby-spot map shows two-year averages. Only the named best spot also gets a verdict for your
+  dates; the map does not search for the best spot on those dates.
+- Slope comes from the 120 m DEM, so boulders and small craters are not resolved. The 8° limit is this
+  tool's screening value, not a lander requirement.
 - Candidate-region reference points from the literature are not approved landing sites.
 
 ## Data sources

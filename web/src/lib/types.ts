@@ -17,6 +17,12 @@ export const CATEGORY_LABELS: Record<Category, string> = {
   custom: 'Custom · flat horizon',
 }
 
+/** Card label; custom points that got a LOLA terrain mask say so. */
+export function categoryLabel(d: SiteData): string {
+  if (d.site.category === 'custom' && d.mask) return 'Custom · LOLA terrain'
+  return CATEGORY_LABELS[d.site.category] ?? d.site.category
+}
+
 export interface Site {
   id: string
   name: string
@@ -50,6 +56,9 @@ export interface HorizonMask {
   mask_el_deg: number[]
   dem: string
   max_range_km: number
+  /** Only for custom points computed by api/terrain.ts. */
+  elevation_m?: number
+  slope_deg?: number
   mock?: boolean
 }
 

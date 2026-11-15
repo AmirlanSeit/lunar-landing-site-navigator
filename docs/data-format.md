@@ -42,6 +42,11 @@ All data the website reads lives in `web/public/data/` and is served as static J
 
 - Elevation angle of the highest terrain in each direction, seen from 2 m above the DEM surface,
   including lunar curvature (`pipeline/horizon_mask.py`). Sites without a file use a flat horizon (0°).
+- Custom points south of 83.5°S get the same structure from `GET /api/terrain?lat=&lon=` (`web/api/terrain.ts`),
+  plus `elevation_m` (DEM height above 1,737.4 km) and `slope_deg`. The function reads `web/terrain/`, which
+  `pipeline/terrain_grid.py` packs from the DEM: the 120 m grid within about 203 km of the pole and a 480 m
+  average of the whole DEM for longer rays. Ray samples follow `pipeline/neighborhood.py` (120 m to 5 km,
+  240 m to 25 km, 480 m to 150 km).
 
 ## `neighborhood/<id>.json` – best spot within 5 km (polar sites only)
 
@@ -54,6 +59,8 @@ All data the website reads lives in `web/public/data/` and is served as static J
 
 - Two-year averages over the full ephemeris period on a 240 m grid (`pipeline/neighborhood.py`).
 - `best`: highest `light_pct` among points with `earth_pct ≥ 50` and `slope_deg ≤ 8` (nearest wins ties).
+- For your dates, the site fetches the best spot's horizon from `/api/terrain` and rotates the site's Sun
+  and Earth directions into the spot's local frame (`web/src/lib/spot.ts`, same rotation as the pipeline).
 
 ## Visibility rules (shared by the site and the pipeline)
 

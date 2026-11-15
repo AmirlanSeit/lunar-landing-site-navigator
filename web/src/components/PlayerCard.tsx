@@ -1,6 +1,6 @@
 import { STAT_HELP, STAT_LABELS, type Stats } from '../lib/rating'
 import type { Scenario } from '../lib/tactics'
-import { CATEGORY_LABELS } from '../lib/types'
+import { categoryLabel } from '../lib/types'
 
 interface Props {
   s: Scenario
@@ -38,7 +38,7 @@ export function PlayerCard({ s, rank, best, planned, selected, inMatch, onSelect
       <div className="tags">
         {best && <span className="tag gold">Best pick</span>}
         {planned && <span className="tag">Your plan</span>}
-        <span className="tag" title={s.data.site.note}>{CATEGORY_LABELS[s.data.site.category] ?? s.data.site.category}</span>
+        <span className="tag" title={s.data.site.note}>{categoryLabel(s.data)}</span>
       </div>
       <div className="stats">
         {ORDER.map((k) => (

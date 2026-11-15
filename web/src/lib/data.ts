@@ -1,3 +1,4 @@
+import { hasTerrain } from './terrain'
 import type { Ephem, HorizonMask, Site, SiteData } from './types'
 
 const base = `${import.meta.env.BASE_URL}data`
@@ -15,7 +16,36 @@ export async function loadSites(): Promise<Site[]> {
   return sites.map((s) => (s.lon > 180 ? { ...s, lon: s.lon - 360 } : s))
 }
 
+/**
+ * LOLA terrain horizon for a custom point south of 83.5°S (api/terrain.ts). Optional: if the
+ * service fails, the point keeps a flat horizon and the UI says so.
+ */
+const terrainCache = new Map<string, Promise<HorizonMask | null>>()
+
+export function loadTerrain(at: { lat: number; lon: number }): Promise<HorizonMask | null> {
+  if (!hasTerrain(at.lat)) return Promise.resolve(null)
+  const query = new URLSearchParams({ lat: String(at.lat), lon: String(at.lon) }).toString()
+  let p = terrainCache.get(query)
+  if (!p) {
+    p = (async () => {
+      try {
+        const res = await fetch(`/api/terrain?${query}`)
+        if (!res.ok) return null
+        const mask = (await res.json()) as HorizonMask
+        return Array.isArray(mask.mask_el_deg) && mask.mask_el_deg.length === 360 ? mask : null
+      } catch {
+        return null
+      }
+    })()
+    // Only successful masks are kept, so a later attempt can retry after a failure.
+    p.then((mask) => mask || terrainCache.delete(query))
+    terrainCache.set(query, p)
+  }
+  return p
+}
+
 async function loadCustomData(site: Site): Promise<SiteData> {
+  const terrain = loadTerrain(site)
   const params = new URLSearchParams({ lat: String(site.lat), lon: String(site.lon) })
   if (site.elev_m !== null) params.set('elev_m', String(site.elev_m))
   const res = await fetch(`/api/horizons?${params}`).catch(() => {
@@ -31,7 +61,10 @@ async function loadCustomData(site: Site): Promise<SiteData> {
   const ephem = await res.json().catch(() => {
     throw new Error('Could not read the Horizons response. Please try again.')
   }) as Ephem
-  return { site, ephem, mask: null }
+  const mask = await terrain
+  if (!mask) return { site, ephem, mask: null }
+  const slope = mask.slope_deg === undefined ? '' : `, ground slope ${mask.slope_deg.toFixed(1)}°`
+  return { site: { ...site, note: `Custom point: LOLA 120 m terrain horizon${slope}` }, ephem, mask }
 }
 
 /** Ephemeris is required; the horizon mask is optional (no mask = spherical horizon). */

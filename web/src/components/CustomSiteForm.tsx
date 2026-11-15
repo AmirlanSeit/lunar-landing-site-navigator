@@ -36,7 +36,7 @@ export function CustomSiteForm({ onAdd }: { onAdd: (site: Site) => void }) {
   return (
     <form className="custom-site-form" onSubmit={handleSubmit} noValidate aria-labelledby="custom-site-title" aria-busy={loading}>
       <h2 id="custom-site-title" className="section-title">Add a custom site</h2>
-      <p className="custom-site-note">Custom point: terrain not modeled (flat horizon)</p>
+      <p className="custom-site-note">South of 83.5°S, the horizon comes from LRO LOLA terrain (120 m grid). Elsewhere it is flat, so real hills are not modeled.</p>
       <fieldset disabled={loading}>
         <legend className="custom-site-legend">Lunar coordinates</legend>
         <div className="control">
@@ -55,7 +55,7 @@ export function CustomSiteForm({ onAdd }: { onAdd: (site: Site) => void }) {
         </div>
         <button type="submit" className="custom-site-submit">{loading ? 'Adding…' : 'Add to squad'}</button>
       </fieldset>
-      {loading && <p className="custom-site-status" role="status">Loading Sun and Earth positions from JPL Horizons… This can take up to a minute.</p>}
+      {loading && <p className="custom-site-status" role="status">Loading Sun and Earth positions from JPL Horizons and the terrain horizon… This can take up to a minute.</p>}
       {error && <p className="custom-site-error" role="alert">{error}</p>}
       {added && <p className="custom-site-status" role="status">{added} added to the squad and selected as the originally planned site.</p>}
     </form>

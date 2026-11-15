@@ -1,0 +1,19 @@
+{
+  "dem": "LOLA GDR LDEM_75S_120M (PDS LRO-L-LOLA-4-GDR-V1.0)",
+  "dem_size": 7624,
+  "pixel_m": 120.0,
+  "lunar_radius_m": 1737400.0,
+  "units": "int16 little-endian, height above 1737.4 km in 0.5 m units",
+  "encoding": "row deltas: value[r][c] = sum of stored[r][0..c]",
+  "fine": {
+    "file": "fine.i16.gz",
+    "size": 3372,
+    "origin_px": 2126
+  },
+  "coarse": {
+    "file": "coarse.i16.gz",
+    "size": 1906,
+    "factor": 4
+  },
+  "supported_lat_deg": -83.5
+}
