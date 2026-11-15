@@ -1,7 +1,8 @@
 import { useMemo, useState, type PointerEvent } from 'react'
 import { compass, offsetKm, type NearbyPoint, type Neighborhood } from '../lib/neighborhood'
+import { MAX_SLOPE_DEG } from '../lib/terrain'
 
-type Metric = 'light' | 'earth'
+type Metric = 'light' | 'earth' | 'slope'
 
 const SIZE = 360 // the SVG is exactly the map square, so pointer math stays simple
 
@@ -9,8 +10,18 @@ const SIZE = 360 // the SVG is exactly the map square, so pointer math stays sim
 const RAMPS: Record<Metric, string[]> = {
   light: ['#1b1e2a', '#3a3424', '#6e5a1f', '#a9851f', '#e0b32c', '#ffd54a', '#fff0b3'],
   earth: ['#1b1e2a', '#162a4a', '#184f95', '#2a78d6', '#5598e7', '#9ec5f4', '#cde2fb'],
+  // Flat ground is bright; it darkens towards the slope limit. Steeper squares are drawn red.
+  slope: ['#e8ebf3', '#b9bdc8', '#8a8f9c', '#5d6270', '#3a3e4a'],
 }
-const LABELS: Record<Metric, string> = { light: 'Sunlight', earth: 'Earth in view' }
+const STEEP = '#E5484D'
+const LABELS: Record<Metric, string> = { light: 'Sunlight', earth: 'Earth in view', slope: 'Slope' }
+
+function cellColor(metric: Metric, p: NearbyPoint): string {
+  if (metric === 'slope') {
+    return p.slope_deg > MAX_SLOPE_DEG ? STEEP : rampColor(RAMPS.slope, (100 * p.slope_deg) / MAX_SLOPE_DEG)
+  }
+  return rampColor(RAMPS[metric], metric === 'light' ? p.light_pct : p.earth_pct)
+}
 
 function rampColor(stops: string[], pct: number): string {
   const t = (Math.min(100, Math.max(0, pct)) / 100) * (stops.length - 1)
@@ -61,7 +72,7 @@ export function NearbyMap({ nb }: { nb: Neighborhood }) {
       <rect
         key={`${p.lat},${p.lon}`} x={x - geo.cell / 2 + 0.5} y={y - geo.cell / 2 + 0.5}
         width={geo.cell - 1} height={geo.cell - 1} rx={1}
-        fill={rampColor(RAMPS[metric], metric === 'light' ? p.light_pct : p.earth_pct)}
+        fill={cellColor(metric, p)}
       />
     )),
     [geo, metric],
@@ -116,16 +127,21 @@ export function NearbyMap({ nb }: { nb: Neighborhood }) {
         <text x={14} y={SIZE - 20} fontSize="11" fill="#e8ebf3" stroke="#0b0e17" strokeWidth={3} paintOrder="stroke">1 km</text>
       </svg>
       <div className="nearby-legend">
-        <span>0%</span>
+        <span>{metric === 'slope' ? '0°' : '0%'}</span>
         <i style={{ background: `linear-gradient(90deg, ${RAMPS[metric].join(', ')})` }} />
-        <span>100% · {LABELS[metric]}</span>
+        <span>
+          {metric === 'slope'
+            ? <>{MAX_SLOPE_DEG}° · Slope · <b style={{ color: STEEP }}>■</b> steeper than {MAX_SLOPE_DEG}°</>
+            : <>100% · {LABELS[metric]}</>}
+        </span>
         <span className="nearby-keys">○ reference point · ★ best spot</span>
       </div>
       <p className="nearby-readout" aria-live="polite">
         {hover ? `Hovered: ${describe(nb, hover)}` : `★ Best spot: ${describe(nb, nb.best)}`}
       </p>
       <p className="chart-caption">
-        Each square is {nb.spacing_m} m: two-year averages (Nov 2026 to Dec 2028, hourly) from LRO LOLA terrain and
+        Each square is {nb.spacing_m} m. Slope comes from the LOLA 120 m grid; the ★ is picked only among squares
+        of {MAX_SLOPE_DEG}° or less. Sunlight and Earth in view are two-year averages (Nov 2026 to Dec 2028, hourly) from LRO LOLA terrain and
         JPL Horizons, not a verdict for your dates. Validation covers the six site reference points only: their averages
         differ from NASA's long-term LOLA illumination map by at most 2.5 percentage points (periods and settings differ);
         individual squares are not separately validated.

@@ -100,11 +100,22 @@ describe('best pick', () => {
     const real = evaluate(realData, new Date(START), 14, DEFAULT_THRESHOLDS)!
     const customData = fake(() => 5, () => 5)
     customData.site = { ...customData.site, id: 'custom-1', category: 'custom', lat: -88 }
+    customData.mask = null // flat horizon
     const custom = evaluate(customData, new Date(START), 14, DEFAULT_THRESHOLDS)!
     const ranked = rank([real, custom])
     expect(ranked[0]).toBe(custom) // it still ranks first on its (optimistic) numbers…
     expect(bestPick(ranked)).toBe(real) // …but is not offered as the best pick
     expect(bestPick([custom])).toBe(custom)
+  })
+  it('treats a custom point with a LOLA terrain mask like any terrain-modeled site', () => {
+    const realData = fake((i) => (i % 48 < 24 ? 3 : -3), () => 3)
+    realData.site = { ...realData.site, id: 'artemis_x', category: 'artemis_region_reference' }
+    const real = evaluate(realData, new Date(START), 14, DEFAULT_THRESHOLDS)!
+    const customData = fake(() => 5, () => 5)
+    customData.site = { ...customData.site, id: 'custom-1', category: 'custom', lat: -88 }
+    customData.mask = { site_id: 'custom', az_step_deg: 1, mask_el_deg: Array(360).fill(0), dem: 'LOLA', max_range_km: 150, slope_deg: 2 }
+    const custom = evaluate(customData, new Date(START), 14, DEFAULT_THRESHOLDS)!
+    expect(bestPick(rank([real, custom]))).toBe(custom)
   })
 })
 

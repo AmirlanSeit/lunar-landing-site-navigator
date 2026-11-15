@@ -3,6 +3,11 @@
   "functions": {
     "api/horizons.ts": {
       "maxDuration": 60
+    },
+    "api/terrain.ts": {
+      "maxDuration": 30,
+      "memory": 1024,
+      "includeFiles": "terrain/**"
     }
   }
 }

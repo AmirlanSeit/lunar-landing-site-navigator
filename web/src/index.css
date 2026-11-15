@@ -146,6 +146,8 @@ h2#tactics { margin-top: var(--s-7); } /* first result section: pull it up towar
 .tactic ul { margin: var(--s-2) 0 0; padding-left: 1.1em; list-style: square; }
 .tactic li::marker { color: var(--text-3); }
 .tactic .fine { font-size: 13px; color: var(--text-2); }
+.tactic .spot-verdict { margin: var(--s-3) 0 0; font-size: 14px; }
+.tactic .spot-verdict .verdict { margin: 0 2px; vertical-align: 1px; }
 .tactic .fine.warn::before {
   content: 'Caution'; display: inline-block; margin-right: var(--s-2); padding: 1px 5px; border: 1px solid var(--risky); border-radius: var(--r-1);
   font: 600 10px/1.4 var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--risky);

@@ -10,9 +10,9 @@ const ephem: Ephem = {
   source: 'test Horizons response',
 }
 const custom: Site = {
-  id: 'custom-polar', name: 'Polar scout', lat: -89.5, lon: 0, elev_m: null,
+  id: 'custom-polar', name: 'Polar scout', lat: -80, lon: 0, elev_m: null,
   category: 'custom', mission: 'User-defined landing site', source: [],
-  note: 'Custom point – terrain not modeled (flat horizon)',
+  note: 'Custom point: terrain not modeled (flat horizon)',
 }
 const fetchMock = vi.fn<typeof fetch>()
 let loadSiteData: typeof import('./data').loadSiteData
@@ -29,17 +29,17 @@ afterEach(() => {
 })
 
 describe('custom-site loading', () => {
-  it('requests the same-origin proxy, keeps site_id custom, and never requests a terrain mask', async () => {
+  it('requests the same-origin proxy, keeps site_id custom, and skips terrain outside the DEM zone', async () => {
     fetchMock.mockResolvedValueOnce(Response.json(ephem))
     const data = await loadSiteData(custom)
-    expect(fetchMock).toHaveBeenCalledExactlyOnceWith('/api/horizons?lat=-89.5&lon=0')
+    expect(fetchMock).toHaveBeenCalledExactlyOnceWith('/api/horizons?lat=-80&lon=0')
     expect(data).toEqual({ site: custom, ephem, mask: null })
   })
 
   it.each([0, 1234.5, -100])('includes an explicitly supplied elevation of %s meters', async (elev_m) => {
     fetchMock.mockResolvedValueOnce(Response.json(ephem))
     await loadSiteData({ ...custom, elev_m })
-    expect(fetchMock).toHaveBeenCalledExactlyOnceWith(`/api/horizons?lat=-89.5&lon=0&elev_m=${elev_m}`)
+    expect(fetchMock).toHaveBeenCalledExactlyOnceWith(`/api/horizons?lat=-80&lon=0&elev_m=${elev_m}`)
   })
 
   it('shares pending and successful requests for a site', async () => {
@@ -56,7 +56,7 @@ describe('custom-site loading', () => {
     fetchMock.mockImplementation(async () => Response.json(ephem))
     const [polarData, equatorialData] = await Promise.all([loadSiteData(custom), loadSiteData(equatorial)])
     expect(fetchMock.mock.calls.map(([url]) => url)).toEqual([
-      '/api/horizons?lat=-89.5&lon=0', '/api/horizons?lat=0&lon=0',
+      '/api/horizons?lat=-80&lon=0', '/api/horizons?lat=0&lon=0',
     ])
     expect(polarData.site).toBe(custom)
     expect(equatorialData.site).toBe(equatorial)
@@ -87,6 +87,44 @@ describe('custom-site loading', () => {
     await expect(loadSiteData(custom)).rejects.toThrow('Could not read the Horizons response.')
     fetchMock.mockResolvedValueOnce(Response.json(ephem))
     await expect(loadSiteData(custom)).resolves.toHaveProperty('ephem', ephem)
+  })
+})
+
+describe('custom points with LOLA terrain (south of 83.5°S)', () => {
+  const deep = { ...custom, id: 'custom-deep', lat: -89.5 }
+  const terrain: HorizonMask = {
+    site_id: 'custom', az_step_deg: 1, mask_el_deg: Array(360).fill(1.25), dem: 'LOLA GDR LDEM_75S_120M',
+    max_range_km: 150, elevation_m: -1200, slope_deg: 4.24,
+  }
+  const route = (terrainResponse: () => Response | Promise<Response>) =>
+    fetchMock.mockImplementation(async (url) => (String(url).startsWith('/api/terrain') ? terrainResponse() : Response.json(ephem)))
+
+  it('requests terrain and Horizons in parallel and uses the terrain mask', async () => {
+    route(() => Response.json(terrain))
+    const data = await loadSiteData(deep)
+    expect(fetchMock.mock.calls.map(([url]) => url).sort()).toEqual([
+      '/api/horizons?lat=-89.5&lon=0', '/api/terrain?lat=-89.5&lon=0',
+    ])
+    expect(data.mask).toEqual(terrain)
+    expect(data.site.id).toBe(deep.id)
+    expect(data.site.note).toBe('Custom point: LOLA 120 m terrain horizon, ground slope 4.2°')
+  })
+
+  it('falls back to a flat horizon when the terrain service fails', async () => {
+    route(() => Response.json({ error: 'boom' }, { status: 500 }))
+    await expect(loadSiteData(deep)).resolves.toEqual({ site: deep, ephem, mask: null })
+  })
+
+  it('ignores a malformed terrain response', async () => {
+    route(() => Response.json({ mask_el_deg: [1, 2, 3] }))
+    await expect(loadSiteData(deep)).resolves.toHaveProperty('mask', null)
+  })
+
+  it('still fails when Horizons fails, even if terrain loaded', async () => {
+    fetchMock.mockImplementation(async (url) => (String(url).startsWith('/api/terrain')
+      ? Response.json(terrain)
+      : Response.json({ error: 'JPL Horizons is unavailable. Please try again.' }, { status: 502 })))
+    await expect(loadSiteData(deep)).rejects.toThrow('JPL Horizons is unavailable.')
   })
 })
 

@@ -1,11 +1,14 @@
 import { computeMetrics, type Metrics } from './metrics'
 import { overall, statsFor, type Stats } from './rating'
-import type { Site, SiteData } from './types'
+import type { SiteData } from './types'
 import { verdictFor, type Thresholds, type Verdict } from './verdict'
 
-/** Custom points use a flat horizon; near the pole that overstates sunlight and Earth visibility. */
-export function flatHorizonPolar(site: Site): boolean {
-  return site.category === 'custom' && site.lat < -75
+/**
+ * A custom polar point without a terrain mask (outside the DEM zone, or the terrain service
+ * failed) uses a flat horizon; near the pole that overstates sunlight and Earth visibility.
+ */
+export function flatHorizonPolar(d: SiteData): boolean {
+  return d.site.category === 'custom' && d.site.lat < -75 && !d.mask
 }
 
 export interface Scenario {
@@ -32,7 +35,7 @@ export function rank(scenarios: Scenario[]): Scenario[] {
 
 /** The site to recommend: a flat-horizon polar point is never compared as an equal to terrain-modeled sites. */
 export function bestPick(ranked: Scenario[]): Scenario | undefined {
-  return ranked.find((s) => !flatHorizonPolar(s.data.site)) ?? ranked[0]
+  return ranked.find((s) => !flatHorizonPolar(s.data)) ?? ranked[0]
 }
 
 /** Smallest landing-date shift (whole days, either direction) that turns this site GO. */
