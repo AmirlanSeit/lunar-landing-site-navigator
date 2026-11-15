@@ -46,7 +46,7 @@ For the six polar sites, a precomputed terrain search evaluates 1,361 points on 
 
 ### A repeatable example
 
-Open the application and click Demo. At the historical VIPER target at Mons Mouton, a hypothetical landing-date change from 13 to 27 November 2027 changes GO to NO-GO. Displayed sunlight falls from 70% to 35% for the 14-day mission. Tactics suggests landing five days later, on 2 December, or inspecting Nobile Rim 2 on the delayed date. The calendar lets users explore the surrounding windows. These are modeled scenarios, not records of an actual VIPER launch delay.
+Open the application and click Demo. At the historical VIPER target at Mons Mouton, a hypothetical landing-date change from 13 to 27 November 2027 changes GO to NO-GO. Displayed sunlight falls from 70% to 35% for the 14-day mission. Tactics suggests landing five days later, on 2 December, which only just reaches GO (70.5% sunlight against the 70% threshold), or inspecting Nobile Rim 2 on the delayed date. A spot 2.1 km from Mons Mouton is GO on the delayed date itself, with 100% sunlight. The calendar lets users explore the surrounding windows. These are modeled scenarios, not records of an actual VIPER launch delay.
 
 ### Who it helps and what the result means
 

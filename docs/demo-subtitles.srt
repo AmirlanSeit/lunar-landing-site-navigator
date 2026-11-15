@@ -17,7 +17,7 @@ The demo changes sunlight from 70% to 35%: NO-GO.
 
 5
 00:00:13,000 --> 00:00:16,000
-Try five days later: December 2 returns GO.
+Try five days later: December 2 just reaches GO.
 
 6
 00:00:16,000 --> 00:00:19,000
