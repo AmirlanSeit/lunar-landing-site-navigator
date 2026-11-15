@@ -217,6 +217,9 @@ h2#tactics { margin-top: var(--s-7); } /* first result section: pull it up towar
 .detail-head .ovr { font-size: 56px; text-align: right; }
 .reasons { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 6px var(--s-6); margin: var(--s-4) 0 var(--s-5); padding: 0; list-style: none; font-size: 14px; }
 .reasons li { padding-left: 1.6em; text-indent: -1.6em; }
+.sensitivity { max-width: 72ch; margin: calc(-1 * var(--s-2)) 0 var(--s-5); font-size: 13px; color: var(--text-2); }
+.sensitivity b { color: var(--text); font-weight: 600; }
+.sensitivity .verdict { margin: 0 2px; vertical-align: 1px; }
 .reasons li::before { content: '\00D7'; display: inline-block; width: 1.6em; text-indent: 0; font: 700 14px/1 var(--font-mono); color: var(--nogo); }
 .reasons li.good::before { content: '\2713'; color: var(--go); }
 .chart { display: block; width: 100%; height: auto; margin-top: var(--s-3); }

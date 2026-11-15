@@ -298,7 +298,7 @@ export default function App() {
       {selected && (
         <>
           <h2 className="section-title">Why</h2>
-          <SiteDetail s={selected} t={t} explain={explain} />
+          <SiteDetail s={selected} t={t} explain={explain} landing={landingDate} days={days} />
         </>
       )}
 

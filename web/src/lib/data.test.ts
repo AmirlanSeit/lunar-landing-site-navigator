@@ -146,6 +146,12 @@ describe('catalog loading', () => {
     await expect(loadSiteData(knownSite)).resolves.toHaveProperty('mask', null)
   })
 
+  it('treats the dev server HTML fallback for a missing horizon as no horizon', async () => {
+    fetchMock.mockResolvedValueOnce(Response.json(ephem))
+      .mockResolvedValueOnce(new Response('<!doctype html><title>app</title>', { status: 200, headers: { 'Content-Type': 'text/html' } }))
+    await expect(loadSiteData(knownSite)).resolves.toHaveProperty('mask', null)
+  })
+
   it('keeps a missing static ephemeris an error', async () => {
     fetchMock.mockImplementation(async () => new Response(null, { status: 404 }))
     await expect(loadSiteData(knownSite)).rejects.toThrow('No ephemeris for apollo_11')

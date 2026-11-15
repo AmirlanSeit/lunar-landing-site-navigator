@@ -31,6 +31,9 @@ rises above the terrain. A ridge 3.7 km away gets 85% sunlight and sees Earth 62
 - **Any coordinates.** Add a custom point; its Sun and Earth positions come live from JPL Horizons.
   South of 83.5°S a server function also computes its LOLA terrain horizon and slope; elsewhere the
   horizon is flat (flagged in the app).
+- **Horizon error check.** For terrain-modeled sites, the detail panel shows how far sunlight and
+  Earth visibility move if the horizon is off by up to 0.2° in any direction, and whether the verdict
+  could flip.
 - **Explain the math.** Coach notes put each site's numbers into the formulas, and an interactive
   latitude lab shows why the polar Sun stays low.
 - **Share.** The URL always mirrors the scenario.
@@ -66,7 +69,12 @@ rises above the terrain. A ridge 3.7 km away gets 85% sunlight and sees Earth 62
 - The on-demand terrain horizon reproduces the five catalog horizons inside its zone within 0.04°, and
   the date-specific check of each best spot reproduces the pipeline's two-year averages within 0.5
   percentage points (tested in `web/src/lib/terrain.test.ts`).
-- 136 automated tests (`npm test`).
+- Sunlight and Earth visibility can only fall as the horizon rises, so recomputing a mission with the
+  horizon raised and lowered by 0.2° bounds the result for any per-direction error of that size
+  (tested with random perturbations). In the built-in example the GO verdicts on 13 November and
+  2 December (70.2% and 70.5% sunlight) are borderline under this check, the delayed NO-GO is firm, and
+  the nearby spot's GO on the delayed date is firm (sunlight 100%, Earth in view 79–81%).
+- 142 automated tests (`npm test`).
 
 ## Limitations
 
@@ -79,6 +87,8 @@ rises above the terrain. A ridge 3.7 km away gets 85% sunlight and sees Earth 62
   dates; the map does not search for the best spot on those dates.
 - Slope comes from the 120 m DEM, so boulders and small craters are not resolved. The 8° limit is this
   tool's screening value, not a lander requirement.
+- The error check covers horizon errors up to 0.2° only. It does not cover landing accuracy, terrain
+  finer than the 120 m DEM, or unmodeled terrain at flat-horizon sites.
 - Candidate-region reference points from the literature are not approved landing sites.
 
 ## Data sources

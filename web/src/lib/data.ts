@@ -6,7 +6,8 @@ const cache = new Map<string, Promise<SiteData>>()
 
 async function getJson<T>(url: string): Promise<T | null> {
   const res = await fetch(url)
-  if (!res.ok) return null
+  // `vite dev` answers a missing file with index.html (200), so check the type too.
+  if (!res.ok || !res.headers.get('content-type')?.includes('json')) return null
   return res.json() as Promise<T>
 }
 

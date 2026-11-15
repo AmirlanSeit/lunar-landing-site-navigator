@@ -52,13 +52,13 @@ Open the application and click Demo. At the historical VIPER target at Mons Mout
 
 For mission engineers, the prototype makes early sunlight and Earth-visibility tradeoffs easier to inspect and share. For students, the horizon graphics, explanations and latitude lab connect angles and terrain with illumination and communication geometry.
 
-GO means the chosen mission-average thresholds are met. It does not promise uninterrupted sunlight or radio contact. Sunlight is a modeled visible-disk fraction, not generated electrical power; Earth visibility is geometry, not a radio link budget. Custom points north of 83.5 degrees south and the six lower-latitude catalog sites use a flat horizon. Slope comes from the 120 m DEM, so boulders and small craters are not resolved. The regional ranking does not calculate transfer distance or fuel requirements. Detailed landing hazards, energy storage and flight constraints need separate analysis.
+GO means the chosen mission-average thresholds are met. It does not promise uninterrupted sunlight or radio contact. Sunlight is a modeled visible-disk fraction, not generated electrical power; Earth visibility is geometry, not a radio link budget. Custom points north of 83.5 degrees south and the six lower-latitude catalog sites use a flat horizon. Slope comes from the 120 m DEM, so boulders and small craters are not resolved. For terrain-modeled sites, a horizon error check shows how far sunlight and Earth visibility move if the horizon is off by up to 0.2 degrees in any direction (about the largest difference found against NASA Moon Trek) and whether the verdict could flip. In the built-in example, the GO dates for Mons Mouton are borderline under this check, while the nearby spot's GO on the delayed date holds. The regional ranking does not calculate transfer distance or fuel requirements. Detailed landing hazards, energy storage and flight constraints need separate analysis.
 
 ### Implementation and next steps
 
 The interface uses React, TypeScript and Vite, with Vercel hosting and a server-side Horizons endpoint. Node.js handles ephemeris collection; Python, NumPy and Pillow handle terrain masks and diagnostic plots. Source: https://github.com/AmirlanSeit/lunar-landing-site-navigator
 
-Proposed next steps are terrain for custom points north of 83.5 degrees south, a date-specific search over every nearby point rather than only the named best spot, clearer uncertainty estimates, and mission-specific power and communication constraints. These additions are future work for the team to assess.
+Proposed next steps are terrain for custom points north of 83.5 degrees south, a date-specific search over every nearby point rather than only the named best spot, uncertainty from landing accuracy and terrain finer than the DEM, and mission-specific power and communication constraints. These additions are future work for the team to assess.
 
 ## NASA Data
 

@@ -1,4 +1,5 @@
 import { stepHours } from '../lib/metrics'
+import { describeRange, horizonSensitivity } from '../lib/sensitivity'
 import { MAX_SLOPE_DEG } from '../lib/terrain'
 import type { Scenario } from '../lib/tactics'
 import { useNeighborhood } from '../lib/useNeighborhood'
@@ -8,13 +9,22 @@ import { HorizonView } from './HorizonView'
 import { MissionTimeline } from './MissionTimeline'
 import { NearbyMap } from './NearbyMap'
 
-export function SiteDetail({ s, t, explain }: { s: Scenario; t: Thresholds; explain: boolean }) {
+interface Props {
+  s: Scenario
+  t: Thresholds
+  explain: boolean
+  landing: Date
+  days: number
+}
+
+export function SiteDetail({ s, t, explain, landing, days }: Props) {
   const { site } = s.data
   const nearby = useNeighborhood(site.id)
   const lat = `${Math.abs(site.lat).toFixed(2)}°${site.lat < 0 ? 'S' : 'N'}`
   const lon = `${Math.abs(site.lon).toFixed(2)}°${site.lon < 0 ? 'W' : 'E'}`
   // Polar catalog sites: slope from the neighborhood grid; custom points: from api/terrain.ts.
   const slope = s.data.mask?.slope_deg ?? nearby?.center.slope_deg
+  const sens = horizonSensitivity(s.data, landing, days, t)
   return (
     <div className="detail">
       <div className="detail-head">
@@ -35,6 +45,17 @@ export function SiteDetail({ s, t, explain }: { s: Scenario; t: Thresholds; expl
           </li>
         )}
       </ul>
+      {sens && (
+        <p className="sensitivity">
+          <b>Horizon error check.</b> If the terrain horizon is off by up to {sens.errorDeg}° in any direction (about
+          the largest difference we found against NASA Moon Trek), {describeRange('sunlight', sens.light)} and
+          {' '}{describeRange('Earth in view', sens.comm)}.{' '}
+          {sens.verdicts[0] === sens.verdicts[1]
+            ? <>The verdict stays <span className={`verdict ${sens.verdicts[0]}`}>{sens.verdicts[0]}</span>.</>
+            : <>The verdict is borderline: <span className={`verdict ${sens.verdicts[1]}`}>{sens.verdicts[1]}</span> with a
+              lower horizon, <span className={`verdict ${sens.verdicts[0]}`}>{sens.verdicts[0]}</span> with a higher one.</>}
+        </p>
+      )}
       <HorizonView data={s.data} m={s.metrics} />
       <div className="chart-caption">What an astronaut would see turning a full circle at the site during the mission.</div>
       <div className="chart-scroll" tabIndex={0} role="region" aria-label="Mission timeline (scrolls sideways on small screens)">
