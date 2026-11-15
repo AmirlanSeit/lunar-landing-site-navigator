@@ -5,6 +5,7 @@
 Launch slipped? Pick the new landing date and see which lunar landing sites still work, and why.
 
 - **Live app:** https://lunar-landing-site-navigator-sigma.vercel.app
+- **Demo video (29 s):** https://youtu.be/Q5i6QY7FjTo
 - **Demo scenario** (a two-week slip at Mons Mouton):
   https://lunar-landing-site-navigator-sigma.vercel.app/?region=south-pole&date=2027-11-27T12:00&orig=2027-11-13T12:00&site=viper_mons_mouton_target
 - **A few kilometres change everything** (Nobile Rim 1):

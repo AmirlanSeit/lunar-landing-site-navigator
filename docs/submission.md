@@ -1,6 +1,6 @@
 # Submission copy
 
-The fields below are ready to paste after the team replaces the remaining bracketed placeholders, including [VIDEO LINK]. Team: Ninjago: Masters of Claudejitzu; members: Islam Sabitov, Amirlan Seitkadyrov, Akezhan Omashev, Shakhnazar Akhmer. Proposed next steps are for the team to review.
+The fields below are ready to paste. Team: Ninjago: Masters of Claudejitzu; members: Islam Sabitov, Amirlan Seitkadyrov, Akezhan Omashev, Shakhnazar Akhmer. Proposed next steps are for the team to review.
 
 ## Project Name
 
@@ -16,7 +16,7 @@ Lunar Landing Site Navigator compares lunar landing sites when a mission's landi
 
 ## Link to Project Demo
 
-[VIDEO LINK]
+https://youtu.be/Q5i6QY7FjTo
 
 ## Link to Final Project
 
@@ -133,4 +133,4 @@ These notes are not submission-field text.
 - Verified against main commit `c63ae3d` and the live Demo on 14 November 2026; the better-spot map and validation figures were added after review against main commit `0adc0f9`. The exact scenario is [the built-in two-week-slip example](https://lunar-landing-site-navigator-sigma.vercel.app/?region=south-pole&date=2027-11-27T12:00&orig=2027-11-13T12:00&site=viper_mons_mouton_target). Screen percentages in the description are rounded values.
 - The [official Project Submission Guide](https://www.spaceappschallenge.org/resources/project-submission-guide/#project-page-form-field-instructions), dated 13 November 2026, lists the fields used here. It does not publish numeric word or character limits for the text fields. The summary follows the team's requested cap of 150 words; check any counters shown by the live form when pasting.
 - Demo must be a public video no longer than 30 seconds or a public presentation of no more than seven slides, including titles and introductions. All written submission materials are in English; use English subtitles for any non-English speech. See [demo requirements](https://www.spaceappschallenge.org/resources/project-submission-guide/#tips-for-creating-a-project-demo).
-- Replace the remaining bracketed placeholders, review the proposed next steps and confirm the final public links. Paste only the appropriate field content, not these notes. Check that the team name matches the team page exactly.
+- The demo video is https://youtu.be/Q5i6QY7FjTo (29 seconds, 1080p). The guide asks for shared files to be set to public access, so keep the video Public on YouTube and check the link in a private window. Review the proposed next steps and confirm the final public links. Paste only the appropriate field content, not these notes. Check that the team name matches the team page exactly.

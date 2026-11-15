@@ -8,7 +8,7 @@ Members: Islam Sabitov, Amirlan Seitkadyrov, Akezhan Omashev, Shakhnazar Akhmer
 
 Chosen tagline: The Moon gives us a destination.
 
-Public demo URL: [VIDEO LINK]
+Public demo URL: https://youtu.be/Q5i6QY7FjTo
 
 Subtitle file ready to import: [`demo-subtitles.srt`](demo-subtitles.srt) (8 cues, 0:00–0:29).
 
@@ -66,7 +66,7 @@ Nobile Rim 2 is a verified alternative on the delayed date, but leave that branc
 6. Use no music unless its license permits the intended use and the team can supply the required attribution. A silent recording with subtitles is sufficient. Do not display NASA logos, flags, or mission emblems.
 7. If the team chooses a Super Intelligence (SI) generated voice, disclose that use in both the project description and the audio/video metadata before publishing. This is a conditional instruction, not a claim that such a voice was used. Any SI-generated images or video must carry a visible generation watermark. Screen recordings of the working site do not need synthetic artwork.
 8. Export an MP4 at 1920 x 1080 and 30 frames per second. Play the exported file from start to finish and verify that its full runtime is 29 seconds, including every title and transition. Check the numbers, subtitle spelling, and readability at normal playback speed.
-9. Upload the export to a public host and replace [VIDEO LINK]. Test the link in a private browser window with no account signed in. Provide the demo link separately from the live project's link; neither should require permission, registration, or a password.
+9. Upload the export to a public host and set it to public access (final video: https://youtu.be/Q5i6QY7FjTo). Test the link in a private browser window with no account signed in. Provide the demo link separately from the live project's link; neither should require permission, registration, or a password.
 
 ## Exactly seven slides if video is unavailable
 
@@ -82,7 +82,7 @@ Use this deck instead of the video if recording is not ready. The seven-slide co
 | 6 | NASA data behind the comparison | Name JPL Horizons for hourly Sun/Earth positions and LRO LOLA for polar terrain horizons. State that the six site reference points' sunlight averages are within 2.5 percentage points of NASA's long-term LOLA illumination map (different periods and settings; map squares are not separately validated). Link the relevant sources from the submission references. Explain that custom points south of 83.5°S get a LOLA terrain horizon and slope on demand; other custom points use a flat horizon. |
 | 7 | Proposed next steps | Terrain for custom points north of 83.5°S, a date-specific search over every nearby point, and uncertainty from landing accuracy. Keep these labeled as proposals. Include the live-project link and public source repository. |
 
-Upload the deck to a public host and place that URL in the Project Demo field instead of [VIDEO LINK]. Test access without signing in. These seven slides are the entire fallback demo.
+Upload the deck to a public host and place that URL in the Project Demo field instead of the video link. Test access without signing in. These seven slides are the entire fallback demo.
 
 ## Official requirements used
 
